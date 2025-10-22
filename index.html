@@ -98,7 +98,6 @@
   </div>
 
   <script>
-    /* 🧠 Wortpool einfügen */
     const wordPool = {
       leicht: [["Ball","Leder"],["Haus","Dach"],["Auto","Verkehr"],["Buch","Seiten"],["Stuhl","Sitzen"]],
       sport: [["Fußball","Rasen"],["Basketball","Korb"],["Tennis","Aufschlag"],["Schwimmen","Bahn"],["Laufen","Tempo"]],
@@ -203,31 +202,59 @@
       setupSwipe();
     }
 
-    function setupSwipe(){
-      const swipe=document.getElementById("swipeCard");
-      const word=document.getElementById("wordCard");
-      let startY=0,moved=false;
-      swipe.ontouchstart=e=>{startY=e.touches[0].clientY;moved=false;};
-      swipe.ontouchmove=e=>{
-        const d=startY-e.touches[0].clientY;
-        if(d>0){
-          swipe.style.transition="none";
-          swipe.style.transform=`translateY(-${d}px)`;
-          word.textContent=currentIndex===imposterIndex?`😈 Du bist der Imposter! Hinweis: ${imposterHint}`:`✅ ${realWord}`;
-          moved=true;
+    /* ✅ Touch + Maus Wischen */
+    function setupSwipe() {
+      const swipe = document.getElementById("swipeCard");
+      const word = document.getElementById("wordCard");
+
+      let startY = 0;
+      let moved = false;
+      let isDragging = false;
+
+      function start(y) {
+        startY = y;
+        moved = false;
+        isDragging = true;
+      }
+
+      function move(y) {
+        if (!isDragging) return;
+        const d = startY - y;
+        if (d > 0) {
+          swipe.style.transition = "none";
+          swipe.style.transform = `translateY(-${d}px)`;
+          word.textContent =
+            currentIndex === imposterIndex
+              ? `😈 Du bist der Imposter! Hinweis: ${imposterHint}`
+              : `✅ ${realWord}`;
+          moved = true;
         }
-      };
-      swipe.ontouchend=()=>{
-        if(!moved)return;
-        swipe.style.transition="transform 0.2s ease";
-        swipe.style.transform="translateY(0)";
-        if(currentIndex<players.length-1)document.getElementById("nextBtn").style.display="block";
-        else{document.getElementById("nextBtn").style.display="none";document.getElementById("startRoundBtn").style.display="block";}
-      };
+      }
+
+      function end() {
+        if (!isDragging) return;
+        isDragging = false;
+        swipe.style.transition = "transform 0.25s ease";
+        swipe.style.transform = "translateY(0)";
+        if (!moved) return;
+        if (currentIndex < players.length - 1) {
+          document.getElementById("nextBtn").style.display = "block";
+        } else {
+          document.getElementById("nextBtn").style.display = "none";
+          document.getElementById("startRoundBtn").style.display = "block";
+        }
+      }
+
+      swipe.addEventListener("mousedown", e => start(e.clientY));
+      document.addEventListener("mousemove", e => move(e.clientY));
+      document.addEventListener("mouseup", end);
+
+      swipe.addEventListener("touchstart", e => start(e.touches[0].clientY), { passive: true });
+      swipe.addEventListener("touchmove", e => move(e.touches[0].clientY), { passive: true });
+      swipe.addEventListener("touchend", end);
     }
 
     function nextPlayer(){currentIndex++;showPlayerCard();}
-
     function showStarter(){
       document.getElementById("cardContainer").style.display="none";
       document.getElementById("playerName").textContent="";
@@ -238,7 +265,6 @@
       timerInterval=setInterval(updateTimer,1000);
       document.getElementById("revealImposterBtn").style.display="block";
     }
-
     function updateTimer(){
       const t=Math.floor((Date.now()-roundStartTime)/1000);
       const min=String(Math.floor(t/60)).padStart(2,'0');
@@ -311,5 +337,6 @@
   </script>
 </body>
 </html>
+
 
 
