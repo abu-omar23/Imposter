@@ -185,21 +185,147 @@
 
   <script>
     const wordPool = {
-      leicht: [["Ball", "rund"], ["Haus", "Wohnung"], ["Auto", "fahren"]],
-      tiere: [["Hund", "Bellen"], ["Katze", "Miau"], ["Vogel", "Fliegen"]],
-      essen: [["Pizza", "Ofen"], ["Apfel", "Baum"], ["Käse", "Milch"]],
-      berufe: [["Lehrer", "Schule"], ["Arzt", "Patient"], ["Bäcker", "Brot"]],
-      schule: [["Tafel", "Kreide"], ["Schüler", "Klasse"], ["Buch", "Lesen"]],
-      technik: [["Computer","Prozessor"],["Handy","Display"],["Tablet","Touch"],["Fernseher","Bildschirm"],["Laptop","Tastatur"]],
-      essen: [["Apfel","Baum"],["Banane","Schale"],["Käse","Milch"],["Brot","Backofen"],["Pizza","Ofen"]],
-      gefuehle: [["Freude","Lächeln"],["Angst","Schatten"],["Wut","Rot"],["Trauer","Träne"],["Liebe","Herz"]],
-      berufe: [["Arzt","Patient"],["Lehrer","Tafel"],["Bäcker","Ofen"],["Polizist","Uniform"],["Feuerwehrmann","Löschen"]],
-      haustier: [["Hund","Leine"],["Katze","Schnurren"],["Hamster","Rad"],["Meerschweinchen","Pfeifen"],["Kaninchen","Möhre"]],
-      saegetier: [["Elefant","Rüssel"],["Löwe","Mähne"],["Tiger","Streifen"],["Pferd","Hufe"],["Kuh","Milch"]],
-      hobbys: [["Lesen","Buch"],["Malen","Pinsel"],["Fotografie","Kamera"],["Kochen","Rezept"],["Backen","Teig"]],
-      natur: [["Baum","Wald"],["Blume","Duft"],["Gras","Wiese"],["Berg","Gipfel"],["See","Wasser"]],
-      sonstiges: [["Auto","Benzin"],["Straße","Ampel"],["Bus","Haltestelle"],["Zug","Schiene"],["Flugzeug","Start"]],
-      mix: [["Chaos","Zimmer"],["Lachen","Witz"],["Regenschirm","Tropfen"],["Sandwich","Picknick"],["Kamera","Erinnerung"]]
+      leicht: [
+    ["Ball", "Leder"], ["Haus", "Dach"], ["Auto", "Verkehr"], ["Buch", "Seiten"], ["Stuhl", "Sitzen"],
+    ["Lampe", "Licht"], ["Tisch", "Essen"], ["Fenster", "Glas"], ["Brot", "Scheibe"], ["Schlüssel", "Schloss"],
+    ["Gabel", "Besteck"], ["Tasse", "Kaffee"], ["Flasche", "Wasser"], ["Schule", "Pause"], ["Lehrer", "Tafel"],
+    ["Brief", "Umschlag"], ["Hund", "Leine"], ["Katze", "Schnurren"], ["Uhr", "Zeit"], ["Garten", "Zaun"],
+    ["Straße", "Asphalt"], ["Bett", "Decke"], ["Kissen", "Schlaf"], ["Wasser", "Quelle"], ["Wolke", "Himmel"],
+    ["Sonne", "Strahl"], ["Mond", "Nacht"], ["Stern", "Glitzer"], ["Schnee", "Kälte"], ["Blume", "Duft"],
+    ["Vogel", "Flügel"], ["Tür", "Klinke"], ["Kerze", "Flamme"], ["Küche", "Kochen"], ["Schrank", "Regal"],
+    ["Radio", "Musik"], ["Computer", "Tastatur"], ["Telefon", "Klingeln"], ["Bus", "Haltestelle"], ["Geld", "Münze"],
+    ["Foto", "Bild"], ["Zug", "Gleis"], ["Wiese", "Gras"], ["Schuh", "Sohle"], ["Jacke", "Reißverschluss"],
+    ["Rucksack", "Tragen"], ["Brille", "Sehen"], ["Apfel", "Obst"], ["Kerze", "Wachs"], ["Pfanne", "Kochen"]
+  ],
+      sport: [
+    ["Fußball", "Rasen"], ["Basketball", "Korb"], ["Tennis", "Aufschlag"], ["Schwimmen", "Bahn"], ["Laufen", "Tempo"],
+    ["Radfahren", "Pedale"], ["Boxen", "Ring"], ["Volleyball", "Netz"], ["Skifahren", "Berg"], ["Klettern", "Griff"],
+    ["Reiten", "Sattel"], ["Surfen", "Welle"], ["Skaten", "Brett"], ["Golf", "Loch"], ["Handball", "Halle"],
+    ["Tanzen", "Bewegung"], ["Yoga", "Ruhe"], ["Judo", "Gürtel"], ["Eishockey", "Puck"], ["Rudern", "Boot"],
+    ["Kanu", "Paddel"], ["Fechten", "Degen"], ["Bogenschießen", "Ziel"], ["Tauchen", "Maske"], ["Segeln", "Wind"],
+    ["Kegeln", "Bahn"], ["Wandern", "Berg"], ["Motorsport", "Helm"], ["Tischtennis", "Platte"], ["Baseball", "Schläger"],
+    ["Snowboard", "Winter"], ["Ringen", "Matte"], ["Ballett", "Tutu"], ["Marathon", "Ausdauer"], ["Fahrrad", "Kette"],
+    ["Dart", "Pfeil"], ["Skispringen", "Schanze"], ["Eislaufen", "Kufen"], ["Triathlon", "Disziplin"], ["Boxsack", "Training"],
+    ["Bowling", "Kugel"], ["Reiten", "Pferd"], ["Bergsteigen", "Seil"], ["Turnen", "Gerät"], ["Joggen", "Park"],
+    ["Gymnastik", "Dehnung"], ["Sprint", "Start"], ["Hockey", "Schläger"], ["Schwimmbrille", "Wasser"], ["Kraftsport", "Hantel"]
+  ],
+      schule: [
+    ["Tafel", "Kreide"], ["Lehrer", "Klasse"], ["Buch", "Lesen"], ["Schüler", "Pause"], ["Heft", "Blatt"],
+    ["Bleistift", "Spitzer"], ["Radiergummi", "Fehler"], ["Lineal", "Messen"], ["Atlas", "Karte"], ["Chemie", "Labor"],
+    ["Biologie", "Zelle"], ["Physik", "Kraft"], ["Mathe", "Zahl"], ["Deutsch", "Grammatik"], ["Englisch", "Sprache"],
+    ["Kunst", "Farbe"], ["Musik", "Instrument"], ["Sport", "Halle"], ["Geschichte", "Zeit"], ["Erdkunde", "Land"],
+    ["Direktor", "Büro"], ["Hausaufgabe", "Abgabe"], ["Klassenarbeit", "Punkte"], ["Zeugnis", "Note"], ["Schulbus", "Haltestelle"],
+    ["Schulhof", "Ball"], ["Pausebrot", "Butter"], ["Rucksack", "Tragen"], ["Tafelwischer", "Schwamm"], ["Tinte", "Füller"],
+    ["Schulweg", "Ampel"], ["Lernen", "Wissen"], ["Test", "Bewertung"], ["Arbeitsblatt", "Aufgabe"], ["Taschenrechner", "Rechnen"],
+    ["Zirkel", "Kreis"], ["Aufsatz", "Text"], ["Schulbank", "Sitzen"], ["Lehrplan", "Thema"], ["Klassenraum", "Tafel"],
+    ["Whiteboard", "Marker"], ["Buchseite", "Lesen"], ["Schulmappe", "Heft"], ["Pausengong", "Ton"], ["Projektor", "Bild"],
+    ["Tafelbild", "Schrift"], ["Notenheft", "Bewertung"], ["Abschluss", "Feier"], ["Präsentation", "Thema"], ["Experiment", "Versuch"]
+  ],
+      technik: [
+    ["Computer", "Prozessor"], ["Handy", "Display"], ["Tablet", "Touch"], ["Fernseher", "Bildschirm"], ["Laptop", "Tastatur"],
+    ["Drucker", "Papier"], ["Scanner", "Dokument"], ["Router", "Signal"], ["Kabel", "Stecker"], ["Kamera", "Linse"],
+    ["Mikrofon", "Ton"], ["Kopfhörer", "Musik"], ["USB", "Speicher"], ["Akku", "Ladung"], ["Monitor", "Anzeige"],
+    ["Maus", "Klick"], ["Lautsprecher", "Sound"], ["Smartwatch", "Armband"], ["Konsole", "Spiele"], ["Joystick", "Steuerung"],
+    ["Roboter", "Maschine"], ["Drohne", "Flug"], ["WLAN", "Verbindung"], ["Server", "Netzwerk"], ["Cloud", "Daten"],
+    ["Festplatte", "Datei"], ["App", "Symbol"], ["Website", "Browser"], ["Algorithmus", "Regel"], ["Datenbank", "Information"],
+    ["Prozessor", "Chip"], ["Tastatur", "Taste"], ["E-Mail", "Nachricht"], ["Sensor", "Messung"], ["Steckdose", "Strom"],
+    ["Laser", "Licht"], ["Smartphone", "Nachricht"], ["Headset", "Gespräch"], ["PlayStation", "Controller"], ["Switch", "Konsole"],
+    ["Bildschirm", "Pixel"], ["Browser", "Surfen"], ["Netzteil", "Energie"], ["Bluetooth", "Verbindung"], ["Software", "Programm"],
+    ["Hardware", "Bauteil"], ["Grafikkarte", "Bild"], ["Modem", "Signal"], ["Mikrochip", "Technik"], ["Ladegerät", "Kabel"]
+  ],
+      essen: [
+    ["Apfel", "Baum"], ["Banane", "Schale"], ["Käse", "Milch"], ["Brot", "Backofen"], ["Pizza", "Ofen"],
+    ["Nudel", "Soße"], ["Reis", "Asien"], ["Fisch", "Meer"], ["Fleisch", "Grill"], ["Salat", "Gemüse"],
+    ["Zucker", "Süß"], ["Salz", "Streuer"], ["Ei", "Pfanne"], ["Butter", "Brot"], ["Honig", "Biene"],
+    ["Milch", "Kuh"], ["Wurst", "Brötchen"], ["Joghurt", "Becher"], ["Kuchen", "Ofen"], ["Keks", "Knusper"],
+    ["Eis", "Kalt"], ["Schokolade", "Tafel"], ["Birne", "Baum"], ["Orange", "Vitamin"], ["Zitrone", "Sauer"],
+    ["Marmelade", "Frucht"], ["Suppe", "Löffel"], ["Kartoffel", "Knolle"], ["Pommes", "Fritteuse"], ["Steak", "Pfanne"],
+    ["Apfelmus", "Löffel"], ["Pudding", "Vanille"], ["Waffel", "Teig"], ["Sahne", "Kuchen"], ["Torte", "Kerze"],
+    ["Toast", "Toaster"], ["Brötchen", "Bäcker"], ["Kaffee", "Bohne"], ["Tee", "Tasse"], ["Saft", "Frucht"],
+    ["Wasser", "Durst"], ["Cola", "Blase"], ["Bier", "Hopfen"], ["Wein", "Traube"], ["Nuss", "Schale"],
+    ["Kirsche", "Rot"], ["Pfirsich", "Flaum"], ["Erdbeere", "Sommer"], ["Melone", "Kern"], ["Ananas", "Südsee"]
+  ],
+      berufe: [
+    ["Arzt", "Patient"], ["Lehrer", "Tafel"], ["Bäcker", "Ofen"], ["Polizist", "Uniform"], ["Feuerwehrmann", "Löschen"],
+    ["Mechaniker", "Werkstatt"], ["Elektriker", "Kabel"], ["Gärtner", "Pflanze"], ["Koch", "Pfanne"], ["Friseur", "Schere"],
+    ["Kellner", "Teller"], ["Verkäufer", "Kasse"], ["Bauer", "Feld"], ["Pilot", "Flugzeug"], ["Zahnarzt", "Bohrer"],
+    ["Architekt", "Plan"], ["Ingenieur", "Maschine"], ["Journalist", "Artikel"], ["Fotograf", "Kamera"], ["Musiker", "Instrument"],
+    ["Schauspieler", "Bühne"], ["Designer", "Mode"], ["Richter", "Urteil"], ["Anwalt", "Mandant"], ["Apotheker", "Medizin"],
+    ["Tierarzt", "Hund"], ["Chemiker", "Labor"], ["Maurer", "Stein"], ["Schreiner", "Holz"], ["Maler", "Farbe"],
+    ["Busfahrer", "Lenkrad"], ["Lokführer", "Zug"], ["Briefträger", "Post"], ["Bibliothekar", "Bücher"], ["Sekretär", "Computer"],
+    ["Florist", "Blumen"], ["Fischer", "Netz"], ["Metzger", "Fleisch"], ["Programmierer", "Code"], ["Trainer", "Sport"],
+    ["Sänger", "Mikrofon"], ["Autor", "Buch"], ["Zimmermann", "Hammer"], ["Banker", "Geld"], ["Politiker", "Rede"]
+  ],
+      haustier: [
+    ["Hund", "Leine"], ["Katze", "Schnurren"], ["Hamster", "Rad"], ["Meerschweinchen", "Pfeifen"], ["Kaninchen", "Möhre"],
+    ["Papagei", "Sprechen"], ["Goldfisch", "Aquarium"], ["Schildkröte", "Panzer"], ["Wellensittich", "Flügel"], ["Ratte", "Schwanz"],
+    ["Maus", "Käse"], ["Pferd", "Box"], ["Ziege", "Meckern"], ["Schaf", "Wolle"], ["Esel", "Wiehern"],
+    ["Huhn", "Ei"], ["Hahn", "Kamm"], ["Katze", "Krallen"], ["Hund", "Pfote"], ["Hamster", "Käfig"],
+    ["Kaninchen", "Fell"], ["Meerschweinchen", "Stroh"], ["Goldfisch", "Wasser"], ["Schildkröte", "Langsamkeit"],
+    ["Pferd", "Sattel"], ["Papagei", "Federn"], ["Vogel", "Käfig"], ["Hund", "Treue"], ["Katze", "Blick"],
+    ["Pferd", "Mähne"], ["Fisch", "Flosse"], ["Reptil", "Terrarium"], ["Vogel", "Singen"], ["Hund", "Freund"],
+    ["Katze", "Kratzbaum"], ["Pferd", "Reiten"], ["Hund", "Wachsamkeit"], ["Katze", "Sofa"], ["Vogel", "Flug"],
+    ["Ziege", "Milch"], ["Hamster", "Backe"], ["Kaninchen", "Nase"], ["Papagei", "Schnabel"], ["Hund", "Schwanz"]
+  ],
+      saegetier: [
+    ["Elefant", "Rüssel"], ["Löwe", "Mähne"], ["Tiger", "Streifen"], ["Pferd", "Hufe"], ["Kuh", "Milch"],
+    ["Affe", "Banane"], ["Bär", "Tatze"], ["Wolf", "Rudel"], ["Fuchs", "Schwanz"], ["Schwein", "Nase"],
+    ["Zebra", "Streifen"], ["Giraffe", "Hals"], ["Nashorn", "Horn"], ["Känguru", "Beutel"], ["Koala", "Baum"],
+    ["Delfin", "Meer"], ["Wal", "Flosse"], ["Fledermaus", "Flug"], ["Panda", "Bambus"], ["Leopard", "Fleck"],
+    ["Igel", "Stachel"], ["Kamel", "Wüste"], ["Esel", "Last"], ["Schaf", "Wolle"], ["Ziege", "Berg"],
+    ["Kaninchen", "Springen"], ["Reh", "Wald"], ["Hirsch", "Geweih"], ["Büffel", "Herde"], ["Waschbär", "Maske"],
+    ["Otter", "Wasser"], ["Ratte", "Schwanz"], ["Dachs", "Bau"], ["Biber", "Staudamm"], ["Feldhase", "Feld"],
+    ["Orang-Utan", "Wald"], ["Gorilla", "Kraft"], ["Seekuh", "Meer"], ["Walross", "Zahn"], ["Puma", "Berg"],
+    ["Luchs", "Ohren"], ["Murmeltier", "Winterschlaf"], ["Faultier", "Langsamkeit"], ["Kojote", "Wüste"], ["Antilope", "Lauf"],
+    ["Wildschwein", "Jagd"], ["Nagetier", "Zähne"]
+  ],
+      hobbys: [
+    ["Lesen", "Buch"], ["Malen", "Pinsel"], ["Fotografie", "Kamera"], ["Kochen", "Rezept"], ["Backen", "Teig"],
+    ["Gärtnern", "Blumen"], ["Angeln", "See"], ["Schwimmen", "Becken"], ["Wandern", "Berg"], ["Joggen", "Strecke"],
+    ["Reiten", "Pferd"], ["Tanzen", "Musik"], ["Singen", "Stimme"], ["Musik", "Instrument"], ["Zeichnen", "Papier"],
+    ["Modellbau", "Kleber"], ["Nähen", "Stoff"], ["Stricken", "Wolle"], ["Basteln", "Schere"], ["Bloggen", "Text"],
+    ["Spielen", "Konsole"], ["Filme", "Kino"], ["Serien", "Folgen"], ["Yoga", "Ruhe"], ["Meditation", "Stille"],
+    ["Laufen", "Schuhe"], ["Sammeln", "Objekte"], ["Schreiben", "Stift"], ["Reisen", "Koffer"], ["Gitarre", "Saiten"],
+    ["Klavier", "Tasten"], ["Schach", "Brett"], ["Videospiele", "Controller"], ["Fotobearbeitung", "Computer"], ["Origami", "Papier"],
+    ["Camping", "Zelt"], ["Klettern", "Seil"], ["Fitness", "Hantel"], ["Tanzen", "Bewegung"], ["Musizieren", "Rhythmus"],
+    ["Surfen", "Welle"], ["Basteln", "Idee"], ["Lesen", "Kapitel"], ["Wandern", "Pfad"], ["Kochen", "Pfanne"]
+  ],
+      natur: [
+    ["Baum", "Wald"], ["Blume", "Duft"], ["Gras", "Wiese"], ["Berg", "Gipfel"], ["See", "Wasser"],
+    ["Fluss", "Strom"], ["Meer", "Welle"], ["Himmel", "Wolke"], ["Wald", "Tiere"], ["Felsen", "Stein"],
+    ["Sonne", "Licht"], ["Mond", "Nacht"], ["Stern", "Himmel"], ["Regen", "Tropfen"], ["Schnee", "Kälte"],
+    ["Wüste", "Sand"], ["Tal", "Boden"], ["Vulkan", "Lava"], ["Insel", "Meer"], ["Ozean", "Weite"],
+    ["Strand", "Muschel"], ["Wind", "Brise"], ["Nebel", "Feuchtigkeit"], ["Eis", "Kälte"], ["Flamme", "Feuer"],
+    ["Wasserfall", "Höhe"], ["Gletscher", "Eis"], ["Höhle", "Dunkelheit"], ["Feld", "Ernte"], ["Busch", "Blätter"],
+    ["Ast", "Zweig"], ["Biene", "Honig"], ["Schmetterling", "Flügel"], ["Vogel", "Nest"], ["Reh", "Wald"],
+    ["Pilz", "Wald"], ["Laub", "Herbst"], ["Saat", "Korn"], ["Frucht", "Baum"], ["Blatt", "Grün"],
+    ["Fisch", "Wasser"], ["Koralle", "Meer"], ["Möwe", "Strand"], ["Tanne", "Winter"], ["Eule", "Nacht"],
+    ["Fuchs", "Wald"], ["Bergsee", "Spiegelung"], ["Hirsch", "Geweih"], ["Kiesel", "Strand"], ["Moos", "Feuchtigkeit"]
+  ],
+      sonstiges: [
+    ["Auto", "Benzin"], ["Straße", "Ampel"], ["Bus", "Haltestelle"], ["Zug", "Schiene"], ["Flugzeug", "Start"],
+    ["Fahrrad", "Helm"], ["Supermarkt", "Einkaufswagen"], ["Restaurant", "Besteck"], ["Kaffee", "Bohne"], ["Arbeit", "Büro"],
+    ["Lampe", "Licht"], ["Musik", "Kopfhörer"], ["Handy", "Display"], ["Internet", "Browser"], ["Schlüssel", "Schloss"],
+    ["Küche", "Herd"], ["Badezimmer", "Spiegel"], ["Garten", "Blume"], ["Briefkasten", "Post"], ["Geldbörse", "Münze"],
+    ["Kino", "Leinwand"], ["Stadt", "Häuser"], ["Land", "Grenze"], ["Wald", "Bäume"], ["Strand", "Sand"],
+    ["Berg", "Gipfel"], ["See", "Boot"], ["Deutschland", "Berlin"], ["Frankreich", "Paris"], ["Italien", "Rom"],
+    ["Japan", "Tokyo"], ["Kanada", "Ahorn"], ["USA", "Freiheit"], ["Schweiz", "Berge"], ["Schweden", "Winter"],
+    ["Norwegen", "Fjord"], ["Regen", "Wolken"], ["Sonne", "Hitze"], ["Mond", "Nacht"], ["Stern", "Himmel"],
+    ["Zeit", "Uhr"], ["Freundschaft", "Lächeln"], ["Abenteuer", "Mut"], ["Wissen", "Buch"], ["Träume", "Schlaf"],
+    ["Zukunft", "Plan"], ["Glück", "Zufall"], ["Magie", "Zauber"], ["Technik", "Fortschritt"], ["Natur", "Leben"]
+  ],
+      mix: [
+    ["Chaos", "Zimmer"], ["Lachen", "Witz"], ["Regenschirm", "Tropfen"], ["Sandwich", "Picknick"], ["Kamera", "Erinnerung"],
+    ["Fernsehen", "Abend"], ["Stau", "Auto"], ["Kalender", "Termin"], ["Kerze", "Feier"], ["Brille", "Sehen"],
+    ["Uhr", "Sekunde"], ["Laptop", "Arbeit"], ["Kissen", "Schlaf"], ["Fahrrad", "Straße"], ["Wolke", "Regen"],
+    ["Post", "Brief"], ["Maske", "Gesicht"], ["Buch", "Kapitel"], ["Lampe", "Nacht"], ["Reise", "Koffer"],
+    ["Treppen", "Stufen"], ["Zug", "Bahnhof"], ["Energie", "Kraftwerk"], ["Spiel", "Freizeit"], ["Zettel", "Notiz"],
+    ["Kerze", "Duft"], ["Bus", "Ticket"], ["Zeitung", "Artikel"], ["Schlüssel", "Tür"], ["Handy", "Anruf"],
+    ["Licht", "Schalter"], ["Brücke", "Fluss"], ["Markt", "Obst"], ["Hemd", "Knopf"], ["Karte", "Weg"],
+    ["Wolke", "Himmel"], ["Fenster", "Ausblick"], ["Stein", "Erinnerung"], ["Radio", "Musik"], ["Ufer", "See"],
+    ["Park", "Bank"], ["Turm", "Aussicht"], ["Tasse", "Tee"], ["Ball", "Spiel"], ["Auto", "Reise"],
+    ["Foto", "Erinnerung"], ["Film", "Abend"], ["Ticket", "Reise"], ["Straße", "Ziel"], ["Buch", "Titel"]
+  ]
     };
 
     let players = [], usedWords = [], selectedWords = [];
