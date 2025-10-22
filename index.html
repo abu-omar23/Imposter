@@ -141,18 +141,13 @@
     const wordPool = {
       leicht: [["Ball", "rund"], ["Haus", "Wohnung"], ["Auto", "Fahren"]],
       tiere: [["Hund", "Bellen"], ["Katze", "Miau"], ["Vogel", "Fliegen"]],
-      schule: [["Tafel", "Unterricht"], ["Lehrer", "Person"], ["Mathe", "Fach"]],
-      technik: [["Computer", "Gerät"], ["Handy", "Telefon"], ["App", "Software"]],
-      essen: [["Pizza", "Ofen"], ["Apfel", "Frucht"], ["Käse", "Milch"]],
-      berufe: [["Arzt", "Krankenhaus"], ["Bäcker", "Brot"], ["Pilot", "Flugzeug"]],
-      fantasie: [["Drache", "Feuer"], ["Zauberer", "Magie"], ["Elf", "Ohren"]],
-      hobbys: [["Lesen", "Buch"], ["Malen", "Farben"], ["Gärtnern", "Pflanzen"]],
-      familie: [["Mutter", "Eltern"], ["Vater", "Kind"], ["Schwester", "Geschwister"]]
+      schule: [["Tafel", "Unterricht"], ["Lehrer", "Person"], ["Mathe", "Fach"]]
     };
 
     let players = [], usedWords = [], selectedWords = [];
     let currentIndex = 0, imposterIndex = 0;
     let realWord = "", imposterHint = "", starter = "";
+    let roundStartTime = 0;
 
     function toggleCategoryMenu() {
       document.getElementById("categoryList").classList.toggle("visible");
@@ -207,7 +202,8 @@
       currentIndex = 0;
       document.getElementById("setup").style.display = "none";
       document.getElementById("game").style.display = "block";
-      document.getElementById("statusText").textContent = `🎲 ${starter} beginnt die Runde!`;
+      document.getElementById("statusText").textContent = "";
+      roundStartTime = Date.now();
       showPlayerCard();
     }
 
@@ -226,6 +222,7 @@
 
     function setupSwipe() {
       const swipeCard = document.getElementById("swipeCard");
+      const wordCard = document.getElementById("wordCard");
       let startY = 0, moved = false, currentY = 0;
 
       swipeCard.ontouchstart = e => {
@@ -238,37 +235,30 @@
         if (deltaY > 0) {
           swipeCard.style.transition = 'none';
           swipeCard.style.transform = `translateY(-${deltaY}px)`;
+          wordCard.textContent = currentIndex === imposterIndex ? `😈 Du bist der Imposter! Hinweis: ${imposterHint}` : `🗝️ Dein Wort: ${realWord}`;
           moved = true;
         }
       };
       swipeCard.ontouchend = () => {
         if (!moved) return;
         let deltaY = startY - currentY;
-        swipeCard.style.transition = 'transform 0.2s ease';
+        swipeCard.style.transition = 'transform 0.15s ease';
         if (deltaY > 60) {
           swipeCard.style.transform = 'translateY(-120%)';
-          setTimeout(() => revealWord(), 200);
+          setTimeout(() => {
+            swipeCard.style.transform = 'translateY(0)';
+            if (currentIndex < players.length - 1) {
+              document.getElementById("nextBtn").style.display = "block";
+            } else {
+              document.getElementById("cardContainer").style.display = "none";
+              document.getElementById("statusText").textContent = `🎲 ${starter} beginnt die Runde!`;
+              document.getElementById("revealImposterBtn").style.display = "block";
+            }
+          }, 300);
         } else {
           swipeCard.style.transform = 'translateY(0)';
         }
       };
-    }
-
-    function revealWord() {
-      const isImposter = currentIndex === imposterIndex;
-      document.getElementById("wordCard").textContent = isImposter
-        ? `😈 Du bist der Imposter! Hinweis: ${imposterHint}`
-        : `🗝️ Dein Wort: ${realWord}`;
-      setTimeout(() => {
-        document.getElementById("swipeCard").style.transform = "translateY(0)";
-        if (currentIndex < players.length - 1) {
-          document.getElementById("nextBtn").style.display = "block";
-        } else {
-          document.getElementById("cardContainer").style.display = "none";
-          document.getElementById("statusText").textContent = `🎲 ${starter} beginnt die Runde!`;
-          document.getElementById("revealImposterBtn").style.display = "block";
-        }
-      }, 500);
     }
 
     function nextPlayer() {
@@ -277,8 +267,11 @@
     }
 
     function revealImposter() {
+      const timePassed = Date.now() - roundStartTime;
+      const minutes = Math.floor(timePassed / 60000);
+      const seconds = Math.floor((timePassed % 60000) / 1000);
       document.getElementById("revealImposterBtn").style.display = "none";
-      document.getElementById("reveal").textContent = `😈 Der Imposter war: ${players[imposterIndex]}\nWort: ${realWord}`;
+      document.getElementById("reveal").textContent = `😈 Imposter: ${players[imposterIndex]}\nWort: ${realWord}\nZeit: ${minutes} min ${seconds} sek`;
       document.getElementById("restartBtn").style.display = "block";
     }
 
@@ -291,7 +284,8 @@
       currentIndex = 0;
       document.getElementById("reveal").textContent = "";
       document.getElementById("restartBtn").style.display = "none";
-      document.getElementById("statusText").textContent = `🎲 ${starter} beginnt die Runde!`;
+      document.getElementById("statusText").textContent = "";
+      roundStartTime = Date.now();
       showPlayerCard();
     }
 
@@ -312,6 +306,8 @@
         [array[i], array[j]] = [array[j], array[i]];
       }
     }
+
+    generateCategoryCheckboxes();
   </script>
 </body>
 </html>
