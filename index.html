@@ -139,6 +139,7 @@
       background: #777;
       width: 80%;
       margin-top: 20px;
+      display: none;
     }
     #resetPointsBtn:hover {
       background: #555;
@@ -154,7 +155,7 @@
     <p>Wie viele Spieler?</p>
     <div id="playerControl">
       <button onclick="changePlayerCount(-1)">−</button>
-      <span id="playerCountDisplay">4</span>
+      <span id="playerCountDisplay">3</span>
       <button onclick="changePlayerCount(1)">+</button>
     </div>
 
@@ -196,10 +197,10 @@
     let realWord = "", imposterHint = "", starter = "";
     let roundStartTime = 0, timerInterval;
     let points = JSON.parse(localStorage.getItem("points") || "{}");
-    let playerCount = 4;
+    let playerCount = 3;
 
     function changePlayerCount(n) {
-      playerCount = Math.min(10, Math.max(4, playerCount + n));
+      playerCount = Math.min(10, Math.max(3, playerCount + n));
       document.getElementById("playerCountDisplay").textContent = playerCount;
       updateNameInputs();
     }
@@ -274,6 +275,7 @@
       document.getElementById("crewWinBtn").style.display = "none";
       document.getElementById("imposterWinBtn").style.display = "none";
       document.getElementById("restartBtn").style.display = "none";
+      document.getElementById("resetPointsBtn").style.display = "none";
       document.getElementById("reveal").textContent = "";
       document.getElementById("timerDisplay").style.display = "none";
       setupSwipe();
@@ -401,10 +403,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
