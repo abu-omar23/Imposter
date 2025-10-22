@@ -164,11 +164,10 @@
     <button id="revealImposterBtn" onclick="revealImposter()">😈 Imposter aufdecken</button>
     <div id="winnerButtons"></div>
     <div id="reveal"></div>
-    <button id="restartBtn" onclick="startNewRound()">🔁 Neue Runde</button>
+    <button id="restartBtn" onclick="location.reload()">🔁 Spiel zurücksetzen</button>
   </div>
 
   <script>
-    // Punktesystem und Spieleranzeige
     let players = [], points = {}, starter = "", imposterIndex = 0;
 
     function adjustPlayerCount(change) {
@@ -192,6 +191,23 @@
       startBtn.textContent = "Spiel starten";
       startBtn.onclick = startGame;
       container.appendChild(startBtn);
+    }
+
+    function startGame() {
+      players = [];
+      const count = parseInt(document.getElementById("playerCountDisplay").value);
+      for (let i = 0; i < count; i++) {
+        const name = document.getElementById(`player${i}`).value.trim();
+        if (!name) return alert("Bitte alle Namen eingeben!");
+        players.push(name);
+        if (!(name in points)) points[name] = 0;
+      }
+      document.getElementById("setup").style.display = "none";
+      document.getElementById("game").style.display = "block";
+      document.getElementById("statusText").textContent = "Spiel gestartet!";
+      starter = players[Math.floor(Math.random() * players.length)];
+      imposterIndex = Math.floor(Math.random() * players.length);
+      document.getElementById("startRoundBtn").style.display = "block";
     }
 
     function toggleCategoryMenu() {
@@ -219,12 +235,20 @@
     }
 
     function revealImposter() {
-      const resultText = `😈 Der Imposter war: ${players[imposterIndex]}\nWort: ...\n\n`;
-      const winnerText = confirm("Hat der Imposter gewonnen?")
-        ? "Der Imposter gewinnt und bekommt 2 Punkte."
-        : "Crewmates gewinnen und bekommen je 1 Punkt.";
+      const resultText = `😈 Der Imposter war: ${players[imposterIndex]}\n`;
+      let winnerText;
+      if (confirm("Hat der Imposter gewonnen?")) {
+        points[players[imposterIndex]] += 2;
+        winnerText = "Der Imposter gewinnt und bekommt 2 Punkte.";
+      } else {
+        players.forEach((p, i) => { if (i !== imposterIndex) points[p]++; });
+        winnerText = "Crewmates gewinnen und bekommen je 1 Punkt.";
+      }
+      let scoreList = Object.entries(points).map(([name, pts]) => `${name}: ${pts} Punkte`).join("\n");
       document.getElementById("statusText").textContent = "";
-      document.getElementById("reveal").textContent = resultText + winnerText;
+      document.getElementById("revealImposterBtn").style.display = "none";
+      document.getElementById("reveal").textContent = resultText + winnerText + "\n\n📊 Punktestand:\n" + scoreList;
+      document.getElementById("restartBtn").style.display = "block";
     }
 
     generateCategoryCheckboxes();
