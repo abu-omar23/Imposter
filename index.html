@@ -91,7 +91,7 @@
       z-index: 1;
       flex-direction: column;
     }
-    #nextBtn, #revealImposterBtn, #restartBtn {
+    #nextBtn, #revealImposterBtn, #restartBtn, #startRoundBtn {
       display: none;
       margin: 20px auto 0;
       background: #0078ff;
@@ -124,6 +124,7 @@
       <div id="swipeCard">🔒 Wische nach oben 👆</div>
     </div>
     <button id="nextBtn" onclick="nextPlayer()">➡️ Nächster Spieler</button>
+    <button id="startRoundBtn" onclick="showStarter()">🎲 Runde starten</button>
     <button id="revealImposterBtn" onclick="revealImposter()">😈 Imposter aufdecken</button>
     <button id="restartBtn" onclick="startNewRound()">🔁 Neue Runde</button>
     <div id="reveal"></div>
@@ -131,9 +132,7 @@
 
   <script>
     const wordPool = {
-      leicht: [["Ball", "rund"], ["Haus", "Wohnung"], ["Auto", "fahren"]],
-      tiere: [["Hund", "Bellen"], ["Katze", "Miau"], ["Vogel", "Fliegen"]],
-      schule: [["Tafel", "Unterricht"], ["Lehrer", "Person"], ["Mathe", "Fach"]]
+      leicht: [["Ball", "rund"], ["Haus", "Wohnung"], ["Auto", "fahren"]]
     };
 
     let players = [], usedWords = [], selectedWords = [];
@@ -206,6 +205,7 @@
       document.getElementById("swipeCard").style.transform = "translateY(0)";
       document.getElementById("cardContainer").style.display = "block";
       document.getElementById("nextBtn").style.display = "none";
+      document.getElementById("startRoundBtn").style.display = "none";
       document.getElementById("revealImposterBtn").style.display = "none";
       document.getElementById("restartBtn").style.display = "none";
       document.getElementById("reveal").textContent = "";
@@ -241,11 +241,16 @@
           } else {
             document.getElementById("playerName").textContent = "";
             document.getElementById("cardContainer").style.display = "none";
-            document.getElementById("statusText").textContent = `🎲 ${starter} beginnt die Runde!`;
-            document.getElementById("revealImposterBtn").style.display = "block";
+            document.getElementById("startRoundBtn").style.display = "block";
           }
         }, 200);
       };
+    }
+
+    function showStarter() {
+      document.getElementById("startRoundBtn").style.display = "none";
+      document.getElementById("statusText").textContent = `🎲 ${starter} beginnt die Runde!`;
+      document.getElementById("revealImposterBtn").style.display = "block";
     }
 
     function nextPlayer() {
