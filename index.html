@@ -255,7 +255,9 @@
           document.getElementById("cardContainer").style.display = "none";
           document.getElementById("playerName").textContent = "";
           document.getElementById("statusText").textContent = "";
-          document.getElementById("revealImposterBtn").style.display = "block";
+          const starter = players[Math.floor(Math.random() * players.length)];
+document.getElementById("statusText").textContent = `🎲 ${starter} beginnt die Runde!`;
+document.getElementById("revealImposterBtn").style.display = "block";
         }
       }, 1000);
     }
@@ -268,7 +270,11 @@
     function startActualGame() {}
 
     function revealImposter() {
-      document.getElementById("reveal").textContent = `😈 Der Imposter war: ${players[imposterIndex]}\nHinweis: ${imposterHint}`;
+      const starter = players[Math.floor(Math.random() * players.length)];
+document.getElementById("reveal").textContent = `😈 Der Imposter war: ${players[imposterIndex]}
+Hinweis: ${imposterHint}
+Wort: ${realWord}
+🎲 ${starter} beginnt die Runde!`;
       document.getElementById("revealImposterBtn").style.display = "none";
       document.getElementById("restartBtn").style.display = "block";
     }
@@ -298,3 +304,4 @@
   </script>
 </body>
 </html>
+
