@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Imposter Wortspiel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    input, button {
+      margin: 5px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+      width: 90%;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    #game {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Imposter Wortspiel 🕵️‍♂️</h1>
+    <div id="setup">
+      <p>Wie viele Spieler?</p>
+      <input type="number" id="playerCount" min="4" max="10" value="4" />
+      <button onclick="setPlayers()">Weiter</button>
+      <div id="nameInputs"></div>
+    </div>
+
+    <div id="game">
+      <h2 id="playerName"></h2>
+      <p id="wordDisplay" style="font-size:1.5em;"></p>
+      <button id="nextButton" onclick="nextPlayer()">Nächster Spieler</button>
+    </div>
+  </div>
+
+  <script>
+    const words = [
+      ["Apfel", "Birne"],
+      ["Hund", "Katze"],
+      ["Auto", "Motorrad"],
+      ["Schule", "Universität"],
+      ["Sommer", "Herbst"],
+      ["Kaffee", "Tee"],
+      ["Berg", "Hügel"],
+      ["Haus", "Wohnung"],
+      ["Brot", "Brötchen"],
+      ["Fußball", "Basketball"]
+    ];
+
+    let players = [];
+    let currentIndex = 0;
+    let realWord = "";
+    let imposterWord = "";
+    let imposterIndex = 0;
+
+    function setPlayers() {
+      const count = parseInt(document.getElementById("playerCount").value);
+      const container = document.getElementById("nameInputs");
+      container.innerHTML = "";
+
+      for (let i = 0; i < count; i++) {
+        const input = document.createElement("input");
+        input.placeholder = `Name Spieler ${i + 1}`;
+        input.id = `player${i}`;
+        container.appendChild(input);
+      }
+
+      const startBtn = document.createElement("button");
+      startBtn.textContent = "Spiel starten";
+      startBtn.onclick = startGame;
+      container.appendChild(startBtn);
+    }
+
+    function startGame() {
+      const count = parseInt(document.getElementById("playerCount").value);
+      players = [];
+      for (let i = 0; i < count; i++) {
+        const name = document.getElementById(`player${i}`).value.trim();
+        if (name === "") {
+          alert("Bitte alle Namen eingeben!");
+          return;
+        }
+        players.push(name);
+      }
+
+      // Zufällige Wörter & Imposter
+      const pair = words[Math.floor(Math.random() * words.length)];
+      if (Math.random() < 0.5) {
+        realWord = pair[0];
+        imposterWord = pair[1];
+      } else {
+        realWord = pair[1];
+        imposterWord = pair[0];
+      }
+      imposterIndex = Math.floor(Math.random() * players.length);
+      currentIndex = 0;
+
+      document.getElementById("setup").style.display = "none";
+      document.getElementById("game").style.display = "block";
+      showWord();
+    }
+
+    function showWord() {
+      const player = players[currentIndex];
+      document.getElementById("playerName").textContent = `Spieler: ${player}`;
+      document.getElementById("wordDisplay").textContent =
+        currentIndex === imposterIndex ? imposterWord : realWord;
+
+      if (currentIndex === players.length - 1) {
+        document.getElementById("nextButton").textContent = "Fertig 🎉";
+      }
+    }
+
+    function nextPlayer() {
+      currentIndex++;
+      if (currentIndex >= players.length) {
+        alert("Alle haben ihr Wort gesehen! Zeit zum Raten! 🕵️‍♀️");
+        location.reload();
+      } else {
+        showWord();
+      }
+    }
+  </script>
+</body>
+</html>
