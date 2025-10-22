@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Imposter Wortspiel 2.0</title>
+  <title>Imposter Wortspiel 2.1</title>
   <style>
     * { box-sizing: border-box; }
     html, body {
@@ -12,10 +12,9 @@
       font-family: "Poppins", sans-serif;
       background: linear-gradient(180deg, #a1c4fd 0%, #c2e9fb 100%);
       height: 100%;
-      overflow-y: auto;         /* erlaubt Scrollen nach unten */
-      overscroll-behavior: none; /* verhindert Safari-Zurückwischen */
+      overflow-y: auto;
+      overscroll-behavior: none;
     }
-
     .card {
       background: white;
       border-radius: 20px;
@@ -81,7 +80,7 @@
       background: #f0f8ff;
       z-index: 1;
     }
-    #nextBtn, #startGameBtn, #revealImposterBtn {
+    #nextBtn, #startGameBtn, #revealImposterBtn, #restartBtn {
       display: none;
       margin-top: 20px;
       background: #0078ff;
@@ -97,10 +96,8 @@
 <body>
   <div class="card" id="setup">
     <h1>Imposter Wortspiel 🕵️‍♂️</h1>
-
     <p><strong>Kategorien auswählen:</strong></p>
     <div class="checkboxes" id="categoryList"></div>
-
     <p>Wie viele Spieler?</p>
     <input type="number" id="playerCount" min="4" max="10" value="4" />
     <button onclick="setPlayers()">Weiter</button>
@@ -117,6 +114,7 @@
     <button id="nextBtn" onclick="nextPlayer()">Nächster Spieler ➡️</button>
     <button id="startGameBtn" onclick="startActualGame()">🎲 Spiel starten</button>
     <button id="revealImposterBtn" onclick="revealImposter()">😈 Imposter aufdecken</button>
+    <button id="restartBtn" onclick="location.reload()">🔁 Neustart</button>
     <div id="reveal"></div>
   </div>
 
@@ -217,6 +215,7 @@
       document.getElementById("nextBtn").style.display = "none";
       document.getElementById("startGameBtn").style.display = "none";
       document.getElementById("revealImposterBtn").style.display = "none";
+      document.getElementById("restartBtn").style.display = "none";
       document.getElementById("reveal").textContent = "";
 
       const swipeCard = document.getElementById("swipeCard");
@@ -224,19 +223,19 @@
       swipeCard.ontouchend = e => {
         const endY = e.changedTouches[0].clientY;
         const distance = startY - endY;
-        if (distance > 50 && !swiped) revealWord();
+        if (distance > 50) revealWord();
         else swipeCard.style.transform = "translateY(0)";
       };
-      swipeCard.onclick = () => { if (!swiped) revealWord(); };
+      swipeCard.onclick = () => { revealWord(); };
     }
 
     function revealWord() {
-      swiped = true;
       const isImposter = currentIndex === imposterIndex;
       document.getElementById("wordCard").textContent = isImposter
         ? `😈 Du bist der Imposter! Hinweis: ${imposterHint}`
         : `🗝️ Dein Wort: ${realWord}`;
       document.getElementById("swipeCard").style.transform = "translateY(-120%)";
+
       setTimeout(() => {
         document.getElementById("swipeCard").style.transform = "translateY(0)";
         if (currentIndex < players.length - 1) {
@@ -244,7 +243,7 @@
         } else {
           document.getElementById("startGameBtn").style.display = "block";
         }
-      }, 1200);
+      }, 1000);
     }
 
     function nextPlayer() {
@@ -261,6 +260,8 @@
 
     function revealImposter() {
       document.getElementById("reveal").textContent = `😈 Der Imposter war: ${players[imposterIndex]}`;
+      document.getElementById("revealImposterBtn").style.display = "none";
+      document.getElementById("restartBtn").style.display = "block";
     }
 
     function shuffle(array) {
@@ -270,7 +271,6 @@
       }
     }
 
-    // Init Kategorie-Checkboxen direkt
     generateCategoryCheckboxes();
   </script>
 </body>
