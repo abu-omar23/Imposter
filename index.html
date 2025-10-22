@@ -132,7 +132,19 @@
 
   <script>
     const wordPool = {
-      leicht: [["Ball", "rund"], ["Haus", "Wohnung"], ["Auto", "fahren"]]
+      leicht: [["Ball", "rund"], ["Haus", "Wohnung"], ["Auto", "fahren"]],
+      trend: [["TikTok", "App"], ["Influencer", "Stars"], ["Meme", "Internet"]],
+      natur: [["Baum", "grün"], ["Fluss", "Wasser"], ["Berg", "hoch"]],
+      tiere: [["Hund", "Leine"], ["Katze", "Schnurren"], ["Vogel", "Fliegen"]],
+      sport: [["Fußball", "Tor"], ["Tennis", "Schläger"], ["Basketball", "Korb"]],
+      schule: [["Tafel", "Unterricht"], ["Mathe", "Zahlen"], ["Lehrer", "Klasse"]],
+      allgemeinbildung: [["Europa", "Kontinent"], ["Merkel", "Politik"], ["Wasser", "H2O"]],
+      nomen: [["Tisch", "Möbel"], ["Buch", "Lesen"], ["Stuhl", "Sitzen"]],
+      sonstige: [["Magie", "Zauber"], ["Zeit", "Uhr"], ["Traum", "Schlaf"]],
+      haustier: [["Hamster", "Käfig"], ["Meerschweinchen", "Fell"], ["Kaninchen", "Hoppeln"]],
+      saegetier: [["Pferd", "Hufe"], ["Löwe", "Raubtier"], ["Elefant", "Rüssel"]],
+      hobbys: [["Malen", "Farbe"], ["Lesen", "Buch"], ["Kochen", "Essen"]],
+      familie: [["Mutter", "Eltern"], ["Vater", "Kind"], ["Schwester", "Geschwister"]]
     };
 
     let players = [], usedWords = [], selectedWords = [];
@@ -263,6 +275,7 @@
       const minutes = Math.floor(timePassed / 60000);
       const seconds = Math.floor((timePassed % 60000) / 1000);
       document.getElementById("revealImposterBtn").style.display = "none";
+      document.getElementById("statusText").textContent = "";
       document.getElementById("reveal").textContent = `😈 Imposter: ${players[imposterIndex]}\nWort: ${realWord}\nZeit: ${minutes} min ${seconds} sek`;
       document.getElementById("restartBtn").style.display = "block";
     }
@@ -303,3 +316,4 @@
   </script>
 </body>
 </html>
+
