@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Imposter Wortspiel – Vollversion</title>
   <style>
     * { box-sizing: border-box; }
     html, body {
       user-select: none;
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(180deg, #a1c4fd 0%, #c2e9fb 100%);
       height: 100%;
@@ -19,124 +18,50 @@
       border-radius: 20px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.15);
       padding: 30px;
-      max-width: 500px;
+      max-width: 480px;
       margin: 30px auto;
+      width: 90%;
       text-align: center;
     }
-    h1, h2, p { color: #333; }
-    button, input {
-      margin: 6px auto;
-      padding: 10px;
+    input, button {
+      margin: 6px auto; padding: 10px;
       border-radius: 10px;
       border: 1px solid #ccc;
-      font-size: 1em;
-      width: 90%;
+      font-size: 1em; width: 90%;
       display: block;
     }
     button {
-      background: #4CAF50;
-      color: white;
-      cursor: pointer;
-      transition: 0.2s;
+      background: #4CAF50; color: white; cursor: pointer; transition: 0.2s;
     }
     button:hover { background: #45a049; }
     #playerControl {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      margin: 10px 0;
+      display: flex; justify-content: center; align-items: center; gap: 10px; margin: 10px 0;
     }
-    #playerCountDisplay {
-      font-weight: bold;
-      font-size: 1.2em;
-    }
+    #playerCountDisplay { font-weight: bold; font-size: 1.2em; }
     .checkboxes {
-      display: none;
-      margin-top: 10px;
-      background: #ffffffa0;
-      padding: 12px;
-      border-radius: 15px;
-      border: 1px solid #ccc;
-      transition: 0.3s ease;
+      display: none; margin-top: 10px;
+      background: #ffffffa0; padding: 10px; border-radius: 15px; border: 1px solid #ccc;
     }
-    .checkboxes.visible {
-      display: block;
-      animation: fadeIn 0.3s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.98); }
-      to { opacity: 1; transform: scale(1); }
-    }
+    .checkboxes.visible { display: block; }
     .checkboxes label {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      margin: 6px 0;
-      padding: 6px 10px;
-      background: #e9f1ff;
-      border-radius: 8px;
-      box-shadow: inset 0 0 3px rgba(0,0,0,0.1);
-      font-size: 1em;
+      display: flex; align-items: center;
+      margin: 5px 0; padding: 5px 10px; border-radius: 8px;
+      background: #e9f1ff; box-shadow: inset 0 0 3px rgba(0,0,0,0.1);
     }
-    .checkboxes input {
-      margin-right: 10px;
-      width: auto;
-      accent-color: #4CAF50;
-    }
+    .checkboxes input { margin-right: 10px; accent-color: #4CAF50; width: auto; }
     #cardContainer {
-      position: relative;
-      height: 220px;
-      overflow: hidden;
-      touch-action: none;
-      display: none;
+      position: relative; height: 220px; overflow: hidden; display: none;
     }
     #swipeCard, #wordCard {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 20px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3em;
-      transition: transform 0.2s ease;
-      text-align: center;
-      padding: 20px;
+      position: absolute; width: 100%; height: 100%;
+      border-radius: 20px; display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 20px; transition: transform 0.2s ease;
     }
-    #swipeCard {
-      background: linear-gradient(to bottom, #7f00ff, #e100ff);
-      color: white;
-      z-index: 2;
-      font-weight: bold;
-      flex-direction: column;
-    }
-    #wordCard {
-      background: #212121;
-      color: #ffffff;
-      z-index: 1;
-      flex-direction: column;
-    }
-    #timerDisplay {
-      font-size: 1.2em;
-      color: #333;
-      margin-top: 10px;
-      display: none;
-    }
-    #reveal {
-      font-size: 1.3em;
-      font-weight: bold;
-      color: darkred;
-      margin-top: 20px;
-      white-space: pre-wrap;
-    }
-    #resetPointsBtn {
-      background: #777;
-      width: 80%;
-      margin-top: 20px;
-      display: none;
-    }
+    #swipeCard { background: linear-gradient(to bottom, #7f00ff, #e100ff); color: white; font-weight: bold; flex-direction: column; }
+    #wordCard { background: #212121; color: #fff; z-index: 1; flex-direction: column; }
+    #reveal { font-size: 1.2em; font-weight: bold; color: darkred; margin-top: 20px; white-space: pre-wrap; }
+    #timerDisplay { font-size: 1.2em; color: #333; margin-top: 10px; display: none; }
+    #resetPointsBtn { background: #777; width: 80%; margin-top: 20px; display: none; }
     #resetPointsBtn:hover { background: #555; }
   </style>
 </head>
@@ -145,271 +70,246 @@
     <h1>Imposter Wortspiel 🕵️‍♂️</h1>
     <button onclick="toggleCategoryMenu()">Kategorien ändern</button>
     <div class="checkboxes" id="categoryList"></div>
-
     <p>Wie viele Spieler?</p>
     <div id="playerControl">
       <button onclick="changePlayerCount(-1)">−</button>
       <span id="playerCountDisplay">3</span>
       <button onclick="changePlayerCount(1)">+</button>
     </div>
-
-    <div id="nameInputs"></div>
+    <div id="nameInputs" style="text-align:center;"></div>
   </div>
 
   <div class="card" id="game" style="display:none">
     <h2 id="playerName"></h2>
     <p id="statusText"></p>
     <p id="timerDisplay">⏱️ Zeit: 00:00</p>
-
     <div id="cardContainer">
       <div id="wordCard">🗝️ Wort anzeigen...</div>
       <div id="swipeCard">🔒 Wische nach oben 👆</div>
     </div>
-
     <button id="nextBtn" onclick="nextPlayer()">➡️ Nächster Spieler</button>
     <button id="startRoundBtn" onclick="showStarter()">🎲 Runde starten</button>
     <button id="revealImposterBtn" onclick="revealImposter()">😈 Imposter aufdecken</button>
     <button id="crewWinBtn" onclick="awardPoints(false)">✔️ Crew gewinnt</button>
     <button id="imposterWinBtn" onclick="awardPoints(true)">😈 Imposter gewinnt</button>
     <button id="restartBtn" onclick="startNewRound()">🔁 Neue Runde</button>
-
     <div id="reveal"></div>
     <button id="resetPointsBtn" onclick="resetPoints()">🗑️ Punkte löschen</button>
   </div>
 
   <script>
+    /* 🧠 Wortpool einfügen */
     const wordPool = {
-  leicht: [
-    ["Ball", "Leder"], ["Haus", "Dach"], ["Auto", "Verkehr"], ["Buch", "Seiten"], ["Stuhl", "Sitzen"],
-    ["Lampe", "Licht"], ["Tisch", "Essen"], ["Fenster", "Glas"], ["Brot", "Scheibe"], ["Schlüssel", "Schloss"],
-    ["Gabel", "Besteck"], ["Tasse", "Kaffee"], ["Flasche", "Wasser"], ["Schule", "Pause"], ["Lehrer", "Tafel"],
-    ["Brief", "Umschlag"], ["Hund", "Leine"], ["Katze", "Schnurren"], ["Uhr", "Zeit"], ["Garten", "Zaun"],
-    ["Straße", "Asphalt"], ["Bett", "Decke"], ["Kissen", "Schlaf"], ["Wasser", "Quelle"], ["Wolke", "Himmel"],
-    ["Sonne", "Strahl"], ["Mond", "Nacht"], ["Stern", "Glitzer"], ["Schnee", "Kälte"], ["Blume", "Duft"],
-    ["Vogel", "Flügel"], ["Tür", "Klinke"], ["Kerze", "Flamme"], ["Küche", "Kochen"], ["Schrank", "Regal"],
-    ["Radio", "Musik"], ["Computer", "Tastatur"], ["Telefon", "Klingeln"], ["Bus", "Haltestelle"], ["Geld", "Münze"],
-    ["Foto", "Bild"], ["Zug", "Gleis"], ["Wiese", "Gras"], ["Schuh", "Sohle"], ["Jacke", "Reißverschluss"],
-    ["Rucksack", "Tragen"], ["Brille", "Sehen"], ["Apfel", "Obst"], ["Kerze", "Wachs"], ["Pfanne", "Kochen"]
-  ],
-  sport: [
-    ["Fußball", "Rasen"], ["Basketball", "Korb"], ["Tennis", "Aufschlag"], ["Schwimmen", "Bahn"], ["Laufen", "Tempo"],
-    ["Radfahren", "Pedale"], ["Boxen", "Ring"], ["Volleyball", "Netz"], ["Skifahren", "Berg"], ["Klettern", "Griff"],
-    ["Reiten", "Sattel"], ["Surfen", "Welle"], ["Skaten", "Brett"], ["Golf", "Loch"], ["Handball", "Halle"],
-    ["Tanzen", "Bewegung"], ["Yoga", "Ruhe"], ["Judo", "Gürtel"], ["Eishockey", "Puck"], ["Rudern", "Boot"],
-    ["Kanu", "Paddel"], ["Fechten", "Degen"], ["Bogenschießen", "Ziel"], ["Tauchen", "Maske"], ["Segeln", "Wind"],
-    ["Kegeln", "Bahn"], ["Wandern", "Berg"], ["Motorsport", "Helm"], ["Tischtennis", "Platte"], ["Baseball", "Schläger"],
-    ["Snowboard", "Winter"], ["Ringen", "Matte"], ["Ballett", "Tutu"], ["Marathon", "Ausdauer"], ["Fahrrad", "Kette"],
-    ["Dart", "Pfeil"], ["Skispringen", "Schanze"], ["Eislaufen", "Kufen"], ["Triathlon", "Disziplin"], ["Boxsack", "Training"],
-    ["Bowling", "Kugel"], ["Reiten", "Pferd"], ["Bergsteigen", "Seil"], ["Turnen", "Gerät"], ["Joggen", "Park"],
-    ["Gymnastik", "Dehnung"], ["Sprint", "Start"], ["Hockey", "Schläger"], ["Schwimmbrille", "Wasser"], ["Kraftsport", "Hantel"]
-  ],
-  schule: [
-    ["Tafel", "Kreide"], ["Lehrer", "Klasse"], ["Buch", "Lesen"], ["Schüler", "Pause"], ["Heft", "Blatt"],
-    ["Bleistift", "Spitzer"], ["Radiergummi", "Fehler"], ["Lineal", "Messen"], ["Atlas", "Karte"], ["Chemie", "Labor"],
-    ["Biologie", "Zelle"], ["Physik", "Kraft"], ["Mathe", "Zahl"], ["Deutsch", "Grammatik"], ["Englisch", "Sprache"],
-    ["Kunst", "Farbe"], ["Musik", "Instrument"], ["Sport", "Halle"], ["Geschichte", "Zeit"], ["Erdkunde", "Land"],
-    ["Direktor", "Büro"], ["Hausaufgabe", "Abgabe"], ["Klassenarbeit", "Punkte"], ["Zeugnis", "Note"], ["Schulbus", "Haltestelle"],
-    ["Schulhof", "Ball"], ["Pausebrot", "Butter"], ["Rucksack", "Tragen"], ["Tafelwischer", "Schwamm"], ["Tinte", "Füller"],
-    ["Schulweg", "Ampel"], ["Lernen", "Wissen"], ["Test", "Bewertung"], ["Arbeitsblatt", "Aufgabe"], ["Taschenrechner", "Rechnen"],
-    ["Zirkel", "Kreis"], ["Aufsatz", "Text"], ["Schulbank", "Sitzen"], ["Lehrplan", "Thema"], ["Klassenraum", "Tafel"],
-    ["Whiteboard", "Marker"], ["Buchseite", "Lesen"], ["Schulmappe", "Heft"], ["Pausengong", "Ton"], ["Projektor", "Bild"],
-    ["Tafelbild", "Schrift"], ["Notenheft", "Bewertung"], ["Abschluss", "Feier"], ["Präsentation", "Thema"], ["Experiment", "Versuch"]
-  ],
-  technik: [
-    ["Computer", "Prozessor"], ["Handy", "Display"], ["Tablet", "Touch"], ["Fernseher", "Bildschirm"], ["Laptop", "Tastatur"],
-    ["Drucker", "Papier"], ["Scanner", "Dokument"], ["Router", "Signal"], ["Kabel", "Stecker"], ["Kamera", "Linse"],
-    ["Mikrofon", "Ton"], ["Kopfhörer", "Musik"], ["USB", "Speicher"], ["Akku", "Ladung"], ["Monitor", "Anzeige"],
-    ["Maus", "Klick"], ["Lautsprecher", "Sound"], ["Smartwatch", "Armband"], ["Konsole", "Spiele"], ["Joystick", "Steuerung"],
-    ["Roboter", "Maschine"], ["Drohne", "Flug"], ["WLAN", "Verbindung"], ["Server", "Netzwerk"], ["Cloud", "Daten"],
-    ["Festplatte", "Datei"], ["App", "Symbol"], ["Website", "Browser"], ["Algorithmus", "Regel"], ["Datenbank", "Information"],
-    ["Prozessor", "Chip"], ["Tastatur", "Taste"], ["E-Mail", "Nachricht"], ["Sensor", "Messung"], ["Steckdose", "Strom"],
-    ["Laser", "Licht"], ["Smartphone", "Nachricht"], ["Headset", "Gespräch"], ["PlayStation", "Controller"], ["Switch", "Konsole"],
-    ["Bildschirm", "Pixel"], ["Browser", "Surfen"], ["Netzteil", "Energie"], ["Bluetooth", "Verbindung"], ["Software", "Programm"],
-    ["Hardware", "Bauteil"], ["Grafikkarte", "Bild"], ["Modem", "Signal"], ["Mikrochip", "Technik"], ["Ladegerät", "Kabel"]
-  ],
-  essen: [
-    ["Apfel", "Baum"], ["Banane", "Schale"], ["Käse", "Milch"], ["Brot", "Backofen"], ["Pizza", "Ofen"],
-    ["Nudel", "Soße"], ["Reis", "Asien"], ["Fisch", "Meer"], ["Fleisch", "Grill"], ["Salat", "Gemüse"],
-    ["Zucker", "Süß"], ["Salz", "Streuer"], ["Ei", "Pfanne"], ["Butter", "Brot"], ["Honig", "Biene"],
-    ["Milch", "Kuh"], ["Wurst", "Brötchen"], ["Joghurt", "Becher"], ["Kuchen", "Ofen"], ["Keks", "Knusper"],
-    ["Eis", "Kalt"], ["Schokolade", "Tafel"], ["Birne", "Baum"], ["Orange", "Vitamin"], ["Zitrone", "Sauer"],
-    ["Marmelade", "Frucht"], ["Suppe", "Löffel"], ["Kartoffel", "Knolle"], ["Pommes", "Fritteuse"], ["Steak", "Pfanne"],
-    ["Apfelmus", "Löffel"], ["Pudding", "Vanille"], ["Waffel", "Teig"], ["Sahne", "Kuchen"], ["Torte", "Kerze"],
-    ["Toast", "Toaster"], ["Brötchen", "Bäcker"], ["Kaffee", "Bohne"], ["Tee", "Tasse"], ["Saft", "Frucht"],
-    ["Wasser", "Durst"], ["Cola", "Blase"], ["Bier", "Hopfen"], ["Wein", "Traube"], ["Nuss", "Schale"],
-    ["Kirsche", "Rot"], ["Pfirsich", "Flaum"], ["Erdbeere", "Sommer"], ["Melone", "Kern"], ["Ananas", "Südsee"]
-  ],
-  gefuehle: [
-    ["Freude", "Lächeln"], ["Angst", "Schatten"], ["Wut", "Rot"], ["Trauer", "Träne"], ["Liebe", "Herz"],
-    ["Mut", "Kraft"], ["Ekel", "Geruch"], ["Scham", "Blick"], ["Neid", "Vergleich"], ["Stolz", "Brust"],
-    ["Zufriedenheit", "Ruhe"], ["Überraschung", "Gesicht"], ["Vertrauen", "Freund"], ["Einsamkeit", "Stille"],
-    ["Stress", "Druck"], ["Erleichterung", "Atmen"], ["Verlegenheit", "Erröten"], ["Sehnsucht", "Ferne"], ["Hoffnung", "Zukunft"],
-    ["Frust", "Blockade"], ["Dankbarkeit", "Lächeln"], ["Langeweile", "Zeit"], ["Furcht", "Gefahr"], ["Begeisterung", "Applaus"],
-    ["Eifersucht", "Liebe"], ["Mitgefühl", "Trösten"], ["Freundschaft", "Nähe"], ["Zorn", "Explosion"], ["Zweifel", "Frage"],
-    ["Ruhe", "Stille"], ["Gier", "Wunsch"], ["Schuld", "Fehler"], ["Erstaunen", "Augen"], ["Panik", "Chaos"],
-    ["Wohlgefühl", "Entspannung"], ["Ehrfurcht", "Respekt"], ["Unsicherheit", "Zögern"], ["Glück", "Lächeln"], ["Bedauern", "Fehler"],
-    ["Sorge", "Gedanke"], ["Sympathie", "Lächeln"], ["Ermutigung", "Ziel"], ["Leid", "Schmerz"], ["Heimweh", "Sehnsucht"],
-    ["Verlust", "Abschied"], ["Hass", "Kälte"], ["Neugier", "Frage"], ["Erleichterung", "Luft"], ["Freundlichkeit", "Gesten"]
-  ],
-  berufe: [
-    ["Arzt", "Patient"], ["Lehrer", "Tafel"], ["Bäcker", "Ofen"], ["Polizist", "Uniform"], ["Feuerwehrmann", "Löschen"],
-    ["Mechaniker", "Werkstatt"], ["Elektriker", "Kabel"], ["Gärtner", "Pflanze"], ["Koch", "Pfanne"], ["Friseur", "Schere"],
-    ["Kellner", "Teller"], ["Verkäufer", "Kasse"], ["Bauer", "Feld"], ["Pilot", "Flugzeug"], ["Zahnarzt", "Bohrer"],
-    ["Architekt", "Plan"], ["Ingenieur", "Maschine"], ["Journalist", "Artikel"], ["Fotograf", "Kamera"], ["Musiker", "Instrument"],
-    ["Schauspieler", "Bühne"], ["Designer", "Mode"], ["Richter", "Urteil"], ["Anwalt", "Mandant"], ["Apotheker", "Medizin"],
-    ["Tierarzt", "Hund"], ["Chemiker", "Labor"], ["Maurer", "Stein"], ["Schreiner", "Holz"], ["Maler", "Farbe"],
-    ["Busfahrer", "Lenkrad"], ["Lokführer", "Zug"], ["Briefträger", "Post"], ["Bibliothekar", "Bücher"], ["Sekretär", "Computer"],
-    ["Florist", "Blumen"], ["Fischer", "Netz"], ["Metzger", "Fleisch"], ["Programmierer", "Code"], ["Trainer", "Sport"],
-    ["Sänger", "Mikrofon"], ["Autor", "Buch"], ["Zimmermann", "Hammer"], ["Banker", "Geld"], ["Politiker", "Rede"]
-  ],
-  haustier: [
-    ["Hund", "Leine"], ["Katze", "Schnurren"], ["Hamster", "Rad"], ["Meerschweinchen", "Pfeifen"], ["Kaninchen", "Möhre"],
-    ["Papagei", "Sprechen"], ["Goldfisch", "Aquarium"], ["Schildkröte", "Panzer"], ["Wellensittich", "Flügel"], ["Ratte", "Schwanz"],
-    ["Maus", "Käse"], ["Pferd", "Box"], ["Ziege", "Meckern"], ["Schaf", "Wolle"], ["Esel", "Wiehern"],
-    ["Huhn", "Ei"], ["Hahn", "Kamm"], ["Katze", "Krallen"], ["Hund", "Pfote"], ["Hamster", "Käfig"],
-    ["Kaninchen", "Fell"], ["Meerschweinchen", "Stroh"], ["Goldfisch", "Wasser"], ["Schildkröte", "Langsamkeit"],
-    ["Pferd", "Sattel"], ["Papagei", "Federn"], ["Vogel", "Käfig"], ["Hund", "Treue"], ["Katze", "Blick"],
-    ["Pferd", "Mähne"], ["Fisch", "Flosse"], ["Reptil", "Terrarium"], ["Vogel", "Singen"], ["Hund", "Freund"],
-    ["Katze", "Kratzbaum"], ["Pferd", "Reiten"], ["Hund", "Wachsamkeit"], ["Katze", "Sofa"], ["Vogel", "Flug"],
-    ["Ziege", "Milch"], ["Hamster", "Backe"], ["Kaninchen", "Nase"], ["Papagei", "Schnabel"], ["Hund", "Schwanz"]
-  ],
-  saegetier: [
-    ["Elefant", "Rüssel"], ["Löwe", "Mähne"], ["Tiger", "Streifen"], ["Pferd", "Hufe"], ["Kuh", "Milch"],
-    ["Affe", "Banane"], ["Bär", "Tatze"], ["Wolf", "Rudel"], ["Fuchs", "Schwanz"], ["Schwein", "Nase"],
-    ["Zebra", "Streifen"], ["Giraffe", "Hals"], ["Nashorn", "Horn"], ["Känguru", "Beutel"], ["Koala", "Baum"],
-    ["Delfin", "Meer"], ["Wal", "Flosse"], ["Fledermaus", "Flug"], ["Panda", "Bambus"], ["Leopard", "Fleck"],
-    ["Igel", "Stachel"], ["Kamel", "Wüste"], ["Esel", "Last"], ["Schaf", "Wolle"], ["Ziege", "Berg"],
-    ["Kaninchen", "Springen"], ["Reh", "Wald"], ["Hirsch", "Geweih"], ["Büffel", "Herde"], ["Waschbär", "Maske"],
-    ["Otter", "Wasser"], ["Ratte", "Schwanz"], ["Dachs", "Bau"], ["Biber", "Staudamm"], ["Feldhase", "Feld"],
-    ["Orang-Utan", "Wald"], ["Gorilla", "Kraft"], ["Seekuh", "Meer"], ["Walross", "Zahn"], ["Puma", "Berg"],
-    ["Luchs", "Ohren"], ["Murmeltier", "Winterschlaf"], ["Faultier", "Langsamkeit"], ["Kojote", "Wüste"], ["Antilope", "Lauf"],
-    ["Wildschwein", "Jagd"], ["Nagetier", "Zähne"]
-  ],
-  hobbys: [
-    ["Lesen", "Buch"], ["Malen", "Pinsel"], ["Fotografie", "Kamera"], ["Kochen", "Rezept"], ["Backen", "Teig"],
-    ["Gärtnern", "Blumen"], ["Angeln", "See"], ["Schwimmen", "Becken"], ["Wandern", "Berg"], ["Joggen", "Strecke"],
-    ["Reiten", "Pferd"], ["Tanzen", "Musik"], ["Singen", "Stimme"], ["Musik", "Instrument"], ["Zeichnen", "Papier"],
-    ["Modellbau", "Kleber"], ["Nähen", "Stoff"], ["Stricken", "Wolle"], ["Basteln", "Schere"], ["Bloggen", "Text"],
-    ["Spielen", "Konsole"], ["Filme", "Kino"], ["Serien", "Folgen"], ["Yoga", "Ruhe"], ["Meditation", "Stille"],
-    ["Laufen", "Schuhe"], ["Sammeln", "Objekte"], ["Schreiben", "Stift"], ["Reisen", "Koffer"], ["Gitarre", "Saiten"],
-    ["Klavier", "Tasten"], ["Schach", "Brett"], ["Videospiele", "Controller"], ["Fotobearbeitung", "Computer"], ["Origami", "Papier"],
-    ["Camping", "Zelt"], ["Klettern", "Seil"], ["Fitness", "Hantel"], ["Tanzen", "Bewegung"], ["Musizieren", "Rhythmus"],
-    ["Surfen", "Welle"], ["Basteln", "Idee"], ["Lesen", "Kapitel"], ["Wandern", "Pfad"], ["Kochen", "Pfanne"]
-  ],
-  natur: [
-    ["Baum", "Wald"], ["Blume", "Duft"], ["Gras", "Wiese"], ["Berg", "Gipfel"], ["See", "Wasser"],
-    ["Fluss", "Strom"], ["Meer", "Welle"], ["Himmel", "Wolke"], ["Wald", "Tiere"], ["Felsen", "Stein"],
-    ["Sonne", "Licht"], ["Mond", "Nacht"], ["Stern", "Himmel"], ["Regen", "Tropfen"], ["Schnee", "Kälte"],
-    ["Wüste", "Sand"], ["Tal", "Boden"], ["Vulkan", "Lava"], ["Insel", "Meer"], ["Ozean", "Weite"],
-    ["Strand", "Muschel"], ["Wind", "Brise"], ["Nebel", "Feuchtigkeit"], ["Eis", "Kälte"], ["Flamme", "Feuer"],
-    ["Wasserfall", "Höhe"], ["Gletscher", "Eis"], ["Höhle", "Dunkelheit"], ["Feld", "Ernte"], ["Busch", "Blätter"],
-    ["Ast", "Zweig"], ["Biene", "Honig"], ["Schmetterling", "Flügel"], ["Vogel", "Nest"], ["Reh", "Wald"],
-    ["Pilz", "Wald"], ["Laub", "Herbst"], ["Saat", "Korn"], ["Frucht", "Baum"], ["Blatt", "Grün"],
-    ["Fisch", "Wasser"], ["Koralle", "Meer"], ["Möwe", "Strand"], ["Tanne", "Winter"], ["Eule", "Nacht"],
-    ["Fuchs", "Wald"], ["Bergsee", "Spiegelung"], ["Hirsch", "Geweih"], ["Kiesel", "Strand"], ["Moos", "Feuchtigkeit"]
-  ],
-  sonstiges: [
-    ["Auto", "Benzin"], ["Straße", "Ampel"], ["Bus", "Haltestelle"], ["Zug", "Schiene"], ["Flugzeug", "Start"],
-    ["Fahrrad", "Helm"], ["Supermarkt", "Einkaufswagen"], ["Restaurant", "Besteck"], ["Kaffee", "Bohne"], ["Arbeit", "Büro"],
-    ["Lampe", "Licht"], ["Musik", "Kopfhörer"], ["Handy", "Display"], ["Internet", "Browser"], ["Schlüssel", "Schloss"],
-    ["Küche", "Herd"], ["Badezimmer", "Spiegel"], ["Garten", "Blume"], ["Briefkasten", "Post"], ["Geldbörse", "Münze"],
-    ["Kino", "Leinwand"], ["Stadt", "Häuser"], ["Land", "Grenze"], ["Wald", "Bäume"], ["Strand", "Sand"],
-    ["Berg", "Gipfel"], ["See", "Boot"], ["Deutschland", "Berlin"], ["Frankreich", "Paris"], ["Italien", "Rom"],
-    ["Japan", "Tokyo"], ["Kanada", "Ahorn"], ["USA", "Freiheit"], ["Schweiz", "Berge"], ["Schweden", "Winter"],
-    ["Norwegen", "Fjord"], ["Regen", "Wolken"], ["Sonne", "Hitze"], ["Mond", "Nacht"], ["Stern", "Himmel"],
-    ["Zeit", "Uhr"], ["Freundschaft", "Lächeln"], ["Abenteuer", "Mut"], ["Wissen", "Buch"], ["Träume", "Schlaf"],
-    ["Zukunft", "Plan"], ["Glück", "Zufall"], ["Magie", "Zauber"], ["Technik", "Fortschritt"], ["Natur", "Leben"]
-  ],
-  mix: [
-    ["Chaos", "Zimmer"], ["Lachen", "Witz"], ["Regenschirm", "Tropfen"], ["Sandwich", "Picknick"], ["Kamera", "Erinnerung"],
-    ["Fernsehen", "Abend"], ["Stau", "Auto"], ["Kalender", "Termin"], ["Kerze", "Feier"], ["Brille", "Sehen"],
-    ["Uhr", "Sekunde"], ["Laptop", "Arbeit"], ["Kissen", "Schlaf"], ["Fahrrad", "Straße"], ["Wolke", "Regen"],
-    ["Post", "Brief"], ["Maske", "Gesicht"], ["Buch", "Kapitel"], ["Lampe", "Nacht"], ["Reise", "Koffer"],
-    ["Treppen", "Stufen"], ["Zug", "Bahnhof"], ["Energie", "Kraftwerk"], ["Spiel", "Freizeit"], ["Zettel", "Notiz"],
-    ["Kerze", "Duft"], ["Bus", "Ticket"], ["Zeitung", "Artikel"], ["Schlüssel", "Tür"], ["Handy", "Anruf"],
-    ["Licht", "Schalter"], ["Brücke", "Fluss"], ["Markt", "Obst"], ["Hemd", "Knopf"], ["Karte", "Weg"],
-    ["Wolke", "Himmel"], ["Fenster", "Ausblick"], ["Stein", "Erinnerung"], ["Radio", "Musik"], ["Ufer", "See"],
-    ["Park", "Bank"], ["Turm", "Aussicht"], ["Tasse", "Tee"], ["Ball", "Spiel"], ["Auto", "Reise"],
-    ["Foto", "Erinnerung"], ["Film", "Abend"], ["Ticket", "Reise"], ["Straße", "Ziel"], ["Buch", "Titel"]
-  ]
-};
+      leicht: [["Ball","Leder"],["Haus","Dach"],["Auto","Verkehr"],["Buch","Seiten"],["Stuhl","Sitzen"]],
+      sport: [["Fußball","Rasen"],["Basketball","Korb"],["Tennis","Aufschlag"],["Schwimmen","Bahn"],["Laufen","Tempo"]],
+      schule: [["Tafel","Kreide"],["Lehrer","Klasse"],["Buch","Lesen"],["Schüler","Pause"],["Heft","Blatt"]],
+      technik: [["Computer","Prozessor"],["Handy","Display"],["Tablet","Touch"],["Fernseher","Bildschirm"],["Laptop","Tastatur"]],
+      essen: [["Apfel","Baum"],["Banane","Schale"],["Käse","Milch"],["Brot","Backofen"],["Pizza","Ofen"]],
+      gefuehle: [["Freude","Lächeln"],["Angst","Schatten"],["Wut","Rot"],["Trauer","Träne"],["Liebe","Herz"]],
+      berufe: [["Arzt","Patient"],["Lehrer","Tafel"],["Bäcker","Ofen"],["Polizist","Uniform"],["Feuerwehrmann","Löschen"]],
+      haustier: [["Hund","Leine"],["Katze","Schnurren"],["Hamster","Rad"],["Meerschweinchen","Pfeifen"],["Kaninchen","Möhre"]],
+      saegetier: [["Elefant","Rüssel"],["Löwe","Mähne"],["Tiger","Streifen"],["Pferd","Hufe"],["Kuh","Milch"]],
+      hobbys: [["Lesen","Buch"],["Malen","Pinsel"],["Fotografie","Kamera"],["Kochen","Rezept"],["Backen","Teig"]],
+      natur: [["Baum","Wald"],["Blume","Duft"],["Gras","Wiese"],["Berg","Gipfel"],["See","Wasser"]],
+      sonstiges: [["Auto","Benzin"],["Straße","Ampel"],["Bus","Haltestelle"],["Zug","Schiene"],["Flugzeug","Start"]],
+      mix: [["Chaos","Zimmer"],["Lachen","Witz"],["Regenschirm","Tropfen"],["Sandwich","Picknick"],["Kamera","Erinnerung"]]
+    };
 
+    let players=[],usedWords=[],selectedWords=[];
+    let currentIndex=0,imposterIndex=0;
+    let realWord="",imposterHint="",starter="";
+    let roundStartTime=0,timerInterval;
+    let points=JSON.parse(localStorage.getItem("points")||"{}");
+    let playerCount=3;
 
-
-    let players = [], usedWords = [], selectedWords = [];
-    let currentIndex = 0, imposterIndex = 0;
-    let realWord = "", imposterHint = "", starter = "";
-    let roundStartTime = 0, timerInterval;
-    let points = JSON.parse(localStorage.getItem("points") || "{}");
-    let playerCount = 3;
-
-    function changePlayerCount(n) {
-      playerCount = Math.min(10, Math.max(3, playerCount + n));
-      document.getElementById("playerCountDisplay").textContent = playerCount;
+    function changePlayerCount(n){
+      playerCount=Math.min(10,Math.max(3,playerCount+n));
+      document.getElementById("playerCountDisplay").textContent=playerCount;
       updateNameInputs();
     }
 
-    function updateNameInputs() {
-      const container = document.getElementById("nameInputs");
-      container.innerHTML = "";
-      const saved = JSON.parse(localStorage.getItem("imposter_names") || "[]");
-      for (let i = 0; i < playerCount; i++) {
-        const input = document.createElement("input");
-        input.placeholder = `Name Spieler ${i + 1}`;
-        input.id = `player${i}`;
-        input.value = saved[i] || "";
-        container.appendChild(input);
+    function updateNameInputs(){
+      const c=document.getElementById("nameInputs");
+      c.innerHTML="";
+      const saved=JSON.parse(localStorage.getItem("imposter_names")||"[]");
+      for(let i=0;i<playerCount;i++){
+        const input=document.createElement("input");
+        input.placeholder=`Name Spieler ${i+1}`;
+        input.id=`player${i}`;
+        input.value=saved[i]||"";
+        c.appendChild(input);
       }
-      const startBtn = document.createElement("button");
-      startBtn.textContent = "Spiel starten";
-      startBtn.onclick = startGame;
-      container.appendChild(startBtn);
+      const startBtn=document.createElement("button");
+      startBtn.textContent="Spiel starten";
+      startBtn.onclick=startGame;
+      c.appendChild(startBtn);
     }
 
-    function toggleCategoryMenu() {
+    function toggleCategoryMenu(){
       document.getElementById("categoryList").classList.toggle("visible");
     }
 
-    function generateCategoryCheckboxes() {
-      const container = document.getElementById("categoryList");
-      container.innerHTML = "";
-      const categories = Object.keys(wordPool);
-      for (let cat of categories) {
-        const label = document.createElement("label");
-        label.innerHTML = `<input type="checkbox" value="${cat}" checked /> ${cat.charAt(0).toUpperCase() + cat.slice(1)}`;
-        container.appendChild(label);
+    function generateCategoryCheckboxes(){
+      const c=document.getElementById("categoryList");
+      c.innerHTML="";
+      for(let cat in wordPool){
+        const label=document.createElement("label");
+        label.innerHTML=`<input type="checkbox" value="${cat}" checked> ${cat}`;
+        c.appendChild(label);
       }
     }
 
-    function startGame() {
-      players = [];
-      for (let i = 0; i < playerCount; i++) {
-        const name = document.getElementById(`player${i}`).value.trim();
-        if (!name) return alert("Bitte alle Namen eingeben!");
+    function startGame(){
+      players=[];
+      for(let i=0;i<playerCount;i++){
+        const name=document.getElementById(`player${i}`).value.trim();
+        if(!name)return alert("Bitte alle Namen eingeben!");
         players.push(name);
-        if (!points[name]) points[name] = 0;
+        if(!points[name])points[name]=0;
       }
-      localStorage.setItem("imposter_names", JSON.stringify(players));
-      localStorage.setItem("points", JSON.stringify(points));
+      localStorage.setItem("imposter_names",JSON.stringify(players));
+      localStorage.setItem("points",JSON.stringify(points));
 
-      const selectedCategories = [...document.querySelectorAll("#categoryList input:checked")].map(cb => cb.value);
-      selectedWords = selectedCategories.flatMap(cat => wordPool[cat] || []);
+      const cats=[...document.querySelectorAll("#categoryList input:checked")].map(c=>c.value);
+      if(cats.length===0)return alert("Bitte mindestens eine Kategorie wählen!");
+      selectedWords=cats.flatMap(cat=>wordPool[cat]);
       shuffle(players);
-      const word = getRandomWord();
-      realWord = word[0];
-      imposterHint = word[1];
-      imposterIndex = Math.floor(Math.random() * players.length);
-      starter = players[Math.floor(Math.random() * players.length)];
-      currentIndex = 0;
-      roundStartTime = 0;
-      document.getElementById("setup").style.display = "none";
-      document.getElementById("game").style.display = "block";
+      const w=getRandomWord();
+      realWord=w[0]; imposterHint=w[1];
+      imposterIndex=Math.floor(Math.random()*players.length);
+      starter=players[Math.floor(Math.random()*players.length)];
+      currentIndex=0; roundStartTime=0;
+      document.getElementById("setup").style.display="none";
+      document.getElementById("game").style.display="block";
       showPlayerCard();
     }
 
-    // --- Die restliche Spiellogik (Swipe, Timer, Punkte usw.) bleibt identisch wie in der letzten Version ---
+    function showPlayerCard(){
+      const player=players[currentIndex];
+      document.getElementById("playerName").textContent=player;
+      document.getElementById("statusText").textContent="";
+      document.getElementById("wordCard").textContent="🗝️ Wort anzeigen...";
+      document.getElementById("swipeCard").style.transform="translateY(0)";
+      document.getElementById("cardContainer").style.display="block";
+      document.getElementById("nextBtn").style.display="none";
+      document.getElementById("startRoundBtn").style.display="none";
+      document.getElementById("revealImposterBtn").style.display="none";
+      document.getElementById("crewWinBtn").style.display="none";
+      document.getElementById("imposterWinBtn").style.display="none";
+      document.getElementById("restartBtn").style.display="none";
+      document.getElementById("resetPointsBtn").style.display="none";
+      document.getElementById("reveal").textContent="";
+      document.getElementById("timerDisplay").style.display="none";
+      setupSwipe();
+    }
 
+    function setupSwipe(){
+      const swipe=document.getElementById("swipeCard");
+      const word=document.getElementById("wordCard");
+      let startY=0,moved=false;
+      swipe.ontouchstart=e=>{startY=e.touches[0].clientY;moved=false;};
+      swipe.ontouchmove=e=>{
+        const d=startY-e.touches[0].clientY;
+        if(d>0){
+          swipe.style.transition="none";
+          swipe.style.transform=`translateY(-${d}px)`;
+          word.textContent=currentIndex===imposterIndex?`😈 Du bist der Imposter! Hinweis: ${imposterHint}`:`✅ ${realWord}`;
+          moved=true;
+        }
+      };
+      swipe.ontouchend=()=>{
+        if(!moved)return;
+        swipe.style.transition="transform 0.2s ease";
+        swipe.style.transform="translateY(0)";
+        if(currentIndex<players.length-1)document.getElementById("nextBtn").style.display="block";
+        else{document.getElementById("nextBtn").style.display="none";document.getElementById("startRoundBtn").style.display="block";}
+      };
+    }
+
+    function nextPlayer(){currentIndex++;showPlayerCard();}
+
+    function showStarter(){
+      document.getElementById("cardContainer").style.display="none";
+      document.getElementById("playerName").textContent="";
+      document.getElementById("startRoundBtn").style.display="none";
+      document.getElementById("statusText").textContent=`🎲 ${starter} beginnt die Runde!`;
+      document.getElementById("timerDisplay").style.display="block";
+      roundStartTime=Date.now();clearInterval(timerInterval);
+      timerInterval=setInterval(updateTimer,1000);
+      document.getElementById("revealImposterBtn").style.display="block";
+    }
+
+    function updateTimer(){
+      const t=Math.floor((Date.now()-roundStartTime)/1000);
+      const min=String(Math.floor(t/60)).padStart(2,'0');
+      const sec=String(t%60).padStart(2,'0');
+      document.getElementById("timerDisplay").textContent=`⏱️ Zeit: ${min}:${sec}`;
+    }
+
+    function revealImposter(){
+      clearInterval(timerInterval);
+      document.getElementById("statusText").textContent="";
+      document.getElementById("timerDisplay").style.display="none";
+      const imp=players[imposterIndex];
+      const elapsed=Math.floor((Date.now()-roundStartTime)/1000);
+      const min=Math.floor(elapsed/60);
+      const sec=elapsed%60;
+      document.getElementById("reveal").textContent=`😈 Imposter: ${imp}\nWort: ${realWord}\nZeit: ${min} min ${sec} sek`;
+      document.getElementById("revealImposterBtn").style.display="none";
+      document.getElementById("crewWinBtn").style.display="block";
+      document.getElementById("imposterWinBtn").style.display="block";
+    }
+
+    function awardPoints(imposterWon){
+      if(imposterWon)points[players[imposterIndex]]+=2;
+      else players.forEach((p,i)=>{if(i!==imposterIndex)points[p]+=1;});
+      localStorage.setItem("points",JSON.stringify(points));
+      let txt="🏆 Punktestand:\n";
+      for(let p in points)txt+=`${p}: ${points[p]} Punkte\n`;
+      document.getElementById("reveal").textContent+=`\n\n${txt}`;
+      document.getElementById("crewWinBtn").style.display="none";
+      document.getElementById("imposterWinBtn").style.display="none";
+      document.getElementById("restartBtn").style.display="block";
+      document.getElementById("resetPointsBtn").style.display="block";
+    }
+
+    function resetPoints(){
+      for(let p in points)points[p]=0;
+      localStorage.setItem("points",JSON.stringify(points));
+      document.getElementById("reveal").textContent+="\n❌ Punkte gelöscht!";
+      document.getElementById("resetPointsBtn").style.display="none";
+    }
+
+    function startNewRound(){
+      document.getElementById("reveal").textContent="";
+      document.getElementById("restartBtn").style.display="none";
+      const w=getRandomWord();
+      realWord=w[0];imposterHint=w[1];
+      imposterIndex=Math.floor(Math.random()*players.length);
+      starter=players[Math.floor(Math.random()*players.length)];
+      currentIndex=0;
+      showPlayerCard();
+    }
+
+    function getRandomWord(){
+      let available=selectedWords.filter(w=>!usedWords.includes(w[0]));
+      if(available.length===0){usedWords=[];available=selectedWords;}
+      const w=available[Math.floor(Math.random()*available.length)];
+      usedWords.push(w[0]);
+      return w;
+    }
+
+    function shuffle(a){
+      for(let i=a.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [a[i],a[j]]=[a[j],a[i]];
+      }
+    }
+
+    generateCategoryCheckboxes();
+    updateNameInputs();
   </script>
 </body>
 </html>
+
 
