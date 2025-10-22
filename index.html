@@ -71,21 +71,16 @@
       display: none;
     }
     #swipeCard, #wordCard {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 20px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3em;
-      transition: transform 0.4s ease;
-    }
+  background: #e6f4ff;
+  z-index: 1;
+  opacity: 1;
+  transform: translateY(0);
+}
     #swipeCard {
-      background: #fff;
-      z-index: 2;
-    }
+  background: linear-gradient(to bottom, #ffffff, #d0eaff);
+  z-index: 2;
+  border: 2px solid #aad4ff;
+}
     #wordCard {
       background: #f0f8ff;
       z-index: 1;
@@ -249,14 +244,15 @@ swipeCard.ontouchmove = e => {
     swipeCard.style.transform = `translateY(-${deltaY}px)`;
     moved = true;
   }
+  wordCard.style.opacity = Math.min(1, deltaY / 100);
 };
 swipeCard.ontouchend = () => {
   if (!moved) return;
   let deltaY = startY - currentY;
-  swipeCard.style.transition = 'transform 0.3s ease';
+  swipeCard.style.transition = 'transform 0.15s ease';
   if (deltaY > 80) {
     swipeCard.style.transform = 'translateY(-120%)';
-    setTimeout(() => revealWord(), 300);
+    setTimeout(() => revealWord(), 150);
   } else {
     swipeCard.style.transform = 'translateY(0)';
   }
