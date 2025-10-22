@@ -160,7 +160,9 @@
       leicht: [["Ball", "rund"], ["Haus", "Wohnung"], ["Hund", "Tier"]],
       sport: [["Fußball", "Tor"], ["Basketball", "Korb"], ["Tennis", "Schläger"]],
       schule: [["Tafel", "Unterricht"], ["Lehrer", "Person"], ["Mathe", "Fach"]],
+      natur: [["Baum", "Blatt"], ["Wolke", "Himmel"], ["Wasser", "Trinken"]],
     };
+
     let players = [], points = {}, usedWords = [], selectedWords = [];
     let currentIndex = 0, imposterIndex = 0, realWord = "", imposterHint = "", starter = "";
 
@@ -243,15 +245,13 @@
       document.getElementById("swipeCard").style.transform = "translateY(0)";
       document.getElementById("cardContainer").style.display = "block";
       const swipeCard = document.getElementById("swipeCard");
-      let startY = 0, moved = false;
-      swipeCard.ontouchstart = e => { startY = e.touches[0].clientY; moved = false; };
+      let startY = 0;
+      swipeCard.ontouchstart = e => { startY = e.touches[0].clientY; };
       swipeCard.ontouchmove = e => {
-        e.preventDefault();
         let deltaY = startY - e.touches[0].clientY;
         if (deltaY > 0) {
           swipeCard.style.transition = 'none';
           swipeCard.style.transform = `translateY(-${deltaY}px)`;
-          moved = true;
           revealWord();
         }
       };
@@ -280,17 +280,26 @@
 
     function showStarter() {
       starter = players[Math.floor(Math.random() * players.length)];
+      document.getElementById("playerName").textContent = "";
       document.getElementById("statusText").textContent = `🎲 ${starter} beginnt die Runde!`;
       document.getElementById("startRoundBtn").style.display = "none";
       document.getElementById("cardContainer").style.display = "none";
       document.getElementById("revealImposterBtn").style.display = "block";
-      document.getElementById("crewWinBtn").style.display = "inline-block";
-      document.getElementById("imposterWinBtn").style.display = "inline-block";
     }
 
     function revealImposter() {
       document.getElementById("statusText").textContent = "";
-      document.getElementById("reveal").textContent = `😈 Der Imposter war: ${players[imposterIndex]}\nWort: ${realWord}`;
+      document.getElementById("playerName").textContent = "";
+      document.getElementById("reveal").textContent = `😈 Der Imposter war: ${players[imposterIndex]}\nWort: ${realWord}\n\n🏆 Punktestand:\n${getPointList()}`;
+      document.getElementById("revealImposterBtn").style.display = "none";
+      document.getElementById("crewWinBtn").style.display = "inline-block";
+      document.getElementById("imposterWinBtn").style.display = "inline-block";
+    }
+
+    function getPointList() {
+      let output = '';
+      for (let p in points) output += `${p}: ${points[p]} Punkte\\n`;
+      return output;
     }
 
     function awardPoints(imposterWon) {
@@ -300,9 +309,7 @@
         players.forEach((p, i) => { if (i !== imposterIndex) points[p] += 1; });
       }
       localStorage.setItem("imposter_points", JSON.stringify(points));
-      let output = `😈 Der Imposter war: ${players[imposterIndex]}\nWort: ${realWord}\n\n🏆 Punktestand:\n`;
-      for (let p in points) output += `${p}: ${points[p]} Punkte\n`;
-      document.getElementById("reveal").textContent = output;
+      document.getElementById("reveal").textContent = `😈 Der Imposter war: ${players[imposterIndex]}\nWort: ${realWord}\n\n🏆 Punktestand aktualisiert:\n${getPointList()}`;
       document.getElementById("crewWinBtn").style.display = "none";
       document.getElementById("imposterWinBtn").style.display = "none";
       document.getElementById("restartBtn").style.display = "block";
