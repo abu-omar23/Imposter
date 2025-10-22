@@ -7,28 +7,30 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f4f4f4;
+      background: linear-gradient(180deg, #c2e9fb 0%, #a1c4fd 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      margin: 0;
       padding: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.3s;
     }
     h1 {
       color: #333;
     }
-    .card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      padding: 20px;
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-    }
     input, button {
-      margin: 5px;
+      margin: 6px;
       padding: 10px;
       border-radius: 8px;
       border: 1px solid #ccc;
@@ -47,44 +49,55 @@
     #game {
       display: none;
     }
+    #swipeCard {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      padding: 40px;
+      font-size: 1.4em;
+      display: none;
+      user-select: none;
+      transition: transform 0.3s;
+    }
   </style>
 </head>
 <body>
-  <div class="card">
+  <div class="card" id="setup">
     <h1>Imposter Wortspiel 🕵️‍♂️</h1>
-    <div id="setup">
-      <p>Wie viele Spieler?</p>
-      <input type="number" id="playerCount" min="4" max="10" value="4" />
-      <button onclick="setPlayers()">Weiter</button>
-      <div id="nameInputs"></div>
-    </div>
+    <p>Wie viele Spieler?</p>
+    <input type="number" id="playerCount" min="4" max="10" value="4" />
+    <button onclick="setPlayers()">Weiter</button>
+    <div id="nameInputs"></div>
+  </div>
 
-    <div id="game">
-      <h2 id="playerName"></h2>
-      <p id="wordDisplay" style="font-size:1.5em;"></p>
-      <button id="nextButton" onclick="nextPlayer()">Nächster Spieler</button>
-    </div>
+  <div class="card" id="game">
+    <h2 id="playerName"></h2>
+    <p>Wische die Karte nach oben, um dein Wort zu sehen 👆</p>
+    <div id="swipeCard"></div>
   </div>
 
   <script>
+    // 🧠 Wortpaare (realWord, imposterHint)
     const words = [
-      ["Apfel", "Birne"],
-      ["Hund", "Katze"],
-      ["Auto", "Motorrad"],
-      ["Schule", "Universität"],
-      ["Sommer", "Herbst"],
-      ["Kaffee", "Tee"],
-      ["Berg", "Hügel"],
-      ["Haus", "Wohnung"],
-      ["Brot", "Brötchen"],
-      ["Fußball", "Basketball"]
+      ["Apfel", "Frucht"],
+      ["Schule", "Lernen"],
+      ["Auto", "Fahren"],
+      ["Hund", "Tier"],
+      ["Sommer", "Jahreszeit"],
+      ["Kaffee", "Getränk"],
+      ["Berg", "Höhe"],
+      ["Haus", "Gebäude"],
+      ["Brot", "Essen"],
+      ["Fußball", "Sport"]
     ];
 
+    let usedWords = [];
     let players = [];
     let currentIndex = 0;
     let realWord = "";
-    let imposterWord = "";
+    let imposterHint = "";
     let imposterIndex = 0;
+    let startY = 0;
 
     function setPlayers() {
       const count = parseInt(document.getElementById("playerCount").value);
@@ -104,6 +117,17 @@
       container.appendChild(startBtn);
     }
 
+    function getRandomWord() {
+      const available = words.filter(w => !usedWords.includes(w[0]));
+      if (available.length === 0) {
+        alert("Alle Wörter wurden benutzt! Seite neu laden für Neustart.");
+        return words[0];
+      }
+      const pair = available[Math.floor(Math.random() * available.length)];
+      usedWords.push(pair[0]);
+      return pair;
+    }
+
     function startGame() {
       const count = parseInt(document.getElementById("playerCount").value);
       players = [];
@@ -116,43 +140,62 @@
         players.push(name);
       }
 
-      // Zufällige Wörter & Imposter
-      const pair = words[Math.floor(Math.random() * words.length)];
-      if (Math.random() < 0.5) {
-        realWord = pair[0];
-        imposterWord = pair[1];
-      } else {
-        realWord = pair[1];
-        imposterWord = pair[0];
-      }
+      const pair = getRandomWord();
+      realWord = pair[0];
+      imposterHint = pair[1];
       imposterIndex = Math.floor(Math.random() * players.length);
       currentIndex = 0;
 
       document.getElementById("setup").style.display = "none";
       document.getElementById("game").style.display = "block";
-      showWord();
+
+      showNextPlayer();
+    }
+
+    function showNextPlayer() {
+      const player = players[currentIndex];
+      const swipeCard = document.getElementById("swipeCard");
+      const nameDisplay = document.getElementById("playerName");
+
+      nameDisplay.textContent = `Spieler: ${player}`;
+      swipeCard.textContent = "🔒 Wische nach oben, um dein Wort zu sehen";
+      swipeCard.style.display = "block";
+      swipeCard.style.transform = "translateY(0)";
+      
+      // Swipe Logik (für Handy)
+      swipeCard.addEventListener("touchstart", (e) => startY = e.touches[0].clientY);
+      swipeCard.addEventListener("touchend", (e) => {
+        const endY = e.changedTouches[0].clientY;
+        if (startY - endY > 50) showWord();
+      });
+
+      // Klick für PC-Test
+      swipeCard.onclick = showWord;
     }
 
     function showWord() {
-      const player = players[currentIndex];
-      document.getElementById("playerName").textContent = `Spieler: ${player}`;
-      document.getElementById("wordDisplay").textContent =
-        currentIndex === imposterIndex ? imposterWord : realWord;
-
-      if (currentIndex === players.length - 1) {
-        document.getElementById("nextButton").textContent = "Fertig 🎉";
-      }
-    }
-
-    function nextPlayer() {
-      currentIndex++;
-      if (currentIndex >= players.length) {
-        alert("Alle haben ihr Wort gesehen! Zeit zum Raten! 🕵️‍♀️");
-        location.reload();
-      } else {
-        showWord();
-      }
+      const swipeCard = document.getElementById("swipeCard");
+      swipeCard.style.transform = "translateY(-200px)";
+      setTimeout(() => {
+        const isImposter = currentIndex === imposterIndex;
+        swipeCard.textContent = isImposter
+          ? `😈 Du bist der Imposter!\nHinweiswort: ${imposterHint}`
+          : `🗝️ Dein Wort: ${realWord}`;
+        
+        setTimeout(() => {
+          if (currentIndex < players.length - 1) {
+            if (confirm("Weiter zum nächsten Spieler?")) {
+              currentIndex++;
+              showNextPlayer();
+            }
+          } else {
+            alert("Alle haben ihr Wort! Zeit zum Raten! 🕵️‍♀️");
+            location.reload();
+          }
+        }, 2500);
+      }, 300);
     }
   </script>
 </body>
 </html>
+
