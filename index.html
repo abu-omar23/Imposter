@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Imposter Wortspiel</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Imposter Wortspiel – Vollversion</title>
   <style>
     * { box-sizing: border-box; }
     html, body {
+      user-select: none;
       margin: 0;
       padding: 0;
-      font-family: "Poppins", sans-serif;
+      font-family: 'Poppins', sans-serif;
       background: linear-gradient(180deg, #a1c4fd 0%, #c2e9fb 100%);
-      user-select: none;
       height: 100%;
-      overflow-x: hidden;
     }
     .card {
-      background: #fffef8;
+      background: #fdf5e6;
       border-radius: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
       padding: 30px;
-      max-width: 500px;
+      max-width: 480px;
       margin: 30px auto;
+      width: 90%;
       text-align: center;
     }
     h1, h2, p { color: #333; }
-    button, input {
-      font-size: 1em;
+    input, button {
+      margin: 6px auto;
       padding: 10px;
-      margin: 8px auto;
-      width: 90%;
       border-radius: 10px;
       border: 1px solid #ccc;
+      font-size: 1em;
+      width: 90%;
+      display: block;
     }
     button {
       background: #4CAF50;
@@ -39,9 +40,25 @@
       cursor: pointer;
     }
     button:hover { background: #45a049; }
+    .checkboxes {
+      display: none;
+      margin-top: 10px;
+    }
+    .checkboxes.visible {
+      display: block;
+    }
+    .checkboxes label {
+      display: flex;
+      align-items: center;
+      margin: 5px 0;
+    }
+    .checkboxes input {
+      margin-right: 10px;
+      width: auto;
+    }
     #cardContainer {
       position: relative;
-      height: 230px;
+      height: 220px;
       overflow: hidden;
       touch-action: none;
       display: none;
@@ -69,56 +86,39 @@
       flex-direction: column;
     }
     #wordCard {
-      background: #f3f9ff;
-      color: #333;
+      background: #212121;
+      color: #ffffff;
       z-index: 1;
       flex-direction: column;
-      font-size: 1.4em;
     }
-    #nextBtn, #startRoundBtn, #revealImposterBtn, #restartBtn, #crewWinBtn, #imposterWinBtn, #resetPointsBtn {
+    #nextBtn, #revealImposterBtn, #restartBtn, #startRoundBtn {
       display: none;
       margin: 20px auto 0;
       background: #0078ff;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      padding: 10px 15px;
-      cursor: pointer;
-    }
-    #resetPointsBtn {
-      background: #e63946;
     }
     #reveal {
-      font-size: 1.1em;
+      font-size: 1.4em;
       font-weight: bold;
-      color: #222;
+      color: darkred;
       margin-top: 20px;
       white-space: pre-wrap;
-    }
-    #timer {
-      font-size: 1em;
-      color: #333;
-      margin-top: 5px;
     }
   </style>
 </head>
 <body>
   <div class="card" id="setup">
     <h1>Imposter Wortspiel 🕵️‍♂️</h1>
-    <p>Spieleranzahl:</p>
-    <div>
-      <button onclick="changePlayerCount(-1)">-</button>
-      <span id="playerCount">4</span>
-      <button onclick="changePlayerCount(1)">+</button>
-    </div>
-    <div id="nameInputs"></div>
-    <button onclick="startGame()">▶️ Weiter</button>
+    <button onclick="toggleCategoryMenu()">Kategorien ändern</button>
+    <div class="checkboxes" id="categoryList"></div>
+    <p>Wie viele Spieler?</p>
+    <input type="number" id="playerCount" min="4" max="10" value="4" />
+    <button onclick="setPlayers()">Weiter</button>
+    <div id="nameInputs" style="text-align: center;"></div>
   </div>
 
   <div class="card" id="game" style="display:none">
     <h2 id="playerName"></h2>
     <p id="statusText"></p>
-    <p id="timer">⏱️ Zeit: 00:00</p>
     <div id="cardContainer">
       <div id="wordCard">🗝️ Wort anzeigen...</div>
       <div id="swipeCard">🔒 Wische nach oben 👆</div>
@@ -126,168 +126,180 @@
     <button id="nextBtn" onclick="nextPlayer()">➡️ Nächster Spieler</button>
     <button id="startRoundBtn" onclick="showStarter()">🎲 Runde starten</button>
     <button id="revealImposterBtn" onclick="revealImposter()">😈 Imposter aufdecken</button>
-    <button id="crewWinBtn" onclick="awardPoints(false)">✔️ Crew gewinnt</button>
-    <button id="imposterWinBtn" onclick="awardPoints(true)">😈 Imposter gewinnt</button>
     <button id="restartBtn" onclick="startNewRound()">🔁 Neue Runde</button>
-    <button id="resetPointsBtn" onclick="resetPoints()">🗑️ Punkte löschen</button>
     <div id="reveal"></div>
   </div>
 
   <script>
     const wordPool = {
-      Tiere: [["Hund", "Tier"], ["Katze", "Schnurren"], ["Elefant", "Rüssel"]],
-      Sport: [["Fußball", "Tor"], ["Tennis", "Schläger"], ["Schwimmen", "Wasser"]],
-      Schule: [["Tafel", "Unterricht"], ["Lehrer", "Klasse"], ["Mathe", "Zahlen"]],
-      Natur: [["Baum", "Wald"], ["Wolke", "Himmel"], ["Fluss", "Wasser"]],
+      leicht: [["Ball", "rund"], ["Haus", "Wohnung"], ["Auto", "fahren"]]
     };
 
-    let playerCount = 4;
-    let players = [];
-    let points = JSON.parse(localStorage.getItem("points") || "{}");
-    let seconds = 0, timerInterval;
-    let imposterIndex = 0;
-    let realWord = "", imposterHint = "";
-    let currentIndex = 0;
-    let startTime;
+    let players = [], usedWords = [], selectedWords = [];
+    let currentIndex = 0, imposterIndex = 0;
+    let realWord = "", imposterHint = "", starter = "";
+    let roundStartTime = 0;
 
-    function changePlayerCount(n) {
-      playerCount = Math.max(4, Math.min(10, playerCount + n));
-      document.getElementById("playerCount").textContent = playerCount;
-      updateNameInputs();
+    function toggleCategoryMenu() {
+      document.getElementById("categoryList").classList.toggle("visible");
     }
 
-    function updateNameInputs() {
+    function generateCategoryCheckboxes() {
+      const container = document.getElementById("categoryList");
+      container.innerHTML = "";
+      for (let cat in wordPool) {
+        const label = document.createElement("label");
+        label.innerHTML = `<input type="checkbox" value="${cat}" checked /> ${cat}`;
+        container.appendChild(label);
+      }
+    }
+
+    function setPlayers() {
+      generateCategoryCheckboxes();
+      const count = parseInt(document.getElementById("playerCount").value);
       const container = document.getElementById("nameInputs");
       container.innerHTML = "";
-      const saved = JSON.parse(localStorage.getItem("playerNames") || "[]");
-      for (let i = 0; i < playerCount; i++) {
+      const saved = JSON.parse(localStorage.getItem("imposter_names") || "[]");
+      for (let i = 0; i < count; i++) {
         const input = document.createElement("input");
-        input.placeholder = `Spieler ${i + 1} Name`;
+        input.placeholder = `Name Spieler ${i + 1}`;
+        input.id = `player${i}`;
         input.value = saved[i] || "";
         container.appendChild(input);
       }
+      const startBtn = document.createElement("button");
+      startBtn.textContent = "Spiel starten";
+      startBtn.onclick = startGame;
+      container.appendChild(startBtn);
     }
-    updateNameInputs();
 
     function startGame() {
-      players = Array.from(document.querySelectorAll("#nameInputs input")).map(i => i.value.trim() || `Spieler${i}`);
-      localStorage.setItem("playerNames", JSON.stringify(players));
-      players.forEach(p => { if (!points[p]) points[p] = 0; });
-      localStorage.setItem("points", JSON.stringify(points));
+      players = [];
+      const count = parseInt(document.getElementById("playerCount").value);
+      for (let i = 0; i < count; i++) {
+        const name = document.getElementById(`player${i}`).value.trim();
+        if (!name) return alert("Bitte alle Namen eingeben!");
+        players.push(name);
+      }
+      localStorage.setItem("imposter_names", JSON.stringify(players));
+      const selectedCategories = [...document.querySelectorAll("#categoryList input:checked")].map(cb => cb.value);
+      selectedWords = selectedCategories.flatMap(cat => wordPool[cat]);
+      shuffle(players);
+      const word = getRandomWord();
+      realWord = word[0];
+      imposterHint = word[1];
+      imposterIndex = Math.floor(Math.random() * players.length);
+      starter = players[Math.floor(Math.random() * players.length)];
+      currentIndex = 0;
+      roundStartTime = Date.now();
       document.getElementById("setup").style.display = "none";
       document.getElementById("game").style.display = "block";
-      startNewRound();
-    }
-
-    function startNewRound() {
-      document.getElementById("reveal").innerHTML = "";
-      document.getElementById("restartBtn").style.display = "none";
-      document.getElementById("crewWinBtn").style.display = "none";
-      document.getElementById("imposterWinBtn").style.display = "none";
-      document.getElementById("resetPointsBtn").style.display = "none";
-      document.getElementById("statusText").textContent = "";
-      document.getElementById("playerName").textContent = "";
-      document.getElementById("timer").textContent = "⏱️ Zeit: 00:00";
-      startRoundSetup();
-    }
-
-    function startRoundSetup() {
-      const allWords = Object.values(wordPool).flat();
-      const [word, hint] = allWords[Math.floor(Math.random() * allWords.length)];
-      realWord = word; imposterHint = hint;
-      imposterIndex = Math.floor(Math.random() * players.length);
-      currentIndex = 0;
       showPlayerCard();
     }
 
     function showPlayerCard() {
       const player = players[currentIndex];
       document.getElementById("playerName").textContent = player;
+      document.getElementById("statusText").textContent = "";
+      document.getElementById("wordCard").textContent = "🗝️ Wort anzeigen...";
+      document.getElementById("swipeCard").style.transform = "translateY(0)";
+      document.getElementById("cardContainer").style.display = "block";
+      document.getElementById("nextBtn").style.display = "none";
+      document.getElementById("startRoundBtn").style.display = "none";
+      document.getElementById("revealImposterBtn").style.display = "none";
+      document.getElementById("restartBtn").style.display = "none";
+      document.getElementById("reveal").textContent = "";
+      setupSwipe();
+    }
+
+    function setupSwipe() {
       const swipeCard = document.getElementById("swipeCard");
-      swipeCard.style.transform = "translateY(0)";
-      let startY = 0;
-      swipeCard.ontouchstart = e => startY = e.touches[0].clientY;
+      const wordCard = document.getElementById("wordCard");
+      let startY = 0, moved = false, currentY = 0;
+
+      swipeCard.ontouchstart = e => {
+        startY = e.touches[0].clientY;
+        moved = false;
+      };
       swipeCard.ontouchmove = e => {
-        let deltaY = startY - e.touches[0].clientY;
+        currentY = e.touches[0].clientY;
+        let deltaY = startY - currentY;
         if (deltaY > 0) {
           swipeCard.style.transition = 'none';
           swipeCard.style.transform = `translateY(-${deltaY}px)`;
-          document.getElementById("wordCard").textContent = currentIndex === imposterIndex ?
-            `😈 Du bist der Imposter!\nHinweis: ${imposterHint}` : `✅ ${realWord}`;
+          wordCard.textContent = currentIndex === imposterIndex ? `😈 Du bist der Imposter! Hinweis: ${imposterHint}` : `✅ ${realWord}`;
+          moved = true;
         }
       };
       swipeCard.ontouchend = () => {
+        if (!moved) return;
         swipeCard.style.transition = 'transform 0.2s ease';
         swipeCard.style.transform = 'translateY(0)';
-        if (currentIndex < players.length - 1)
-          document.getElementById("nextBtn").style.display = "block";
-        else
-          document.getElementById("startRoundBtn").style.display = "block";
+        setTimeout(() => {
+          if (currentIndex < players.length - 1) {
+            document.getElementById("nextBtn").style.display = "block";
+          } else {
+            document.getElementById("playerName").textContent = "";
+            document.getElementById("cardContainer").style.display = "none";
+            document.getElementById("startRoundBtn").style.display = "block";
+          }
+        }, 200);
       };
     }
 
+    function showStarter() {
+      document.getElementById("startRoundBtn").style.display = "none";
+      document.getElementById("statusText").textContent = `🎲 ${starter} beginnt die Runde!`;
+      document.getElementById("revealImposterBtn").style.display = "block";
+    }
+
     function nextPlayer() {
-      document.getElementById("nextBtn").style.display = "none";
       currentIndex++;
       showPlayerCard();
     }
 
-    function showStarter() {
-      document.getElementById("playerName").textContent = "";
-      const starter = players[Math.floor(Math.random() * players.length)];
-      document.getElementById("statusText").textContent = `🎲 ${starter} beginnt die Runde!`;
-      startTime = new Date();
-      seconds = 0;
-      clearInterval(timerInterval);
-      timerInterval = setInterval(() => {
-        seconds++;
-        const min = String(Math.floor(seconds / 60)).padStart(2, "0");
-        const sec = String(seconds % 60).padStart(2, "0");
-        document.getElementById("timer").textContent = `⏱️ Zeit: ${min}:${sec}`;
-      }, 1000);
-      document.getElementById("startRoundBtn").style.display = "none";
-      document.getElementById("revealImposterBtn").style.display = "block";
-    }
-
     function revealImposter() {
-      clearInterval(timerInterval);
-      const duration = Math.floor((new Date() - startTime) / 1000);
-      const min = String(Math.floor(duration / 60)).padStart(2, '0');
-      const sec = String(duration % 60).padStart(2, '0');
-      const imposter = players[imposterIndex];
-      document.getElementById("reveal").innerText =
-        `😈 Der Imposter war: ${imposter}\nWort: ${realWord}\n\n⏱️ Rundenzeit: ${min}:${sec}`;
-      document.getElementById("statusText").textContent = "";
+      const timePassed = Date.now() - roundStartTime;
+      const minutes = Math.floor(timePassed / 60000);
+      const seconds = Math.floor((timePassed % 60000) / 1000);
       document.getElementById("revealImposterBtn").style.display = "none";
-      document.getElementById("crewWinBtn").style.display = "inline-block";
-      document.getElementById("imposterWinBtn").style.display = "inline-block";
-    }
-
-    function awardPoints(imposterWon) {
-      if (imposterWon) points[players[imposterIndex]] += 2;
-      else players.forEach((p, i) => { if (i !== imposterIndex) points[p] += 1; });
-      localStorage.setItem("points", JSON.stringify(points));
-      showPoints();
-    }
-
-    function showPoints() {
-      let txt = "\n🏆 Punktestand:\n";
-      for (let p in points) txt += `${p}: ${points[p]} Punkte\n`;
-      document.getElementById("reveal").innerText += txt;
-      document.getElementById("crewWinBtn").style.display = "none";
-      document.getElementById("imposterWinBtn").style.display = "none";
+      document.getElementById("reveal").textContent = `😈 Imposter: ${players[imposterIndex]}\nWort: ${realWord}\nZeit: ${minutes} min ${seconds} sek`;
       document.getElementById("restartBtn").style.display = "block";
-      document.getElementById("resetPointsBtn").style.display = "block";
     }
 
-    function resetPoints() {
-      if (confirm("Willst du wirklich alle Punkte löschen?")) {
-        points = {};
-        localStorage.removeItem("points");
-        document.getElementById("reveal").innerText = "🔄 Punkte wurden gelöscht.";
-        document.getElementById("resetPointsBtn").style.display = "none";
+    function startNewRound() {
+      const word = getRandomWord();
+      realWord = word[0];
+      imposterHint = word[1];
+      imposterIndex = Math.floor(Math.random() * players.length);
+      starter = players[Math.floor(Math.random() * players.length)];
+      currentIndex = 0;
+      roundStartTime = Date.now();
+      document.getElementById("reveal").textContent = "";
+      document.getElementById("restartBtn").style.display = "none";
+      document.getElementById("statusText").textContent = "";
+      showPlayerCard();
+    }
+
+    function getRandomWord() {
+      let available = selectedWords.filter(w => !usedWords.includes(w[0]));
+      if (available.length === 0) {
+        usedWords = [];
+        available = selectedWords;
+      }
+      const word = available[Math.floor(Math.random() * available.length)];
+      usedWords.push(word[0]);
+      return word;
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
       }
     }
+
+    generateCategoryCheckboxes();
   </script>
 </body>
 </html>
