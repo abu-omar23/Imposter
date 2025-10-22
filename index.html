@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Imposter Wortspiel – Vollversion</title>
   <style>
     * { box-sizing: border-box; }
@@ -96,6 +96,10 @@
       margin: 20px auto 0;
       background: #0078ff;
     }
+    #winnerButtons button {
+      margin: 5px;
+      width: auto;
+    }
     #reveal {
       font-size: 1.4em;
       font-weight: bold;
@@ -126,27 +130,13 @@
     <button id="nextBtn" onclick="nextPlayer()">➡️ Nächster Spieler</button>
     <button id="startRoundBtn" onclick="showStarter()">🎲 Runde starten</button>
     <button id="revealImposterBtn" onclick="revealImposter()">😈 Imposter aufdecken</button>
-    <button id="restartBtn" onclick="startNewRound()">🔁 Neue Runde</button>
+    <div id="winnerButtons"></div>
     <div id="reveal"></div>
+    <button id="restartBtn" onclick="startNewRound()">🔁 Neue Runde</button>
   </div>
 
   <script>
-    const wordPool = {
-      leicht: [["Ball", "rund"], ["Haus", "Wohnung"]],
-      sport: [["Fußball", "Tor"], ["Tennis", "Schläger"]],
-      schule: [["Tafel", "Unterricht"], ["Mathe", "Rechnen"]],
-      technik: [["Computer", "Tastatur"], ["App", "Smartphone"]],
-      essen: [["Pizza", "Käse"], ["Apfel", "Obst"]],
-      gefuehle: [["Freude", "Lächeln"], ["Wut", "rot"]],
-      berufe: [["Lehrer", "Schule"], ["Arzt", "Patient"]],
-      fantasie: [["Drache", "Feuer"], ["Zauberer", "Magie"]],
-      haustier: [["Katze", "Miau"], ["Hamster", "Käfig"]],
-      saegetier: [["Hund", "Tier"], ["Elefant", "Rüssel"]],
-      hobbys: [["Lesen", "Buch"], ["Malen", "Farben"]],
-      familie: [["Mutter", "Eltern"], ["Bruder", "Geschwister"]]
-    };
-
-    let players = [], usedWords = [], selectedWords = [];
+    let players = [], points = {}, usedWords = [], selectedWords = [];
     let currentIndex = 0, imposterIndex = 0;
     let realWord = "", imposterHint = "", starter = "";
     let roundStartTime = 0;
@@ -155,18 +145,7 @@
       document.getElementById("categoryList").classList.toggle("visible");
     }
 
-    function generateCategoryCheckboxes() {
-      const container = document.getElementById("categoryList");
-      container.innerHTML = "";
-      for (let cat in wordPool) {
-        const label = document.createElement("label");
-        label.innerHTML = `<input type="checkbox" value="${cat}" checked /> ${cat}`;
-        container.appendChild(label);
-      }
-    }
-
     function setPlayers() {
-      generateCategoryCheckboxes();
       const count = parseInt(document.getElementById("playerCount").value);
       const container = document.getElementById("nameInputs");
       container.innerHTML = "";
@@ -191,10 +170,12 @@
         const name = document.getElementById(`player${i}`).value.trim();
         if (!name) return alert("Bitte alle Namen eingeben!");
         players.push(name);
+        if (!(name in points)) points[name] = 0;
       }
       localStorage.setItem("imposter_names", JSON.stringify(players));
+      generateCategoryCheckboxes();
       const selectedCategories = [...document.querySelectorAll("#categoryList input:checked")].map(cb => cb.value);
-      selectedWords = selectedCategories.flatMap(cat => wordPool[cat]);
+      selectedWords = selectedCategories.flatMap(cat => wordPool[cat] || []);
       shuffle(players);
       const word = getRandomWord();
       realWord = word[0];
@@ -220,10 +201,8 @@
       document.getElementById("revealImposterBtn").style.display = "none";
       document.getElementById("restartBtn").style.display = "none";
       document.getElementById("reveal").textContent = "";
-      setupSwipe();
-    }
+      document.getElementById("winnerButtons").innerHTML = "";
 
-    function setupSwipe() {
       const swipeCard = document.getElementById("swipeCard");
       const wordCard = document.getElementById("wordCard");
       let startY = 0, moved = false, currentY = 0;
@@ -250,8 +229,6 @@
           if (currentIndex < players.length - 1) {
             document.getElementById("nextBtn").style.display = "block";
           } else {
-            document.getElementById("playerName").textContent = "";
-            document.getElementById("cardContainer").style.display = "none";
             document.getElementById("startRoundBtn").style.display = "block";
           }
         }, 200);
@@ -270,12 +247,32 @@
     }
 
     function revealImposter() {
+      const winnerButtons = document.getElementById("winnerButtons");
+      winnerButtons.innerHTML = "<p>Wer hat gewonnen?</p>";
+      players.forEach(name => {
+        const btn = document.createElement("button");
+        btn.textContent = name;
+        btn.onclick = () => awardPoint(name);
+        winnerButtons.appendChild(btn);
+      });
+    }
+
+    function awardPoint(winner) {
+      if (players[imposterIndex] === winner) {
+        points[winner] += 2;
+      } else {
+        players.forEach(p => { if (p !== players[imposterIndex]) points[p] += 1; });
+      }
       const timePassed = Date.now() - roundStartTime;
       const minutes = Math.floor(timePassed / 60000);
       const seconds = Math.floor((timePassed % 60000) / 1000);
       document.getElementById("revealImposterBtn").style.display = "none";
-      document.getElementById("statusText").textContent = "";
-      document.getElementById("reveal").textContent = `😈 Imposter: ${players[imposterIndex]}\nWort: ${realWord}\nZeit: ${minutes} min ${seconds} sek`;
+      document.getElementById("winnerButtons").innerHTML = "";
+      let scoreboard = `😈 Imposter: ${players[imposterIndex]}\nWort: ${realWord}\nZeit: ${minutes} min ${seconds} sek\n\n🔢 Punkte:\n`;
+      players.forEach(p => {
+        scoreboard += `${p}: ${points[p]}\n`;
+      });
+      document.getElementById("reveal").textContent = scoreboard;
       document.getElementById("restartBtn").style.display = "block";
     }
 
@@ -290,6 +287,7 @@
       document.getElementById("reveal").textContent = "";
       document.getElementById("restartBtn").style.display = "none";
       document.getElementById("statusText").textContent = "";
+      document.getElementById("winnerButtons").innerHTML = "";
       showPlayerCard();
     }
 
@@ -311,7 +309,30 @@
       }
     }
 
-    generateCategoryCheckboxes();
+    function generateCategoryCheckboxes() {
+      const container = document.getElementById("categoryList");
+      container.innerHTML = "";
+      for (let cat in wordPool) {
+        const label = document.createElement("label");
+        label.innerHTML = `<input type="checkbox" value="${cat}" checked /> ${cat}`;
+        container.appendChild(label);
+      }
+    }
+
+    const wordPool = {
+      leicht: [["Ball", "rund"], ["Haus", "Wohnung"]],
+      sport: [["Fußball", "Tor"], ["Tennis", "Schläger"]],
+      schule: [["Tafel", "Unterricht"], ["Mathe", "Rechnen"]],
+      technik: [["Computer", "Tastatur"], ["App", "Smartphone"]],
+      essen: [["Pizza", "Käse"], ["Apfel", "Obst"]],
+      gefuehle: [["Freude", "Lächeln"], ["Wut", "rot"]],
+      berufe: [["Lehrer", "Schule"], ["Arzt", "Patient"]],
+      fantasie: [["Drache", "Feuer"], ["Zauberer", "Magie"]],
+      haustier: [["Katze", "Miau"], ["Hamster", "Käfig"]],
+      saegetier: [["Hund", "Tier"], ["Elefant", "Rüssel"]],
+      hobbys: [["Lesen", "Buch"], ["Malen", "Farben"]],
+      familie: [["Mutter", "Eltern"], ["Bruder", "Geschwister"]]
+    };
   </script>
 </body>
 </html>
