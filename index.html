@@ -91,7 +91,7 @@
       z-index: 1;
       flex-direction: column;
     }
-    #nextBtn, #revealImposterBtn, #restartBtn, #startRoundBtn {
+    #nextBtn, #revealImposterBtn, #restartBtn, #startRoundBtn, #crewWinBtn, #imposterWinBtn {
       display: none;
       margin: 20px auto 0;
       background: #0078ff;
@@ -102,6 +102,11 @@
       color: darkred;
       margin-top: 20px;
       white-space: pre-wrap;
+    }
+    #timerDisplay {
+      font-size: 1.2em;
+      color: #333;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -119,6 +124,7 @@
   <div class="card" id="game" style="display:none">
     <h2 id="playerName"></h2>
     <p id="statusText"></p>
+    <p id="timerDisplay">⏱️ Zeit: 00:00</p>
     <div id="cardContainer">
       <div id="wordCard">🗝️ Wort anzeigen...</div>
       <div id="swipeCard">🔒 Wische nach oben 👆</div>
@@ -126,6 +132,8 @@
     <button id="nextBtn" onclick="nextPlayer()">➡️ Nächster Spieler</button>
     <button id="startRoundBtn" onclick="showStarter()">🎲 Runde starten</button>
     <button id="revealImposterBtn" onclick="revealImposter()">😈 Imposter aufdecken</button>
+    <button id="crewWinBtn" onclick="awardPoints(false)">✔️ Crew gewinnt</button>
+    <button id="imposterWinBtn" onclick="awardPoints(true)">😈 Imposter gewinnt</button>
     <button id="restartBtn" onclick="startNewRound()">🔁 Neue Runde</button>
     <div id="reveal"></div>
   </div>
@@ -136,9 +144,9 @@
     };
 
     let players = [], usedWords = [], selectedWords = [];
-    let currentIndex = 0, imposterIndex = 0;
+    let currentIndex = 0, imposterIndex = 0, roundStartTime = 0, timerInterval;
     let realWord = "", imposterHint = "", starter = "";
-    let roundStartTime = 0;
+    let points = JSON.parse(localStorage.getItem("points") || "{}");
 
     function toggleCategoryMenu() {
       document.getElementById("categoryList").classList.toggle("visible");
@@ -180,8 +188,10 @@
         const name = document.getElementById(`player${i}`).value.trim();
         if (!name) return alert("Bitte alle Namen eingeben!");
         players.push(name);
+        if (!points[name]) points[name] = 0;
       }
       localStorage.setItem("imposter_names", JSON.stringify(players));
+      localStorage.setItem("points", JSON.stringify(points));
       const selectedCategories = [...document.querySelectorAll("#categoryList input:checked")].map(cb => cb.value);
       selectedWords = selectedCategories.flatMap(cat => wordPool[cat]);
       shuffle(players);
@@ -191,10 +201,11 @@
       imposterIndex = Math.floor(Math.random() * players.length);
       starter = players[Math.floor(Math.random() * players.length)];
       currentIndex = 0;
-      roundStartTime = Date.now();
+      roundStartTime = 0;
       document.getElementById("setup").style.display = "none";
       document.getElementById("game").style.display = "block";
       showPlayerCard();
+      updatePointsDisplay();
     }
 
     function showPlayerCard() {
@@ -207,6 +218,8 @@
       document.getElementById("nextBtn").style.display = "none";
       document.getElementById("startRoundBtn").style.display = "none";
       document.getElementById("revealImposterBtn").style.display = "none";
+      document.getElementById("crewWinBtn").style.display = "none";
+      document.getElementById("imposterWinBtn").style.display = "none";
       document.getElementById("restartBtn").style.display = "none";
       document.getElementById("reveal").textContent = "";
       setupSwipe();
@@ -239,8 +252,6 @@
           if (currentIndex < players.length - 1) {
             document.getElementById("nextBtn").style.display = "block";
           } else {
-            document.getElementById("playerName").textContent = "";
-            document.getElementById("cardContainer").style.display = "none";
             document.getElementById("startRoundBtn").style.display = "block";
           }
         }, 200);
@@ -248,36 +259,60 @@
     }
 
     function showStarter() {
+      document.getElementById("playerName").textContent = "";
       document.getElementById("startRoundBtn").style.display = "none";
       document.getElementById("statusText").textContent = `🎲 ${starter} beginnt die Runde!`;
+      roundStartTime = Date.now();
+      clearInterval(timerInterval);
+      timerInterval = setInterval(updateTimer, 1000);
       document.getElementById("revealImposterBtn").style.display = "block";
     }
 
-    function nextPlayer() {
-      currentIndex++;
-      showPlayerCard();
+    function updateTimer() {
+      const elapsed = Math.floor((Date.now() - roundStartTime) / 1000);
+      const min = String(Math.floor(elapsed / 60)).padStart(2, '0');
+      const sec = String(elapsed % 60).padStart(2, '0');
+      document.getElementById("timerDisplay").textContent = `⏱️ Zeit: ${min}:${sec}`;
     }
 
     function revealImposter() {
-      const timePassed = Date.now() - roundStartTime;
-      const minutes = Math.floor(timePassed / 60000);
-      const seconds = Math.floor((timePassed % 60000) / 1000);
+      clearInterval(timerInterval);
+      document.getElementById("statusText").textContent = "";
+      const imposter = players[imposterIndex];
+      const timePassed = Math.floor((Date.now() - roundStartTime) / 1000);
+      const minutes = Math.floor(timePassed / 60);
+      const seconds = timePassed % 60;
+      document.getElementById("reveal").textContent = `😈 Imposter: ${imposter}\nWort: ${realWord}\nZeit: ${minutes} min ${seconds} sek`;
       document.getElementById("revealImposterBtn").style.display = "none";
-      document.getElementById("reveal").textContent = `😈 Imposter: ${players[imposterIndex]}\nWort: ${realWord}\nZeit: ${minutes} min ${seconds} sek`;
+      document.getElementById("crewWinBtn").style.display = "block";
+      document.getElementById("imposterWinBtn").style.display = "block";
+    }
+
+    function awardPoints(imposterWon) {
+      if (imposterWon) points[players[imposterIndex]] += 2;
+      else players.forEach((p, i) => { if (i !== imposterIndex) points[p] += 1; });
+      localStorage.setItem("points", JSON.stringify(points));
+      updatePointsDisplay();
+      document.getElementById("crewWinBtn").style.display = "none";
+      document.getElementById("imposterWinBtn").style.display = "none";
       document.getElementById("restartBtn").style.display = "block";
     }
 
+    function updatePointsDisplay() {
+      let txt = "🏆 Punktestand:\n";
+      for (let p in points) txt += `${p}: ${points[p]} Punkte\n`;
+      document.getElementById("reveal").textContent = txt;
+    }
+
     function startNewRound() {
+      document.getElementById("reveal").textContent = "";
+      document.getElementById("restartBtn").style.display = "none";
       const word = getRandomWord();
       realWord = word[0];
       imposterHint = word[1];
       imposterIndex = Math.floor(Math.random() * players.length);
       starter = players[Math.floor(Math.random() * players.length)];
       currentIndex = 0;
-      roundStartTime = Date.now();
-      document.getElementById("reveal").textContent = "";
-      document.getElementById("restartBtn").style.display = "none";
-      document.getElementById("statusText").textContent = "";
       showPlayerCard();
     }
 
@@ -303,3 +338,4 @@
   </script>
 </body>
 </html>
+
