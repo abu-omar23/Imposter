@@ -45,10 +45,37 @@
       width: 70%;
       margin-top: 20px;
     }
-    .checkboxes { display: none; margin-top: 10px; }
-    .checkboxes.visible { display: block; }
-    .checkboxes label { display: flex; align-items: center; margin: 5px 0; }
-    .checkboxes input { margin-right: 10px; width: auto; }
+    .checkboxes {
+      display: none;
+      margin-top: 10px;
+      background: #ffffffa0;
+      padding: 10px;
+      border-radius: 15px;
+      border: 1px solid #ccc;
+      transition: 0.3s ease;
+    }
+    .checkboxes.visible {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .checkboxes label {
+      display: flex;
+      align-items: center;
+      margin: 8px 0;
+      background: #e9f1ff;
+      padding: 6px 10px;
+      border-radius: 8px;
+      box-shadow: inset 0 0 3px rgba(0,0,0,0.1);
+    }
+    .checkboxes input {
+      margin-right: 10px;
+      width: auto;
+      accent-color: #4CAF50;
+    }
     #cardContainer {
       position: relative;
       height: 220px;
@@ -84,6 +111,17 @@
       z-index: 1;
       flex-direction: column;
     }
+    #playerControl {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    #playerCountDisplay {
+      font-weight: bold;
+      font-size: 1.2em;
+    }
     #reveal {
       font-size: 1.3em;
       font-weight: bold;
@@ -97,6 +135,14 @@
       margin-top: 10px;
       display: none;
     }
+    #resetPointsBtn {
+      background: #777;
+      width: 80%;
+      margin-top: 20px;
+    }
+    #resetPointsBtn:hover {
+      background: #555;
+    }
   </style>
 </head>
 <body>
@@ -104,9 +150,14 @@
     <h1>Imposter Wortspiel 🕵️‍♂️</h1>
     <button onclick="toggleCategoryMenu()">Kategorien ändern</button>
     <div class="checkboxes" id="categoryList"></div>
+    
     <p>Wie viele Spieler?</p>
-    <input type="number" id="playerCount" min="4" max="10" value="4" />
-    <button onclick="setPlayers()">Weiter</button>
+    <div id="playerControl">
+      <button onclick="changePlayerCount(-1)">−</button>
+      <span id="playerCountDisplay">4</span>
+      <button onclick="changePlayerCount(1)">+</button>
+    </div>
+
     <div id="nameInputs" style="text-align: center;"></div>
   </div>
 
@@ -125,10 +176,10 @@
     <button id="revealImposterBtn" onclick="revealImposter()">😈 Imposter aufdecken</button>
     <button id="crewWinBtn" onclick="awardPoints(false)">✔️ Crew gewinnt</button>
     <button id="imposterWinBtn" onclick="awardPoints(true)">😈 Imposter gewinnt</button>
-    <button id="resetPointsBtn" onclick="resetPoints()">🗑️ Punkte löschen</button>
     <button id="restartBtn" onclick="startNewRound()">🔁 Neue Runde</button>
 
     <div id="reveal"></div>
+    <button id="resetPointsBtn" onclick="resetPoints()">🗑️ Punkte löschen</button>
   </div>
 
   <script>
@@ -145,6 +196,30 @@
     let realWord = "", imposterHint = "", starter = "";
     let roundStartTime = 0, timerInterval;
     let points = JSON.parse(localStorage.getItem("points") || "{}");
+    let playerCount = 4;
+
+    function changePlayerCount(n) {
+      playerCount = Math.min(10, Math.max(4, playerCount + n));
+      document.getElementById("playerCountDisplay").textContent = playerCount;
+      updateNameInputs();
+    }
+
+    function updateNameInputs() {
+      const container = document.getElementById("nameInputs");
+      container.innerHTML = "";
+      const saved = JSON.parse(localStorage.getItem("imposter_names") || "[]");
+      for (let i = 0; i < playerCount; i++) {
+        const input = document.createElement("input");
+        input.placeholder = `Name Spieler ${i + 1}`;
+        input.id = `player${i}`;
+        input.value = saved[i] || "";
+        container.appendChild(input);
+      }
+      const startBtn = document.createElement("button");
+      startBtn.textContent = "Spiel starten";
+      startBtn.onclick = startGame;
+      container.appendChild(startBtn);
+    }
 
     function toggleCategoryMenu() {
       document.getElementById("categoryList").classList.toggle("visible");
@@ -160,29 +235,9 @@
       }
     }
 
-    function setPlayers() {
-      generateCategoryCheckboxes();
-      const count = parseInt(document.getElementById("playerCount").value);
-      const container = document.getElementById("nameInputs");
-      container.innerHTML = "";
-      const saved = JSON.parse(localStorage.getItem("imposter_names") || "[]");
-      for (let i = 0; i < count; i++) {
-        const input = document.createElement("input");
-        input.placeholder = `Name Spieler ${i + 1}`;
-        input.id = `player${i}`;
-        input.value = saved[i] || "";
-        container.appendChild(input);
-      }
-      const startBtn = document.createElement("button");
-      startBtn.textContent = "Spiel starten";
-      startBtn.onclick = startGame;
-      container.appendChild(startBtn);
-    }
-
     function startGame() {
       players = [];
-      const count = parseInt(document.getElementById("playerCount").value);
-      for (let i = 0; i < count; i++) {
+      for (let i = 0; i < playerCount; i++) {
         const name = document.getElementById(`player${i}`).value.trim();
         if (!name) return alert("Bitte alle Namen eingeben!");
         players.push(name);
@@ -218,7 +273,6 @@
       document.getElementById("revealImposterBtn").style.display = "none";
       document.getElementById("crewWinBtn").style.display = "none";
       document.getElementById("imposterWinBtn").style.display = "none";
-      document.getElementById("resetPointsBtn").style.display = "none";
       document.getElementById("restartBtn").style.display = "none";
       document.getElementById("reveal").textContent = "";
       document.getElementById("timerDisplay").style.display = "none";
@@ -250,7 +304,6 @@
         if (currentIndex < players.length - 1) {
           document.getElementById("nextBtn").style.display = "block";
         } else {
-          // Karte bleibt stehen, Button unter der Karte anzeigen
           document.getElementById("nextBtn").style.display = "none";
           document.getElementById("startRoundBtn").style.display = "block";
         }
@@ -263,7 +316,6 @@
     }
 
     function showStarter() {
-      // Jetzt erst Karte ausblenden
       document.getElementById("cardContainer").style.display = "none";
       document.getElementById("playerName").textContent = "";
       document.getElementById("startRoundBtn").style.display = "none";
@@ -306,15 +358,15 @@
       document.getElementById("reveal").textContent += `\n\n${txt}`;
       document.getElementById("crewWinBtn").style.display = "none";
       document.getElementById("imposterWinBtn").style.display = "none";
-      document.getElementById("resetPointsBtn").style.display = "block";
       document.getElementById("restartBtn").style.display = "block";
+      document.getElementById("resetPointsBtn").style.display = "block";
     }
 
     function resetPoints() {
       for (let p in points) points[p] = 0;
       localStorage.setItem("points", JSON.stringify(points));
-      document.getElementById("resetPointsBtn").style.display = "none";
       document.getElementById("reveal").textContent += `\n\n❌ Punkte wurden gelöscht!`;
+      document.getElementById("resetPointsBtn").style.display = "none";
     }
 
     function startNewRound() {
@@ -345,9 +397,11 @@
     }
 
     generateCategoryCheckboxes();
+    updateNameInputs();
   </script>
 </body>
 </html>
+
 
 
 
