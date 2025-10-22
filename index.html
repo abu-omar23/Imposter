@@ -204,10 +204,68 @@
       }
       document.getElementById("setup").style.display = "none";
       document.getElementById("game").style.display = "block";
-      document.getElementById("statusText").textContent = "Spiel gestartet!";
       starter = players[Math.floor(Math.random() * players.length)];
       imposterIndex = Math.floor(Math.random() * players.length);
-      document.getElementById("startRoundBtn").style.display = "block";
+      currentIndex = 0;
+      showPlayerCard();
+    }
+
+    let currentIndex = 0;
+    function showPlayerCard() {
+      document.getElementById("cardContainer").style.display = "block";
+      document.getElementById("swipeCard").style.transform = "translateY(0)";
+      document.getElementById("playerName").textContent = players[currentIndex];
+      document.getElementById("wordCard").textContent = "🗝️ Wort anzeigen...";
+      document.getElementById("nextBtn").style.display = "none";
+
+      let startY = 0;
+      let currentY = 0;
+      let moved = false;
+      const swipeCard = document.getElementById("swipeCard");
+
+      swipeCard.ontouchstart = e => {
+        startY = e.touches[0].clientY;
+        moved = false;
+      };
+      swipeCard.ontouchmove = e => {
+        e.preventDefault();
+        currentY = e.touches[0].clientY;
+        let deltaY = startY - currentY;
+        if (deltaY > 0) {
+          swipeCard.style.transition = 'none';
+          swipeCard.style.transform = `translateY(-${deltaY}px)`;
+          moved = true;
+        }
+      };
+      swipeCard.ontouchend = () => {
+        if (!moved) return;
+        let deltaY = startY - currentY;
+        swipeCard.style.transition = 'transform 0.3s ease';
+        if (deltaY > 80) {
+          swipeCard.style.transform = 'translateY(-120%)';
+          setTimeout(() => revealWord(), 300);
+        } else {
+          swipeCard.style.transform = 'translateY(0)';
+        }
+      };
+    }
+
+    function revealWord() {
+      const isImposter = currentIndex === imposterIndex;
+      document.getElementById("wordCard").textContent = isImposter ? `😈 Du bist der Imposter! Hinweis: ?` : `✅ Dein Wort ist: ?`;
+      setTimeout(() => {
+        document.getElementById("swipeCard").style.transform = "translateY(0)";
+        if (currentIndex < players.length - 1) {
+          document.getElementById("nextBtn").style.display = "block";
+        } else {
+          document.getElementById("startRoundBtn").style.display = "block";
+        }
+      }, 1000);
+    }
+
+    function nextPlayer() {
+      currentIndex++;
+      showPlayerCard();
     }
 
     function toggleCategoryMenu() {
