@@ -7,6 +7,9 @@
   <style>
     * { box-sizing: border-box; }
     html, body {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
       margin: 0;
       padding: 0;
       font-family: "Poppins", sans-serif;
@@ -231,13 +234,33 @@
       document.getElementById("restartBtn").style.display = "none";
       document.getElementById("reveal").textContent = "";
       const swipeCard = document.getElementById("swipeCard");
-      swipeCard.ontouchstart = e => startY = e.touches[0].clientY;
-      swipeCard.ontouchend = e => {
-        const endY = e.changedTouches[0].clientY;
-        const distance = startY - endY;
-        if (distance > 50) revealWord();
-        else swipeCard.style.transform = "translateY(0)";
-      };
+      let currentY = 0;
+let moved = false;
+swipeCard.ontouchstart = e => {
+  startY = e.touches[0].clientY;
+  moved = false;
+};
+swipeCard.ontouchmove = e => {
+  e.preventDefault();
+  currentY = e.touches[0].clientY;
+  let deltaY = startY - currentY;
+  if (deltaY > 0) {
+    swipeCard.style.transition = 'none';
+    swipeCard.style.transform = `translateY(-${deltaY}px)`;
+    moved = true;
+  }
+};
+swipeCard.ontouchend = () => {
+  if (!moved) return;
+  let deltaY = startY - currentY;
+  swipeCard.style.transition = 'transform 0.3s ease';
+  if (deltaY > 80) {
+    swipeCard.style.transform = 'translateY(-120%)';
+    setTimeout(() => revealWord(), 300);
+  } else {
+    swipeCard.style.transform = 'translateY(0)';
+  }
+};
       swipeCard.onclick = () => revealWord();
     }
 
@@ -272,9 +295,7 @@ document.getElementById("revealImposterBtn").style.display = "block";
     function revealImposter() {
       const starter = players[Math.floor(Math.random() * players.length)];
 document.getElementById("reveal").textContent = `😈 Der Imposter war: ${players[imposterIndex]}
-Hinweis: ${imposterHint}
-Wort: ${realWord}
-🎲 ${starter} beginnt die Runde!`;
+Wort: ${realWord}`;
       document.getElementById("revealImposterBtn").style.display = "none";
       document.getElementById("restartBtn").style.display = "block";
     }
@@ -304,4 +325,3 @@ Wort: ${realWord}
   </script>
 </body>
 </html>
-
