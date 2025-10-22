@@ -233,28 +233,25 @@
     document.getElementById("cardContainer").style.display = "block";
     const swipeCard = document.getElementById("swipeCard");
     swipeCard.style.transform = "translateY(0)";
-    let startY = 0, moved = false;
+    let startY = 0;
 
     swipeCard.ontouchstart = e => {
       startY = e.touches[0].clientY;
-      moved = false;
     };
 
     swipeCard.ontouchmove = e => {
-      e.preventDefault();
-      const currentY = e.touches[0].clientY;
-      const deltaY = startY - currentY;
+      const deltaY = startY - e.touches[0].clientY;
       if (deltaY > 0) {
         swipeCard.style.transition = 'none';
         swipeCard.style.transform = `translateY(-${deltaY}px)`;
-        moved = true;
       }
     };
 
     swipeCard.ontouchend = () => {
       swipeCard.style.transition = 'transform 0.3s ease';
-      const translateY = swipeCard.style.transform.match(/-([\\d.]+)px/);
-      const pulled = translateY ? parseFloat(translateY[1]) : 0;
+      const transform = swipeCard.style.transform;
+      const match = transform.match(/-([\d.]+)px/);
+      const pulled = match ? parseFloat(match[1]) : 0;
       if (pulled > 80) {
         swipeCard.style.transform = 'translateY(-120%)';
         setTimeout(() => {
@@ -303,5 +300,3 @@
 </script>
 </body>
 </html>
-
-
