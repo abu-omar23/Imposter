@@ -43,6 +43,11 @@
     .checkboxes {
       display: none;
       margin-top: 10px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: left;
     }
     .checkboxes.visible {
       display: block;
@@ -51,10 +56,33 @@
       display: flex;
       align-items: center;
       margin: 5px 0;
+      font-size: 0.95em;
     }
     .checkboxes input {
       margin-right: 10px;
       width: auto;
+    }
+    .player-counter {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+    .counter-btn {
+      font-size: 1.2em;
+      padding: 5px 15px;
+      cursor: pointer;
+      background: #0078ff;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+    }
+    #playerCountDisplay {
+      font-size: 1.2em;
+      width: 40px;
+      text-align: center;
+      background: none;
+      border: none;
     }
     #cardContainer {
       position: relative;
@@ -115,7 +143,11 @@
     <button onclick="toggleCategoryMenu()">Kategorien ändern</button>
     <div class="checkboxes" id="categoryList"></div>
     <p>Wie viele Spieler?</p>
-    <input type="number" id="playerCount" min="4" max="10" value="4" />
+    <div class="player-counter">
+      <button class="counter-btn" onclick="adjustPlayerCount(-1)">−</button>
+      <input id="playerCountDisplay" type="text" readonly value="4">
+      <button class="counter-btn" onclick="adjustPlayerCount(1)">+</button>
+    </div>
     <button onclick="setPlayers()">Weiter</button>
     <div id="nameInputs" style="text-align: center;"></div>
   </div>
@@ -136,25 +168,12 @@
   </div>
 
   <script>
-    let players = [], points = {}, usedWords = [], selectedWords = [];
-    let currentIndex = 0, imposterIndex = 0;
-    let realWord = "", imposterHint = "", starter = "";
-    let roundStartTime = 0;
-
-    const wordPool = {
-      leicht: [["Ball", "rund"], ["Haus", "Wohnung"]],
-      sport: [["Fußball", "Tor"], ["Tennis", "Schläger"]],
-      schule: [["Tafel", "Unterricht"], ["Mathe", "Rechnen"]],
-      technik: [["Computer", "Tastatur"], ["App", "Smartphone"]],
-      essen: [["Pizza", "Käse"], ["Apfel", "Obst"]],
-      gefuehle: [["Freude", "Lächeln"], ["Wut", "rot"]],
-      berufe: [["Lehrer", "Schule"], ["Arzt", "Patient"]],
-      fantasie: [["Drache", "Feuer"], ["Zauberer", "Magie"]],
-      haustier: [["Katze", "Miau"], ["Hamster", "Käfig"]],
-      saegetier: [["Hund", "Tier"], ["Elefant", "Rüssel"]],
-      hobbys: [["Lesen", "Buch"], ["Malen", "Farben"]],
-      familie: [["Mutter", "Eltern"], ["Bruder", "Geschwister"]]
-    };
+    function adjustPlayerCount(change) {
+      const display = document.getElementById('playerCountDisplay');
+      let count = parseInt(display.value);
+      count = Math.min(10, Math.max(4, count + change));
+      display.value = count;
+    }
 
     function toggleCategoryMenu() {
       const box = document.getElementById("categoryList");
@@ -164,23 +183,15 @@
     function generateCategoryCheckboxes() {
       const container = document.getElementById("categoryList");
       container.innerHTML = "";
-      for (let cat in wordPool) {
+      const categories = ["leicht", "sport", "schule", "technik", "essen", "gefuehle", "berufe", "fantasie", "haustier", "saegetier", "hobbys", "familie"];
+      for (let cat of categories) {
         const label = document.createElement("label");
-        label.innerHTML = `<input type="checkbox" value="${cat}" checked /> ${cat}`;
+        label.innerHTML = `<input type="checkbox" value="${cat}" checked> ${cat}`;
         container.appendChild(label);
       }
     }
 
-    // Stelle sicher, dass die Checkboxen auch beim ersten Laden erzeugt werden
     generateCategoryCheckboxes();
-
-    function showStarter() {
-      document.getElementById("startRoundBtn").style.display = "none";
-      document.getElementById("cardContainer").style.display = "none";
-      document.getElementById("playerName").textContent = "";
-      document.getElementById("statusText").textContent = `🎲 ${starter} beginnt die Runde!`;
-      document.getElementById("revealImposterBtn").style.display = "block";
-    }
   </script>
 </body>
 </html>
