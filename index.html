@@ -253,8 +253,9 @@
 
     swipeCard.ontouchend = () => {
       swipeCard.style.transition = 'transform 0.3s ease';
-      const endY = parseFloat(swipeCard.style.transform.match(/-(\\d+)/)?.[1] || "0");
-      if (endY > 80) {
+      const translateY = swipeCard.style.transform.match(/-([\\d.]+)px/);
+      const pulled = translateY ? parseFloat(translateY[1]) : 0;
+      if (pulled > 80) {
         swipeCard.style.transform = 'translateY(-120%)';
         setTimeout(() => {
           if (currentIndex < players.length - 1) {
@@ -302,4 +303,5 @@
 </script>
 </body>
 </html>
+
 
