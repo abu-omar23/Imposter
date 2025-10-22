@@ -244,19 +244,19 @@
         if (!moved) return;
         swipeCard.style.transition = 'transform 0.2s ease';
         swipeCard.style.transform = 'translateY(0)';
-        document.getElementById("nextBtn").style.display = "block";
+        if (currentIndex < players.length - 1) {
+          document.getElementById("nextBtn").style.display = "block";
+        } else {
+          document.getElementById("cardContainer").style.display = "none";
+          document.getElementById("nextBtn").style.display = "none";
+          document.getElementById("startRoundBtn").style.display = "block";
+        }
       };
     }
 
     function nextPlayer() {
       currentIndex++;
-      if (currentIndex < players.length) {
-        showPlayerCard();
-      } else {
-        document.getElementById("cardContainer").style.display = "none";
-        document.getElementById("nextBtn").style.display = "none";
-        document.getElementById("startRoundBtn").style.display = "block";
-      }
+      showPlayerCard();
     }
 
     function showStarter() {
@@ -343,6 +343,7 @@
   </script>
 </body>
 </html>
+
 
 
 
