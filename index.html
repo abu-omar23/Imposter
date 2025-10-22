@@ -120,7 +120,15 @@
       font-weight: bold;
       color: darkred;
       margin-top: 20px;
-      white-space: pre-wrap;
+    }
+    .score-entry {
+      background: #fff;
+      border-radius: 8px;
+      padding: 8px;
+      margin: 5px auto;
+      width: 80%;
+      color: #333;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
   </style>
 </head>
@@ -290,7 +298,8 @@
     function revealImposter() {
       document.getElementById("statusText").textContent = "";
       document.getElementById("playerName").textContent = "";
-      document.getElementById("reveal").textContent = `😈 Der Imposter war: ${players[imposterIndex]}\nWort: ${realWord}\n\n🏆 Punktestand:\n${getPointList()}`;
+      const revealDiv = document.getElementById("reveal");
+      revealDiv.innerHTML = `😈 Der Imposter war: ${players[imposterIndex]}<br>Wort: ${realWord}<br><br>🏆 <b>Punktestand:</b><br>${getPointList()}`;
       document.getElementById("revealImposterBtn").style.display = "none";
       document.getElementById("crewWinBtn").style.display = "inline-block";
       document.getElementById("imposterWinBtn").style.display = "inline-block";
@@ -298,7 +307,9 @@
 
     function getPointList() {
       let output = '';
-      for (let p in points) output += `${p}: ${points[p]} Punkte\\n`;
+      for (let p in points) {
+        output += `<div class='score-entry'>${p}: <b>${points[p]}</b> Punkte</div>`;
+      }
       return output;
     }
 
@@ -309,7 +320,8 @@
         players.forEach((p, i) => { if (i !== imposterIndex) points[p] += 1; });
       }
       localStorage.setItem("imposter_points", JSON.stringify(points));
-      document.getElementById("reveal").textContent = `😈 Der Imposter war: ${players[imposterIndex]}\nWort: ${realWord}\n\n🏆 Punktestand aktualisiert:\n${getPointList()}`;
+      const revealDiv = document.getElementById("reveal");
+      revealDiv.innerHTML = `😈 Der Imposter war: ${players[imposterIndex]}<br>Wort: ${realWord}<br><br>🏆 <b>Punktestand aktualisiert:</b><br>${getPointList()}`;
       document.getElementById("crewWinBtn").style.display = "none";
       document.getElementById("imposterWinBtn").style.display = "none";
       document.getElementById("restartBtn").style.display = "block";
