@@ -28,7 +28,7 @@
       text-align: center;
     }
     input, button, label {
-      margin: 6px 0;
+      margin: 6px auto;
       padding: 10px;
       border-radius: 10px;
       border: 1px solid #ccc;
@@ -98,7 +98,7 @@
     }
     #nextBtn, #revealImposterBtn, #restartBtn {
       display: none;
-      margin-top: 20px;
+      margin: 20px auto 0;
       background: #0078ff;
     }
     #reveal {
@@ -255,6 +255,7 @@
       if (pulled > 80) {
         swipeCard.style.transform = 'translateY(-120%)';
         setTimeout(() => {
+          swipeCard.style.transform = 'translateY(0)';
           if (currentIndex < players.length - 1) {
             document.getElementById("nextBtn").style.display = "block";
           } else {
@@ -262,7 +263,7 @@
             document.getElementById("statusText").textContent = `🎲 ${starter} beginnt die Runde!`;
             document.getElementById("revealImposterBtn").style.display = "block";
           }
-        }, 300);
+        }, 700);
       } else {
         swipeCard.style.transform = 'translateY(0)';
       }
