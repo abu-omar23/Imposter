@@ -168,11 +168,30 @@
   </div>
 
   <script>
+    // Punktesystem und Spieleranzeige
+    let players = [], points = {}, starter = "", imposterIndex = 0;
+
     function adjustPlayerCount(change) {
       const display = document.getElementById('playerCountDisplay');
       let count = parseInt(display.value);
       count = Math.min(10, Math.max(4, count + change));
       display.value = count;
+    }
+
+    function setPlayers() {
+      const count = parseInt(document.getElementById('playerCountDisplay').value);
+      const container = document.getElementById("nameInputs");
+      container.innerHTML = "";
+      for (let i = 0; i < count; i++) {
+        const input = document.createElement("input");
+        input.placeholder = `Name Spieler ${i + 1}`;
+        input.id = `player${i}`;
+        container.appendChild(input);
+      }
+      const startBtn = document.createElement("button");
+      startBtn.textContent = "Spiel starten";
+      startBtn.onclick = startGame;
+      container.appendChild(startBtn);
     }
 
     function toggleCategoryMenu() {
@@ -189,6 +208,23 @@
         label.innerHTML = `<input type="checkbox" value="${cat}" checked> ${cat}`;
         container.appendChild(label);
       }
+    }
+
+    function showStarter() {
+      document.getElementById("startRoundBtn").style.display = "none";
+      document.getElementById("cardContainer").style.display = "none";
+      document.getElementById("playerName").textContent = "";
+      document.getElementById("statusText").textContent = `🎲 ${starter} beginnt die Runde!`;
+      document.getElementById("revealImposterBtn").style.display = "block";
+    }
+
+    function revealImposter() {
+      const resultText = `😈 Der Imposter war: ${players[imposterIndex]}\nWort: ...\n\n`;
+      const winnerText = confirm("Hat der Imposter gewonnen?")
+        ? "Der Imposter gewinnt und bekommt 2 Punkte."
+        : "Crewmates gewinnen und bekommen je 1 Punkt.";
+      document.getElementById("statusText").textContent = "";
+      document.getElementById("reveal").textContent = resultText + winnerText;
     }
 
     generateCategoryCheckboxes();
