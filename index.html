@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Imposter Wortspiel 2.2</title>
+  <title>Imposter Wortspiel 2.3</title>
   <style>
     * { box-sizing: border-box; }
     html, body {
@@ -43,6 +43,13 @@
     }
     button:hover {
       background: #45a049;
+    }
+    .checkboxes {
+      display: none;
+      margin-top: 10px;
+    }
+    .checkboxes.visible {
+      display: block;
     }
     .checkboxes label {
       display: flex;
@@ -96,7 +103,7 @@
 <body>
   <div class="card" id="setup">
     <h1>Imposter Wortspiel 🕵️‍♂️</h1>
-    <p><strong>Kategorien auswählen:</strong></p>
+    <button onclick="toggleCategoryMenu()">Kategorien ändern</button>
     <div class="checkboxes" id="categoryList"></div>
     <p>Wie viele Spieler?</p>
     <input type="number" id="playerCount" min="4" max="10" value="4" />
@@ -127,7 +134,11 @@
       essen: [["Pizza", "Ofen"], ["Apfel", "Frucht"], ["Käse", "Milch"]],
       gefuehle: [["Freude", "Lachen"], ["Angst", "Gefahr"], ["Liebe", "Herz"]],
       berufe: [["Arzt", "Krankenhaus"], ["Lehrer", "Schule"], ["Bäcker", "Brot"]],
-      fantasie: [["Drache", "Feuer"], ["Zauberer", "Magie"], ["Elf", "Ohren"]]
+      fantasie: [["Drache", "Feuer"], ["Zauberer", "Magie"], ["Elf", "Ohren"]],
+      haustier: [["Katze", "Schnurren"], ["Hund", "Leine"], ["Hamster", "Käfig"]],
+      saegetier: [["Elefant", "Rüssel"], ["Pferd", "Hufe"], ["Löwe", "Raubtier"]],
+      hobbys: [["Lesen", "Buch"], ["Malen", "Farben"], ["Gärtnern", "Pflanzen"]],
+      familie: [["Mutter", "Eltern"], ["Vater", "Kind"], ["Schwester", "Geschwister"]]
     };
 
     let players = [];
@@ -138,6 +149,10 @@
     let realWord = "";
     let imposterHint = "";
     let startY = 0;
+
+    function toggleCategoryMenu() {
+      document.getElementById("categoryList").classList.toggle("visible");
+    }
 
     function generateCategoryCheckboxes() {
       const container = document.getElementById("categoryList");
@@ -188,6 +203,7 @@
       document.getElementById("setup").style.display = "none";
       document.getElementById("game").style.display = "block";
       document.getElementById("cardContainer").style.display = "block";
+      document.getElementById("playerName").textContent = "";
       document.getElementById("statusText").textContent = "Wörter werden vergeben...";
       showPlayerCard();
     }
@@ -237,7 +253,8 @@
           document.getElementById("nextBtn").style.display = "block";
         } else {
           document.getElementById("cardContainer").style.display = "none";
-          document.getElementById("statusText").textContent = `🎲 ${players[Math.floor(Math.random() * players.length)]} beginnt die Runde!`;
+          document.getElementById("playerName").textContent = "";
+          document.getElementById("statusText").textContent = "";
           document.getElementById("revealImposterBtn").style.display = "block";
         }
       }, 1000);
@@ -251,7 +268,7 @@
     function startActualGame() {}
 
     function revealImposter() {
-      document.getElementById("reveal").textContent = `😈 Der Imposter war: ${players[imposterIndex]}`;
+      document.getElementById("reveal").textContent = `😈 Der Imposter war: ${players[imposterIndex]}\nHinweis: ${imposterHint}`;
       document.getElementById("revealImposterBtn").style.display = "none";
       document.getElementById("restartBtn").style.display = "block";
     }
@@ -265,6 +282,8 @@
       currentIndex = 0;
       document.getElementById("cardContainer").style.display = "block";
       document.getElementById("statusText").textContent = "Neue Runde – Wörter werden vergeben...";
+      document.getElementById("reveal").textContent = "";
+      document.getElementById("restartBtn").style.display = "none";
       showPlayerCard();
     }
 
