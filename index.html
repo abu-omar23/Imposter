@@ -7,31 +7,26 @@
   <style>
     * { box-sizing: border-box; }
     html, body {
-      -webkit-user-select: none;
-      -ms-user-select: none;
       user-select: none;
       margin: 0;
       padding: 0;
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(180deg, #a1c4fd 0%, #c2e9fb 100%);
       height: 100%;
-      overflow-x: hidden;
     }
     .card {
       background: #fdf5e6;
       border-radius: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
       padding: 30px;
       max-width: 480px;
       margin: 30px auto;
       width: 90%;
       text-align: center;
     }
-    h1, h2, p {
-      color: #333;
-    }
-    input, select, button, label {
-      margin: 6px 0;
+    h1, h2, p { color: #333; }
+    input, button {
+      margin: 6px auto;
       padding: 10px;
       border-radius: 10px;
       border: 1px solid #ccc;
@@ -44,9 +39,7 @@
       color: white;
       cursor: pointer;
     }
-    button:hover {
-      background: #45a049;
-    }
+    button:hover { background: #45a049; }
     .checkboxes {
       display: none;
       margin-top: 10px;
@@ -97,9 +90,8 @@
       color: #ffffff;
       z-index: 1;
       flex-direction: column;
-      opacity: 1;
     }
-    #nextBtn, #startGameBtn, #revealImposterBtn, #restartBtn {
+    #nextBtn, #revealImposterBtn, #restartBtn {
       display: none;
       margin: 20px auto 0;
       background: #0078ff;
@@ -121,7 +113,7 @@
     <p>Wie viele Spieler?</p>
     <input type="number" id="playerCount" min="4" max="10" value="4" />
     <button onclick="setPlayers()">Weiter</button>
-    <div id="nameInputs"></div>
+    <div id="nameInputs" style="text-align: center;"></div>
   </div>
 
   <div class="card" id="game" style="display:none">
@@ -139,7 +131,7 @@
 
   <script>
     const wordPool = {
-      leicht: [["Ball", "rund"], ["Haus", "Wohnung"], ["Auto", "Fahren"]],
+      leicht: [["Ball", "rund"], ["Haus", "Wohnung"], ["Auto", "fahren"]],
       tiere: [["Hund", "Bellen"], ["Katze", "Miau"], ["Vogel", "Fliegen"]],
       schule: [["Tafel", "Unterricht"], ["Lehrer", "Person"], ["Mathe", "Fach"]]
     };
@@ -200,16 +192,16 @@
       imposterIndex = Math.floor(Math.random() * players.length);
       starter = players[Math.floor(Math.random() * players.length)];
       currentIndex = 0;
+      roundStartTime = Date.now();
       document.getElementById("setup").style.display = "none";
       document.getElementById("game").style.display = "block";
-      document.getElementById("statusText").textContent = "";
-      roundStartTime = Date.now();
       showPlayerCard();
     }
 
     function showPlayerCard() {
       const player = players[currentIndex];
       document.getElementById("playerName").textContent = player;
+      document.getElementById("statusText").textContent = "";
       document.getElementById("wordCard").textContent = "🗝️ Wort anzeigen...";
       document.getElementById("swipeCard").style.transform = "translateY(0)";
       document.getElementById("cardContainer").style.display = "block";
@@ -235,29 +227,24 @@
         if (deltaY > 0) {
           swipeCard.style.transition = 'none';
           swipeCard.style.transform = `translateY(-${deltaY}px)`;
-          wordCard.textContent = currentIndex === imposterIndex ? `😈 Du bist der Imposter! Hinweis: ${imposterHint}` : `🗝️ Dein Wort: ${realWord}`;
+          wordCard.textContent = currentIndex === imposterIndex ? `😈 Du bist der Imposter! Hinweis: ${imposterHint}` : `✅ ${realWord}`;
           moved = true;
         }
       };
       swipeCard.ontouchend = () => {
         if (!moved) return;
-        let deltaY = startY - currentY;
-        swipeCard.style.transition = 'transform 0.15s ease';
-        if (deltaY > 60) {
-          swipeCard.style.transform = 'translateY(-120%)';
-          setTimeout(() => {
-            swipeCard.style.transform = 'translateY(0)';
-            if (currentIndex < players.length - 1) {
-              document.getElementById("nextBtn").style.display = "block";
-            } else {
-              document.getElementById("cardContainer").style.display = "none";
-              document.getElementById("statusText").textContent = `🎲 ${starter} beginnt die Runde!`;
-              document.getElementById("revealImposterBtn").style.display = "block";
-            }
-          }, 300);
-        } else {
-          swipeCard.style.transform = 'translateY(0)';
-        }
+        swipeCard.style.transition = 'transform 0.2s ease';
+        swipeCard.style.transform = 'translateY(0)';
+        setTimeout(() => {
+          if (currentIndex < players.length - 1) {
+            document.getElementById("nextBtn").style.display = "block";
+          } else {
+            document.getElementById("playerName").textContent = "";
+            document.getElementById("cardContainer").style.display = "none";
+            document.getElementById("statusText").textContent = `🎲 ${starter} beginnt die Runde!`;
+            document.getElementById("revealImposterBtn").style.display = "block";
+          }
+        }, 200);
       };
     }
 
@@ -282,10 +269,10 @@
       imposterIndex = Math.floor(Math.random() * players.length);
       starter = players[Math.floor(Math.random() * players.length)];
       currentIndex = 0;
+      roundStartTime = Date.now();
       document.getElementById("reveal").textContent = "";
       document.getElementById("restartBtn").style.display = "none";
       document.getElementById("statusText").textContent = "";
-      roundStartTime = Date.now();
       showPlayerCard();
     }
 
