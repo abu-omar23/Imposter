@@ -775,6 +775,11 @@ input:checked + .slider:before {
       <input type="checkbox" id="hintSwitch" checked>
       <span class="slider"></span>
     </label>
+    // 💾 Wenn der Hinweis-Switch geändert wird → in den Einstellungen speichern
+    document.getElementById("hintSwitch").addEventListener("change", (e) => {
+      settings.hintsEnabled = e.target.checked;
+      localStorage.setItem("gameSettings", JSON.stringify(settings));
+    });
     
     <p>Wie viele Spieler?</p>
     <div id="playerControl">
@@ -996,16 +1001,23 @@ input:checked + .slider:before {
     let playerCount = 4;
     let imposterCount = 1;
     let showHints = true;
+    // 🔄 Einstellungen laden oder Standardwerte setzen
+    let settings = JSON.parse(localStorage.getItem("gameSettings")) || {
+      playerCount: 4,
+      imposterCount: 1,
+      hintsEnabled: true
+    };
     
     function changePlayerCount(n) {
-      playerCount = Math.min(12, Math.max(3, playerCount + n));
-      document.getElementById("playerCountDisplay").textContent = playerCount;
-      updateNameInputs();
+      settings.playerCount = Math.min(10, Math.max(3, settings.playerCount + n));
+      document.getElementById("playerCountDisplay").textContent = settings.playerCount;
+      localStorage.setItem("gameSettings", JSON.stringify(settings));
     }
     
     function changeImposterCount(n) {
-      imposterCount = Math.min(3, Math.max(1, imposterCount + n));
-      document.getElementById("imposterCountDisplay").textContent = imposterCount;
+      settings.imposterCount = Math.min(settings.playerCount - 1, Math.max(1, settings.imposterCount + n));
+      document.getElementById("imposterCountDisplay").textContent = settings.imposterCount;
+      localStorage.setItem("gameSettings", JSON.stringify(settings));
     }
     
     function updateNameInputs() {
@@ -1190,7 +1202,7 @@ input:checked + .slider:before {
     
       document.getElementById("reveal").innerHTML = `
         <div style="display:flex;flex-direction:column;align-items:center;text-align:center;font-size:1.1em;line-height:1.2em;color:#000;">
-          <span style="color:#b30000;font-weight:bold;">😈 Imposter: ${imposters}</span>
+          <span style="color:#b30000;font-weight:bold;">Imposter: ${imposters}</span>
           ${showHints ? `<span>Hinweis: ${imposterHint}</span>` : ""}
           <span>Wort: ${realWord}</span>
           <span>Zeit: ${minutes} min ${seconds} sek</span>
@@ -1203,15 +1215,42 @@ input:checked + .slider:before {
     }
     
     function awardPoints(imposterWon) {
-      if (imposterWon) imposterIndex.forEach(i => (points[players[i]] += 2));
-      else players.forEach((p, i) => { if (!imposterIndex.includes(i)) points[p] += 1; });
+      // 🧮 Punkte berechnen
+      if (imposterWon) {
+        imposterIndex.forEach(i => (points[players[i]] += 2));
+      } else {
+        players.forEach((p, i) => {
+          if (!imposterIndex.includes(i)) points[p] += 1;
+        });
+      }
       localStorage.setItem("points", JSON.stringify(points));
     
-      localStorage.setItem("points", JSON.stringify(points));
-      document.getElementById("roundScore").innerHTML = "";
+      // 🧾 Kurzer Infotext, wer wie viele Punkte bekommt
+      const infoText = imposterWon
+        ? "<span style='color:#b30000;font-weight:600;'>Imposter erhält +2 Punkte</span>"
+        : "<span style='color:#007700;font-weight:600;'>Crew-Mitglieder erhalten +1 Punkt</span>";
     
-      ["crewWinBtn","imposterWinBtn"].forEach(id => document.getElementById(id).style.display = "none");
-      ["restartBtn","resetPointsBtn","backToSetupBtn"].forEach(id => document.getElementById(id).style.display = "block");
+      // 🔹 Anzeige aufbauen
+      const roundScore = document.getElementById("roundScore");
+      roundScore.innerHTML = `
+        <div style="
+          width:85%;
+          margin:6px auto 0;
+          background:#f8fafb;
+          border:1px solid #ddd;
+          border-radius:8px;
+          padding:6px 8px;
+          text-align:left;
+          font-size:0.95em;
+          line-height:1.3em;
+        ">
+          ${infoText}
+        </div>
+      `;
+    
+      // Buttons aktualisieren
+      ["crewWinBtn", "imposterWinBtn"].forEach(id => document.getElementById(id).style.display = "none");
+      ["restartBtn", "backToSetupBtn"].forEach(id => document.getElementById(id).style.display = "block");
     }
     
     function resetPoints() {
