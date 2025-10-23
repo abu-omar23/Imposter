@@ -224,17 +224,16 @@
   
   #cardContainer  {
     position: relative;
-    width: 85vw;
-    max-width: 360px;
+    width: 80vw;
+    max-width: 340px;
     aspect-ratio: 3 / 4;
-    margin: 10px auto 30px auto; /* 👈 direkt unter dem Namen, etwas Abstand */
+    margin: 10px auto 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
   }
   
-  /* Beide Karten exakt zentriert */
+  /* Karten exakt zentriert, aber kleiner (75 % x 50 %) */
   #wordCard,
   #swipeCard {
     position: absolute;
@@ -243,32 +242,29 @@
     transform: translate(-50%, -50%);
     width: 75%;
     height: 50%;
-    border-radius: 20px;
+    border-radius: 18px;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 20px;
+    font-size: 1.2em;
+    font-weight: 600;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
     transition: transform 0.25s ease;
   }
   
-  /* Untere Karte */
+  /* Wortkarte unten */
   #wordCard {
     background: #222;
     color: #f8f8f8;
-    z-index: 1; /* 👈 unten */
-    font-size: 1.2em;
-    font-weight: 600;
+    z-index: 1;
   }
   
-  /* Obere Karte (liegt wirklich oben!) */
+  /* Swipe-Karte oben */
   #swipeCard {
     background: linear-gradient(135deg, #8a2be2, #e100ff);
     color: #fff;
-    z-index: 2; /* 👈 über der Wortkarte */
-    font-size: 1.2em;
-    font-weight: bold;
+    z-index: 2;
   }
 
 
@@ -390,16 +386,18 @@ input:checked + .slider:before {
     <div id="nameInputs" style="text-align: center;"></div>
     </div>
 
-
+  #
   <div class="card" id="game" style="display:none">
     <h2 id="playerName"></h2>
-    <p id="statusText"></p>
-    <p id="timerDisplay">⏱️ Zeit: 00:00</p>
 
     <div id="cardContainer">
       <div id="wordCard">🗝️ Wort anzeigen...</div>
       <div id="swipeCard">🔒 Wische nach oben 👆</div>
     </div>
+
+    <p id="statusText"></p>
+    <p id="timerDisplay">⏱️ Zeit: 00:00</p>
+
 
     <button id="nextBtn" onclick="nextPlayer()">➡️ Nächster Spieler</button>
     <button id="startRoundBtn" onclick="showStarter()">🎲 Runde starten</button>
