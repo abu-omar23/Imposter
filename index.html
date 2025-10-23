@@ -378,16 +378,18 @@ input:checked + .slider:before {
 
 #game.card {
   background: white;
-  width: 92vw;
+  width: 80vw;
   max-width: 450px;
   border-radius: 30px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.1);
   margin: 20px auto;
-  padding: 15px 10px 25px 10px; /* Weniger Innenabstand oben */
+  padding: 5px 10px 15px 10px; /* noch weniger Abstand oben & unten */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  max-height: 70vh;   /* maximal 90% der Bildschirmhöhe */
+
 }
 
 #playerName {
@@ -396,7 +398,7 @@ input:checked + .slider:before {
 }
 
 #cardContainer {
-  margin: 15px auto; /* vorher 60px! */
+  margin: 5px auto; /* vorher 60px! */
 }
 
 #nextBtn,
@@ -406,7 +408,7 @@ input:checked + .slider:before {
 #imposterWinBtn,
 #restartBtn,
 #resetPointsBtn {
-  margin-top: 10px;
+  margin-top: 4px;
 }
 
 /* optional: für vertikale Zentrierung des Spiels */
