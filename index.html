@@ -99,6 +99,28 @@
     transform: translateY(-2px);
     background: linear-gradient(90deg, #45a049, #3e8e41);
   }
+  /* 🔹 RUNDEN + / − BUTTONS IM SETUP */
+  #playerControl button,
+  #imposterControl button {
+    width: 45px !important;
+    height: 45px !important;
+    border-radius: 50% !important;
+    padding: 0 !important;
+    font-size: 1.4em !important;
+    font-weight: bold;
+    background: linear-gradient(90deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  #playerControl button:hover,
+  #imposterControl button:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(90deg, #45a049, #3e8e41);
+  }
     /* 🔹 Setup-Buttons: breite, mittige Buttons im Startmenü */
   .setup-btn {
     display: block;
@@ -676,6 +698,7 @@ input:checked + .slider:before {
       const container = document.getElementById("nameInputs");
       container.innerHTML = "";
       const saved = JSON.parse(localStorage.getItem("imposter_names") || "[]");
+    
       for (let i = 0; i < playerCount; i++) {
         const input = document.createElement("input");
         input.placeholder = `Name Spieler ${i + 1}`;
@@ -683,8 +706,11 @@ input:checked + .slider:before {
         input.value = saved[i] || "";
         container.appendChild(input);
       }
+    
+      // 🔹 Spiel starten Button mit passender Klasse
       const startBtn = document.createElement("button");
       startBtn.textContent = "Spiel starten";
+      startBtn.classList.add("setup-btn"); // <--- HIER wird der Stil aktiviert
       startBtn.onclick = startGame;
       container.appendChild(startBtn);
     }
