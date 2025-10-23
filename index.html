@@ -28,15 +28,23 @@
     background: #fff;
     border-radius: 25px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    padding: 20px 18px;
+    padding: 25px 20px;
     margin: 30px auto;
     width: 94%;
-    max-width: 420px; /* war 480px – jetzt kompakter */
+    max-width: 420px;
     text-align: center;
     transition: 0.3s;
-    max-height: 85vh;   /* niemals höher als 90% des Bildschirms */
-    overflow-y: auto;   /* falls zu viel Inhalt: scrollbar */
-}
+    
+    /* 🧩 Automatische Höhe */
+    height: auto;
+    max-height: none;
+    
+    /* sorgt für Abstand zu Bildschirmrand */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
   }
   
 
