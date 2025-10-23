@@ -985,27 +985,38 @@ input:checked + .slider:before {
     }
 
     function showStarter() {
+      // 🧹 Karten & Texte ausblenden
       document.getElementById("cardContainer").style.display = "none";
       document.getElementById("playerName").textContent = "";
       document.getElementById("startRoundBtn").style.display = "none";
+      document.getElementById("nextBtn").style.display = "none";
+      document.getElementById("reveal").textContent = "";
     
-      // 🎲 Startspieler-Anzeige (größer und fett)
+      // 🎲 Anzeige, wer startet
       document.getElementById("statusText").innerHTML = 
         `<span style="font-size: 1.4em;">🎲 <strong>${starter}</strong> beginnt die Runde!</span>`;
     
-      document.getElementById("timerDisplay").style.display = "block";
+      // ⏱️ Timer anzeigen und zurücksetzen
+      const timerDisplay = document.getElementById("timerDisplay");
+      timerDisplay.style.display = "block";
+      timerDisplay.textContent = "⏱️ Zeit: 00:00";
     
-      // ⏱️ Timer starten
+      // ⏳ Timer neu starten
       roundStartTime = Date.now();
       clearInterval(timerInterval);
       timerInterval = setInterval(updateTimer, 1000);
     
-      // 😈 Imposter-Button sicher sichtbar machen
+      // 😈 Imposter-Button anzeigen (und ggf. in Sicht bringen)
       const revealBtn = document.getElementById("revealImposterBtn");
       revealBtn.style.display = "block";
       revealBtn.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-
+    function updateTimer() {
+      const timePassed = Math.floor((Date.now() - roundStartTime) / 1000);
+      const minutes = String(Math.floor(timePassed / 60)).padStart(2, "0");
+      const seconds = String(timePassed % 60).padStart(2, "0");
+      document.getElementById("timerDisplay").textContent = `⏱️ Zeit: ${minutes}:${seconds}`;
+    }
     function revealImposter() {
       clearInterval(timerInterval);
       document.getElementById("statusText").textContent = "";
