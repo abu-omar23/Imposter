@@ -243,8 +243,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60%;
-    height: 50%;
+    width: 65%;
+    height: 45%;
     border-radius: 18px;
     background: #222;
     color: #f8f8f8;
@@ -264,8 +264,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60%;
-    height: 50%;
+    width: 65%;
+    height: 45%;
     border-radius: 18px;
     background: linear-gradient(135deg, #8a2be2, #e100ff);
     color: #fff;
@@ -278,7 +278,6 @@
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     z-index: 100;
     pointer-events: auto;
-    transform: translate(-50%, -50%) translateZ(10px);
   }
 
 
@@ -822,11 +821,15 @@ input:checked + .slider:before {
       starter = players[Math.floor(Math.random() * players.length)];
       currentIndex = 0;
     
+      // 💡 Karte neu anzeigen
+      document.getElementById("cardContainer").style.display = "block";
+      document.getElementById("swipeCard").style.transform = "translate(-50%, -50%)";
+      document.getElementById("wordCard").textContent = "🗝️ Wort anzeigen...";
+    
       showPlayerCard();
     
-      // 🔁 Swipe-Funktion nach jeder neuen Runde wieder aktivieren
-      setupSwipe();
-    
+      // 🔁 Swipe nach DOM-Neuaufbau neu aktivieren
+      setTimeout(setupSwipe, 100);
     }
 
     function getRandomWord() {
