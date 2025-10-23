@@ -99,6 +99,28 @@
     transform: translateY(-2px);
     background: linear-gradient(90deg, #45a049, #3e8e41);
   }
+    /* 🔹 Setup-Buttons: breite, mittige Buttons im Startmenü */
+  .setup-btn {
+    display: block;
+    width: 90%;
+    padding: 12px 0;
+    margin: 8px auto;
+    text-align: center;
+    border-radius: 15px;
+    border: none;
+    font-size: 1em;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    background: linear-gradient(90deg, #4CAF50, #45a049);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+  }
+  
+  .setup-btn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(90deg, #45a049, #3e8e41);
+  }
 
   #playerControl {
     display: flex;
@@ -262,8 +284,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60%;
-    height: 50%;
+    width: 70%;
+    height: 65%;
     border-radius: 18px;
     background: #1e1e1e;
     color: #f5f5f5;
@@ -285,8 +307,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60%;
-    height: 50%;
+    width: 70%;
+    height: 65%;
     border-radius: 18px;
     background: linear-gradient(135deg, #9b5de5, #f15bb5);
     color: #fff;
@@ -419,36 +441,41 @@ input:checked + .slider:before {
 <body>
   <div class="card" id="setup">
     <h1>Imposter Wortspiel 🕵️‍♂️</h1>
-    <button onclick="toggleCategoryMenu()">Kategorien ändern</button>
+
+    <!-- Kategorien-Button -->
+    <button class="setup-btn" onclick="toggleCategoryMenu()">Kategorien ändern</button>
+
+    <!-- Kategorien-Auswahl -->
     <div class="checkboxes" id="categoryList">
       <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-        <button type="button" onclick="selectAllCategories(true)" style="background:#4CAF50;width:48%;font-size:0.9em;">Alle auswählen</button>
-        <button type="button" onclick="selectAllCategories(false)" style="background:#e53935;width:48%;font-size:0.9em;">Alle abwählen</button>
+        <button class="setup-btn" type="button" onclick="selectAllCategories(true)" style="width:48%;font-size:0.9em;background:#4CAF50;">Alle auswählen</button>
+        <button class="setup-btn" type="button" onclick="selectAllCategories(false)" style="width:48%;font-size:0.9em;background:#e53935;">Alle abwählen</button>
       </div>
     </div>
-    
+
     <p>Wie viele Spieler?</p>
     <div id="playerControl">
       <button onclick="changePlayerCount(-1)">−</button>
       <span id="playerCountDisplay">4</span>
       <button onclick="changePlayerCount(1)">+</button>
     </div>
-    
+
     <p>Wie viele Imposter?</p>
     <div id="imposterControl" class="controlRow">
       <button onclick="changeImposterCount(-1)">−</button>
       <span id="imposterCountDisplay">1</span>
       <button onclick="changeImposterCount(1)">+</button>
     </div>
-    
+
     <p>Hinweise anzeigen?</p>
     <label class="switch">
       <input type="checkbox" id="hintSwitch" checked>
       <span class="slider"></span>
     </label>
-    
+
     <div id="nameInputs" style="text-align: center;"></div>
-    </div>
+  </div>
+
 
   <div class="card" id="game" style="display:none">
     <h2 id="playerName"></h2>
