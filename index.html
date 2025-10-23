@@ -736,7 +736,16 @@ input:checked + .slider:before {
 #setup.menu-open::before {
   opacity: 1;
   pointer-events: auto;
-}    
+}
+#setup .setup-btn {
+  display: block;
+  width: fit-content;
+  margin: 8px auto;
+}
+
+#setup > .setup-btn + .setup-btn {
+  margin-top: 8px;
+}
 </style>
 
 
