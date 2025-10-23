@@ -1034,10 +1034,15 @@ input:checked + .slider:before {
         .sort((a, b) => b[1] - a[1]);
     
       let html = `<div style="width:85%;margin:4px auto 0;background:#f8fafb;border:1px solid #ddd;border-radius:8px;padding:4px 8px;text-align:left;font-size:0.9em;line-height:1.1em;">`;
-      sorted.forEach(([name, score]) => html += `<div style="display:flex;justify-content:space-between;margin:2px 0;">
-                                          <span style="color:#000;">${name}</span>
-                                          <span style="color:#000;">${score}</span>
-                                        </div>`;
+      sorted.forEach(([name, score]) => {
+        html += `
+          <div style="display:flex;justify-content:space-between;margin:2px 0;">
+            <span style="color:#000;">${name}</span>
+            <span style="color:#000;">${score}</span>
+          </div>
+        `;
+      });
+
       html += "</div>";
       roundScore.innerHTML = html;
     
