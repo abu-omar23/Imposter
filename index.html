@@ -411,9 +411,10 @@ input:checked + .slider:before {
 
 /* optional: für vertikale Zentrierung des Spiels */
 body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  display: block;
+  overflow-x: hidden;
+  overscroll-behavior: none;
+  padding-top: 20px; /* etwas Luft nach oben */
 }
 
     
