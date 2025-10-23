@@ -221,56 +221,59 @@
     justify-content: flex-start;
   }
   #cardContainer {
+    margin-top: 20px;
     position: relative;
-    width: 80vw;
-    max-width: 340px;
-    aspect-ratio: 3 / 4;
+    width: 85vw;
+    max-width: 400px;
+    height: 240px;
     margin: 30px auto;
     display: none;
     touch-action: none;
     overflow: hidden;
-    border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-}
-
-/* Beide Karten */
-  #swipeCard, #wordCard {
+  }
+  
+  /* Karte mit dem Wort */
+  #wordCard {
     position: absolute;
     top: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
     width: 100%;
     height: 100%;
     border-radius: 20px;
+    background: #1c1c1c;
+    color: #fefefe;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     text-align: center;
-    padding: 25px;
-    transition: transform 0.25s ease;
-  }
-  
-  /* Vorderseite */
-  #swipeCard {
-    background: linear-gradient(135deg, #8a2be2, #c56cf0);
-    color: #fff;
-    z-index: 2;
-    font-size: 1.3em;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    box-shadow: 0 10px 25px rgba(138,43,226,0.3);
-  }
-  
-  /* Rückseite */
-  #wordCard {
-    background: linear-gradient(135deg, #222, #333);
-    color: #f2f2f2;
-    z-index: 1;
     font-size: 1.2em;
-    font-weight: 500;
-    box-shadow: inset 0 0 15px rgba(255,255,255,0.05);
+    padding: 20px;
   }
+  
+  /* Swipe-Karte mit Nachfedern */
+  #swipeCard {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #7b2ff7, #f107a3);
+    color: white;
+    font-weight: bold;
+    font-size: 1.3em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    z-index: 5;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.35s cubic-bezier(0.25, 1.5, 0.5, 1); /* 🪄 Nachfedern */
+  }
+
 
 
 
@@ -700,8 +703,13 @@ input:checked + .slider:before {
       };
       swipeCard.ontouchend = () => {
         if (!moved) return;
-        swipeCard.style.transition = 'transform 0.2s ease';
+        swipeCard.style.transition = 'transform 0.35s cubic-bezier(0.25, 1.5, 0.5, 1)'; // 🪄 Feder-Animation
         swipeCard.style.transform = 'translateY(0)';
+        
+        // Optionales kurzes Aufleuchten
+        swipeCard.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.5)';
+        setTimeout(() => swipeCard.style.boxShadow = '0 6px 20px rgba(0,0,0,0.3)', 300);
+      
         if (currentIndex < players.length - 1) {
           document.getElementById("nextBtn").style.display = "block";
         } else {
@@ -709,6 +717,7 @@ input:checked + .slider:before {
           document.getElementById("startRoundBtn").style.display = "block";
         }
       };
+
     }
 
     function nextPlayer() {
