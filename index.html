@@ -306,30 +306,28 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;    /* Elemente von oben nach unten */
-    gap: 8px;                       /* kompakter Abstand */
-    width: 92vw;
-    max-width: 420px;
-    margin: 0 auto;
-    padding: 15px 10px;
+    justify-content: flex-start;
+    gap: 4px;                      /* 🔹 minimaler Abstand zwischen Elementen */
+    width: 85vw;                   /* 🔹 schmaler als vorher */
+    max-width: 360px;              /* 🔹 begrenzt auf Handygröße */
+    margin: 10px auto;
+    padding: 10px 8px;             /* 🔹 kaum Innenabstand */
     background: #ffffff;
-    border-radius: 25px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    height: auto;                   /* passt sich Kartenhöhe an */
-    min-height: unset;              /* keine erzwungene Mindesthöhe */
+    border-radius: 22px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    height: auto;
   }
 
   
   /* Haupt-Container für die Karten */
   #cardContainer {
     position: relative;
-    width: 85%;
-    max-width: 360px;
-    height: 240px;                  /* gleiche Höhe wie Karten */
+    width: 100%;
+    height: 220px;                 /* 🔹 leicht kleiner als vorher */
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 6px 0;                  /* ganz nah am Namen & Buttons */
+    margin: 2px 0 6px 0;           /* 🔹 minimaler Außenabstand */
   }
   
   
@@ -339,21 +337,20 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 70%;
-    height: 65%;
+    width: 90%;
+    height: 100%;
     border-radius: 18px;
     background: #1e1e1e;
     color: #f5f5f5;
     z-index: 1;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 1.2em;
-    padding: 20px;
+    font-size: 1.1em;
     font-weight: 500;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    padding: 15px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   }
   
   /* Swipe-Karte (oben) */
@@ -362,21 +359,20 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 70%;
-    height: 65%;
+    width: 90%;
+    height: 100%;
     border-radius: 18px;
     background: linear-gradient(135deg, #9b5de5, #f15bb5);
     color: #fff;
     z-index: 2;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 1.4em;
+    font-size: 1.3em;
     font-weight: bold;
-    padding: 25px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
     transition: transform 0.3s ease;
   }
 
@@ -469,8 +465,8 @@ input:checked + .slider:before {
 }
 
 #playerName {
-  margin: 4px 0 2px 0;
-  font-size: 1.3em;
+  margin: 2px 0 4px 0;
+  font-size: 1.2em;
   font-weight: 600;
   text-align: center;
 }
