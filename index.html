@@ -148,49 +148,57 @@
     justify-content: flex-start;
   }
   #cardContainer {
-    margin-top: 20px;
-    position: relative;
-    width: 85vw;
-    max-width: 420px;
-    height: 300px;
-    margin: 40px auto;
-    display: none;
-    touch-action: none;
-    overflow: hidden;
-  }
-  
+  position: relative;
+  width: 80vw;
+  max-width: 340px;
+  aspect-ratio: 3 / 4;
+  margin: 30px auto;
+  display: none;
+  touch-action: none;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
+
+/* Beide Karten */
   #swipeCard, #wordCard {
     position: absolute;
     top: 0;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 100%;
     height: 100%;
     border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     text-align: center;
-    padding: 20px;
+    padding: 25px;
     transition: transform 0.25s ease;
   }
   
+  /* Vorderseite */
   #swipeCard {
-    background: linear-gradient(135deg, #8a2be2, #e100ff);
+    background: linear-gradient(135deg, #8a2be2, #c56cf0);
     color: #fff;
     z-index: 2;
-    font-size: 1.4em;
-    font-weight: bold;
-    flex-direction: column;
+    font-size: 1.3em;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 10px 25px rgba(138,43,226,0.3);
   }
   
+  /* Rückseite */
   #wordCard {
-    background: #222;
+    background: linear-gradient(135deg, #222, #333);
     color: #f2f2f2;
     z-index: 1;
-    flex-direction: column;
-    font-size: 1.3em;
+    font-size: 1.2em;
+    font-weight: 500;
+    box-shadow: inset 0 0 15px rgba(255,255,255,0.05);
   }
+
 
 
 
@@ -651,19 +659,24 @@ input:checked + .slider:before {
       clearInterval(timerInterval);
       document.getElementById("statusText").textContent = "";
       document.getElementById("timerDisplay").style.display = "none";
-      const imposter = players[imposterIndex];
+      const imposters = imposterIndex.map(i => players[i]).join(", ");
       const timePassed = Math.floor((Date.now() - roundStartTime) / 1000);
       const minutes = Math.floor(timePassed / 60);
       const seconds = timePassed % 60;
-      document.getElementById("reveal").textContent = `😈 Imposter: ${imposter}\nWort: ${realWord}\nZeit: ${minutes} min ${seconds} sek`;
+      document.getElementById("reveal").textContent = `😈 Imposter: ${imposters}\nWort: ${realWord}\nZeit: ${minutes} min ${seconds} sek`;
       document.getElementById("revealImposterBtn").style.display = "none";
       document.getElementById("crewWinBtn").style.display = "block";
       document.getElementById("imposterWinBtn").style.display = "block";
     }
 
     function awardPoints(imposterWon) {
-      if (imposterWon) points[players[imposterIndex]] += 2;
-      else players.forEach((p, i) => { if (i !== imposterIndex) points[p] += 1; });
+      if (imposterWon) {
+        imposterIndex.forEach(i => points[players[i]] += 2);
+      } else {
+        players.forEach((p, i) => {
+          if (!imposterIndex.includes(i)) points[p] += 1;
+        });
+      }
       localStorage.setItem("points", JSON.stringify(points));
     
       // 👉 Nur aktuelle Spieler anzeigen
