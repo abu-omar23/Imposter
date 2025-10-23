@@ -102,18 +102,21 @@
   /* 🔹 RUNDEN + / − BUTTONS IM SETUP */
   #playerControl button,
   #imposterControl button {
-    width: 45px !important;
-    height: 45px !important;
-    border-radius: 50% !important;
-    padding: 0 !important;
-    font-size: 1.4em !important;
-    font-weight: bold;
+    all: unset;                       /* entfernt ALLE geerbten Button-Stile */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
     background: linear-gradient(90deg, #4CAF50, #45a049);
-    color: white;
-    border: none;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    color: #fff;
+    font-size: 1.4em;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease, background 0.2s ease;
+    margin: 0 5px;
   }
   
   #playerControl button:hover,
@@ -191,112 +194,142 @@
     color: #222;
   }
 
-  .checkboxes {
-    display: none;
-    margin-top: 15px;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 15px;
-    border-radius: 18px;
-    border: 1px solid #ccc;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    max-height: 60vh;
-    overflow-y: auto;
-    transition: all 0.3s ease;
-  }
-  
-  .checkboxes.visible {
-    display: block;
-    animation: fadeIn 0.3s ease;
-  }
-  
-  .checkboxes label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 8px 0;
-    background: #f3faff;
-    padding: 10px 14px;
-    border-radius: 12px;
-    font-weight: 500;
-    color: #333;
-    transition: background 0.2s;
-    cursor: pointer;
-  }
-  
-  .checkboxes label:hover {
-    background: #e8f5e9;
-  }
-  
-  .checkboxes input[type="checkbox"] {
-    appearance: none;
-    width: 40px;
-    height: 22px;
-    background: #ccc;
-    border-radius: 20px;
-    position: relative;
-    outline: none;
-    transition: 0.3s;
-    cursor: pointer;
-  }
-  
-  .checkboxes input[type="checkbox"]::before {
-    content: "";
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    top: 2px;
-    left: 2px;
-    background: white;
-    transition: 0.3s;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  }
-  
-  .checkboxes input[type="checkbox"]:checked {
-    background: #4CAF50;
-  }
-  
-  .checkboxes input[type="checkbox"]:checked::before {
-    transform: translateX(18px);
-  }
-  
-  .checkboxes button {
-    border: none;
-    border-radius: 10px;
-    color: white;
-    font-weight: 600;
-    padding: 8px 0;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-    transition: 0.2s;
-  }
-  
-  .checkboxes button:hover {
-    transform: scale(1.05);
-  }
+/* === KOMPAKTES KATEGORIEN-MENÜ === */
+.checkboxes {
+  display: none;
+  margin-top: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12px;
+  border-radius: 18px;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-height: 50vh;              /* 🔹 kleiner als vorher */
+  overflow-y: auto;
+  transition: all 0.3s ease;
+  font-size: 0.9em;              /* 🔹 Text etwas kleiner */
+}
+
+.checkboxes.visible {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Jede Kategorie-Zeile */
+.checkboxes label {
+  display: flex;
+  align-items: center;           /* 🔹 vertikal zentriert */
+  justify-content: flex-start;   /* 🔹 Text folgt nach Switch */
+  gap: 10px;
+  margin: 6px 0;
+  background: #f7fbfd;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-weight: 500;
+  color: #333;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
+.checkboxes label:hover {
+  background: #e8f5e9;
+}
+
+/* Der Switch – jetzt ganz links & kleiner */
+.checkboxes input[type="checkbox"] {
+  appearance: none;
+  width: 34px;
+  height: 18px;
+  background: #ccc;
+  border-radius: 20px;
+  position: relative;
+  outline: none;
+  transition: 0.3s;
+  cursor: pointer;
+  flex-shrink: 0;                /* 🔹 verhindert Größenänderung */
+}
+
+.checkboxes input[type="checkbox"]::before {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  background: white;
+  transition: 0.3s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.checkboxes input[type="checkbox"]:checked {
+  background: #4CAF50;
+}
+
+.checkboxes input[type="checkbox"]:checked::before {
+  transform: translateX(16px);
+}
+
+/* Buttons "Alle auswählen / abwählen" im Menü */
+.category-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.category-btn {
+  flex: 1;
+  padding: 7px 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85em;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.category-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.category-btn.green {
+  background: linear-gradient(90deg, #4CAF50, #45a049);
+}
+
+.category-btn.red {
+  background: linear-gradient(90deg, #e53935, #d32f2f);
+}
   #game {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 6px;                    /* 🔹 Weniger vertikaler Abstand */
+    justify-content: flex-start;    /* Elemente von oben nach unten */
+    gap: 8px;                       /* kompakter Abstand */
+    width: 92vw;
     max-width: 420px;
-    height: 95dvh;               /* nutzt fast den gesamten sichtbaren Bereich */
     margin: 0 auto;
-    padding: 10px 0;
+    padding: 15px 10px;
+    background: #ffffff;
+    border-radius: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    height: auto;                   /* passt sich Kartenhöhe an */
+    min-height: unset;              /* keine erzwungene Mindesthöhe */
   }
 
   
   /* Haupt-Container für die Karten */
   #cardContainer {
     position: relative;
-    width: 90%;
+    width: 85%;
     max-width: 360px;
-    height: 240px;           /* vorher 60vh – halb so hoch */
-    max-height: 360px;
-    margin: 5px 0;
+    height: 240px;                  /* gleiche Höhe wie Karten */
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 6px 0;                  /* ganz nah am Namen & Buttons */
   }
   
   
@@ -436,10 +469,10 @@ input:checked + .slider:before {
 }
 
 #playerName {
-  margin-top: 5px;
-  margin-bottom: 0px;
+  margin: 4px 0 2px 0;
   font-size: 1.3em;
   font-weight: 600;
+  text-align: center;
 }
 
 
