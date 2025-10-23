@@ -218,31 +218,30 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* ⬆️ kein überdehntes Weiß mehr */
-    padding: 20px 0;
-    }
-  /*test*/   
+    justify-content: flex-start;
+    gap: 15px;
+  }
+  
   #cardContainer {
     position: relative;
     width: 85vw;
-    max-width: 360px;
+    max-width: 340px;
     aspect-ratio: 3 / 4;
-    margin: 40px auto;
+    margin-top: 10px;   /* 👈 kleiner Abstand unter dem Spielernamen */
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
   }
   
-  /* Beide Karten */
   #wordCard,
   #swipeCard {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80%;   /* Größe beider Karten */
-    height: 60%;
+    width: 90%;   /* 👈 hier kannst du Größe ändern */
+    height: 90%;
     border-radius: 20px;
     display: flex;
     justify-content: center;
@@ -253,7 +252,7 @@
     transition: transform 0.25s ease;
   }
   
-  /* Untere Karte (das Wort) */
+  /* Untere Wortkarte */
   #wordCard {
     background: #1e1e1e;
     color: #f8f8f8;
@@ -262,7 +261,7 @@
     font-weight: 600;
   }
   
-  /* Obere Karte (die Swipe-Karte) */
+  /* Obere Swipe-Karte */
   #swipeCard {
     background: linear-gradient(135deg, #9b5de5, #f15bb5);
     color: #fff;
@@ -270,6 +269,7 @@
     font-size: 1.2em;
     font-weight: bold;
   }
+
 
 
 
