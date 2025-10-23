@@ -216,10 +216,10 @@
   border-radius: 18px;
   border: 1px solid #ccc;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  max-height: 50vh;              /* 🔹 kleiner als vorher */
+  max-height: 50vh;
   overflow-y: auto;
   transition: all 0.3s ease;
-  font-size: 0.9em;              /* 🔹 Text etwas kleiner */
+  font-size: 0.9em;
 }
 
 .checkboxes.visible {
@@ -227,59 +227,61 @@
   animation: fadeIn 0.3s ease;
 }
 
-/* Jede Kategorie-Zeile */
+/* Jede Zeile mit Text + Schalter */
 .checkboxes label {
   display: flex;
-  align-items: center;           /* 🔹 vertikal zentriert */
-  justify-content: flex-start;   /* 🔹 Text folgt nach Switch */
-  gap: 10px;
-  margin: 6px 0;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  margin: 8px 0;
   background: #f7fbfd;
-  padding: 8px 12px;
-  border-radius: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
   font-weight: 500;
   color: #333;
-  transition: background 0.2s;
   cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: background 0.2s;
 }
 
 .checkboxes label:hover {
   background: #e8f5e9;
 }
 
-/* Der Switch – jetzt ganz links & kleiner */
+/* Der neue Switch */
 .checkboxes input[type="checkbox"] {
   appearance: none;
-  width: 34px;
-  height: 18px;
-  background: #ccc;
-  border-radius: 20px;
   position: relative;
+  width: 46px;
+  height: 26px;
+  background: #ccc;
+  border-radius: 30px;
   outline: none;
-  transition: 0.3s;
   cursor: pointer;
-  flex-shrink: 0;                /* 🔹 verhindert Größenänderung */
+  transition: background 0.3s ease;
+  flex-shrink: 0;
 }
 
 .checkboxes input[type="checkbox"]::before {
   content: "";
   position: absolute;
-  width: 14px;
-  height: 14px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  top: 2px;
-  left: 2px;
+  top: 3px;
+  left: 3px;
   background: white;
-  transition: 0.3s;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
+/* Aktiviert */
 .checkboxes input[type="checkbox"]:checked {
   background: #4CAF50;
 }
 
 .checkboxes input[type="checkbox"]:checked::before {
-  transform: translateX(16px);
+  transform: translateX(20px);
 }
 
 /* Buttons "Alle auswählen / abwählen" im Menü */
