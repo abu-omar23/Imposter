@@ -951,8 +951,8 @@ input:checked + .slider:before {
           // Wort sofort zeigen
           if (imposterIndex.includes(currentIndex)) {
             wordCard.textContent = showHints
-              ? `😈 Du bist der Imposter!\n💡 Hinweis: ${imposterHint}`
-              : `😈 Du bist der Imposter!`;
+              ? `😈 Du bist der Imposter 😈\n Hinweis: ${imposterHint}`
+              : `😈 Du bist der Imposter 😈`;
           } else {
             wordCard.textContent = `✅ ${realWord}`;
           }
@@ -988,19 +988,16 @@ input:checked + .slider:before {
       document.getElementById("cardContainer").style.display = "none";
       document.getElementById("playerName").textContent = "";
       document.getElementById("startRoundBtn").style.display = "none";
-      document.getElementById("statusText").textContent = `🎲 ${starter} beginnt die Runde!`;
+    
+      // ✨ Name fett und Text größer
+      document.getElementById("statusText").innerHTML = 
+        `<span style="font-size: 1.4em;">🎲 <strong>${starter}</strong> beginnt die Runde!</span>`;
+    
       document.getElementById("timerDisplay").style.display = "block";
       roundStartTime = Date.now();
       clearInterval(timerInterval);
       timerInterval = setInterval(updateTimer, 1000);
       document.getElementById("revealImposterBtn").style.display = "block";
-    }
-
-    function updateTimer() {
-      const elapsed = Math.floor((Date.now() - roundStartTime) / 1000);
-      const min = String(Math.floor(elapsed / 60)).padStart(2, '0');
-      const sec = String(elapsed % 60).padStart(2, '0');
-      document.getElementById("timerDisplay").textContent = `⏱️ Zeit: ${min}:${sec}`;
     }
 
     function revealImposter() {
@@ -1011,8 +1008,11 @@ input:checked + .slider:before {
       const timePassed = Math.floor((Date.now() - roundStartTime) / 1000);
       const minutes = Math.floor(timePassed / 60);
       const seconds = timePassed % 60;
-      document.getElementById("reveal").textContent = `😈 Imposter: ${imposters}\nWort: ${realWord}\nZeit: ${minutes} min ${seconds} sek`;
-      document.getElementById("revealImposterBtn").style.display = "none";
+      document.getElementById("reveal").innerHTML = 
+        `<span style="color:#8b0000; font-weight:bold;">😈 Imposter: ${imposters}</span><br>
+        Hinweis: ${imposterHint}<br>
+        Wort: ${realWord}<br>
+        Zeit: ${minutes} min ${seconds} sek`;      document.getElementById("revealImposterBtn").style.display = "none";
       document.getElementById("crewWinBtn").style.display = "block";
       document.getElementById("imposterWinBtn").style.display = "block";
     }
