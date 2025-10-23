@@ -231,28 +231,29 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    perspective: 1000px;
+    overflow: hidden;
   }
   
+  /* Beide Karten */
   #wordCard,
   #swipeCard {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80%;
-    height: 80%;
-    border-radius: 22px;
+    width: 80%;   /* Größe beider Karten */
+    height: 60%;
+    border-radius: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     padding: 20px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
-    transition: transform 0.3s ease;
+    transition: transform 0.25s ease;
   }
   
-  /* untere Karte */
+  /* Untere Karte (das Wort) */
   #wordCard {
     background: #1e1e1e;
     color: #f8f8f8;
@@ -261,14 +262,15 @@
     font-weight: 600;
   }
   
-  /* obere Swipe-Karte */
+  /* Obere Karte (die Swipe-Karte) */
   #swipeCard {
     background: linear-gradient(135deg, #9b5de5, #f15bb5);
     color: #fff;
     z-index: 2;
-    font-size: 1.2em; /* identisch mit wordCard */
-    font-weight: 600;
+    font-size: 1.2em;
+    font-weight: bold;
   }
+
 
 
 
