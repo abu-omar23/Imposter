@@ -226,15 +226,14 @@
   
   #cardContainer {
     position: relative;
-    width: 90%;              /* lässt automatisch etwas Platz links/rechts */
-    max-width: 420px;        /* maximale Breite, damit es nicht zu groß wird */
-    aspect-ratio: 3 / 4;
-    margin: 20px auto;       /* schöner Abstand nach oben/unten */
+    width: 90%;
+    max-width: 440px;
+    aspect-ratio: 3 / 3.5; /* etwas höher für mehr Fläche */
+    margin: 25px auto;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: visible;
-    transform: none;
   }
 
 
@@ -245,8 +244,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 70%;
-    height: 60%;
+    width: 85%;
+    height: 65%;
     border-radius: 18px;
     background: #222;
     color: #f8f8f8;
@@ -254,11 +253,12 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 1.1em;
+    font-size: 1.3em;
     font-weight: 600;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
     z-index: 1;
-  }
+}
+  
   
   /* Swipe-Karte (oben) */
   #swipeCard {
@@ -266,8 +266,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 70%;
-    height: 45%;
+    width: 85%;
+    height: 65%;
     border-radius: 18px;
     background: linear-gradient(135deg, #8a2be2, #e100ff);
     color: #fff;
@@ -275,30 +275,13 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 1.1em;
+    font-size: 1.3em;
     font-weight: bold;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    z-index: 2;
+    z-index: 10;
     pointer-events: auto;
     touch-action: none;
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
