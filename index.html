@@ -389,7 +389,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 1.4em;   /* 🔹 größerer Text für normales Wort */
+    font-size: 1.2em;   /* 🔹 größerer Text für normales Wort */
     font-weight: 600;
     padding: 15px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
@@ -1009,10 +1009,13 @@ input:checked + .slider:before {
       const minutes = Math.floor(timePassed / 60);
       const seconds = timePassed % 60;
       document.getElementById("reveal").innerHTML = 
-        `<span style="color:#8b0000; font-weight:bold;">😈 Imposter: ${imposters}</span><br>
+        `<span style="color:#b30000; font-weight:bold;">
+          😈 Imposter: ${imposters}
+        </span><br>
         Hinweis: ${imposterHint}<br>
         Wort: ${realWord}<br>
-        Zeit: ${minutes} min ${seconds} sek`;      document.getElementById("revealImposterBtn").style.display = "none";
+        Zeit: ${minutes} min ${seconds} sek`; 
+      document.getElementById("revealImposterBtn").style.display = "none";
       document.getElementById("crewWinBtn").style.display = "block";
       document.getElementById("imposterWinBtn").style.display = "block";
     }
