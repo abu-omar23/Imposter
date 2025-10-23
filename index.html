@@ -226,14 +226,15 @@
   
   #cardContainer {
     position: relative;
-    width: 80%;
-    max-width: 320px;
-    aspect-ratio: 3 / 4;
+    width: calc(100% - 14mm); /* links & rechts je ~7mm Platz */
+    max-width: 380px;
+    aspect-ratio: 3 / 3.8;
     margin: 10px auto;
     display: flex;
     justify-content: center;
     align-items: center;
   }
+
   
   /* Wortkarte (unten) */
   #wordCard {
@@ -242,7 +243,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 70%;
-    height: 45%;
+    height: 60%;
     border-radius: 18px;
     background: #222;
     color: #f8f8f8;
@@ -250,7 +251,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: 600;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
     z-index: 1;
@@ -271,7 +272,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: bold;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     z-index: 2;
