@@ -5,148 +5,211 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Imposter Wortspiel – Vollversion</title>
   <style>
-    * { box-sizing: border-box; }
-    html, body {
-      user-select: none;
-      margin: 0;
-      padding: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(180deg, #a1c4fd 0%, #c2e9fb 100%);
-      height: 100%;
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    user-select: none;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    height: 100%;
+    background: linear-gradient(180deg, #7ec8e3 0%, #b5e2fa 50%, #e3f6ff 100%);
+    overscroll-behavior: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    padding: 30px 25px;
+    max-width: 480px;
+    margin: 40px auto;
+    width: 92%;
+    text-align: center;
+    transition: 0.3s;
+  }
+
+  h1 {
+    color: #222;
+    font-size: 1.9em;
+    font-weight: 700;
+    margin-bottom: 15px;
+  }
+
+  h2, p {
+    color: #333;
+  }
+
+  input {
+    margin: 8px auto;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    width: 90%;
+    display: block;
+    background: #f9f9f9;
+    transition: all 0.2s ease;
+  }
+
+  input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    background: #fff;
+    box-shadow: 0 0 5px #4CAF50;
+  }
+
+  button {
+    margin: 8px auto;
+    padding: 12px 16px;
+    border-radius: 15px;
+    border: none;
+    font-size: 1em;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    background: linear-gradient(90deg, #4CAF50, #45a049);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    width: 90%;
+  }
+
+  button:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(90deg, #45a049, #3e8e41);
+  }
+
+  #playerControl {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 15px 0;
+  }
+
+  #playerControl button {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 1.4em;
+    background: linear-gradient(90deg, #4CAF50, #45a049);
+  }
+
+  #playerCountDisplay {
+    font-weight: bold;
+    font-size: 1.4em;
+    color: #222;
+  }
+
+  .checkboxes {
+    display: none;
+    margin-top: 15px;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 15px;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+  }
+
+  .checkboxes.visible {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .checkboxes label {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    background: #f2faff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .checkboxes input {
+    margin-right: 10px;
+    accent-color: #4CAF50;
+    width: auto;
+  }
+
+  #cardContainer {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+    touch-action: none;
+    display: none;
+  }
+
+  #swipeCard, #wordCard {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3em;
+    transition: transform 0.2s ease;
+    text-align: center;
+    padding: 20px;
+  }
+
+  #swipeCard {
+    background: linear-gradient(to bottom, #7f00ff, #e100ff);
+    color: white;
+    z-index: 2;
+    font-size: 1.5em;
+    font-weight: bold;
+    flex-direction: column;
+  }
+
+  #wordCard {
+    background: #212121;
+    color: #ffffff;
+    z-index: 1;
+    flex-direction: column;
+  }
+
+  #reveal {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #b30000;
+    margin-top: 25px;
+    white-space: pre-wrap;
+  }
+
+  #timerDisplay {
+    font-size: 1.1em;
+    color: #222;
+    margin-top: 10px;
+    display: none;
+  }
+
+  #resetPointsBtn {
+    background: #777;
+    width: 80%;
+    margin-top: 25px;
+    display: none;
+  }
+
+  #resetPointsBtn:hover {
+    background: #555;
+  }
+<style>
+
+
   
-}
-    }
-    .card {
-      background: #fdf5e6;
-      border-radius: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-      padding: 30px;
-      max-width: 480px;
-      margin: 30px auto;
-      width: 90%;
-      text-align: center;
-    }
-    h1, h2, p { color: #333; }
-    input, button {
-      margin: 6px auto;
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      font-size: 1em;
-      width: 90%;
-      display: block;
-    }
-    button {
-      background: #4CAF50;
-      color: white;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    button:hover { background: #45a049; }
-    #nextBtn, #startRoundBtn {
-      width: 70%;
-      margin-top: 20px;
-    }
-    .checkboxes {
-      display: none;
-      margin-top: 10px;
-      background: #ffffffa0;
-      padding: 10px;
-      border-radius: 15px;
-      border: 1px solid #ccc;
-      transition: 0.3s ease;
-    }
-    .checkboxes.visible {
-      display: block;
-      animation: fadeIn 0.3s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.98); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    .checkboxes label {
-      display: flex;
-      align-items: center;
-      margin: 8px 0;
-      background: #e9f1ff;
-      padding: 6px 10px;
-      border-radius: 8px;
-      box-shadow: inset 0 0 3px rgba(0,0,0,0.1);
-    }
-    .checkboxes input {
-      margin-right: 10px;
-      width: auto;
-      accent-color: #4CAF50;
-    }
-    #cardContainer {
-      position: relative;
-      height: 220px;
-      overflow: hidden;
-      touch-action: none;
-      display: none;
-    }
-    #swipeCard, #wordCard {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 20px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3em;
-      transition: transform 0.2s ease;
-      text-align: center;
-      padding: 20px;
-    }
-    #swipeCard {
-      background: linear-gradient(to bottom, #7f00ff, #e100ff);
-      color: white;
-      z-index: 2;
-      font-size: 1.5em;
-      font-weight: bold;
-      flex-direction: column;
-    }
-    #wordCard {
-      background: #212121;
-      color: #ffffff;
-      z-index: 1;
-      flex-direction: column;
-    }
-    #playerControl {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      margin: 10px 0;
-    }
-    #playerCountDisplay {
-      font-weight: bold;
-      font-size: 1.2em;
-    }
-    #reveal {
-      font-size: 1.3em;
-      font-weight: bold;
-      color: darkred;
-      margin-top: 20px;
-      white-space: pre-wrap;
-    }
-    #timerDisplay {
-      font-size: 1.2em;
-      color: #333;
-      margin-top: 10px;
-      display: none;
-    }
-    #resetPointsBtn {
-      background: #777;
-      width: 80%;
-      margin-top: 20px;
-      display: none;
-    }
-    #resetPointsBtn:hover {
-      background: #555;
-    }
-  </style>
 </head>
 <body>
   <div class="card" id="setup">
@@ -371,14 +434,15 @@
     }
 
     function generateCategoryCheckboxes() {
-      const container = document.getElementById("categoryList");
-      container.innerHTML = "";
-      for (let cat in wordPool) {
-        const label = document.createElement("label");
-        label.innerHTML = `<input type="checkbox" value="${cat}" checked /> ${cat}`;
-        container.appendChild(label);
-      }
-    }
+  const container = document.getElementById("categoryList");
+  container.innerHTML = "";
+  for (let cat in wordPool) {
+    const isChecked = cat !== "test"; // ✅ alles aktiv, außer „test“
+    const label = document.createElement("label");
+    label.innerHTML = `<input type="checkbox" value="${cat}" ${isChecked ? "checked" : ""}> ${cat}`;
+    container.appendChild(label);
+  }
+}
 
     function startGame() {
       players = [];
