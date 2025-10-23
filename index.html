@@ -1023,7 +1023,7 @@ input:checked + .slider:before {
       container.innerHTML = "";
       const saved = JSON.parse(localStorage.getItem("imposter_names") || "[]");
     
-      for (let i = 0; i < playerCount; i++) {
+      for (let i = 0; i < settings.playerCount; i++) {
         const input = document.createElement("input");
         input.placeholder = `Name Spieler ${i + 1}`;
         input.id = `player${i}`;
@@ -1032,8 +1032,16 @@ input:checked + .slider:before {
       }
     }
     function toggleNames() {
-      document.getElementById("nameInputsBox").classList.toggle("visible");
-      document.getElementById("setup").classList.toggle("menu-open");    
+      const box = document.getElementById("nameInputsBox");
+      const setup = document.getElementById("setup");
+      
+      // Wenn das Menü geöffnet wird, Spielerfelder aktualisieren
+      if (!box.classList.contains("visible")) {
+        updateNameInputs();
+      }
+    
+      box.classList.toggle("visible");
+      setup.classList.toggle("menu-open");
     }
     function toggleCategoryMenu() {
       document.getElementById("categoryList").classList.toggle("visible");
@@ -1224,11 +1232,6 @@ input:checked + .slider:before {
       localStorage.setItem("points", JSON.stringify(points));
     
       // 🧾 Kurzer Infotext, wer wie viele Punkte bekommt
-      const infoText = imposterWon
-        ? "<span style='color:#b30000;font-weight:600;'>Imposter erhält +2 Punkte</span>"
-        : "<span style='color:#007700;font-weight:600;'>Crew-Mitglieder erhalten +1 Punkt</span>";
-    
-      // 🔹 Anzeige aufbauen
       const roundScore = document.getElementById("roundScore");
       roundScore.innerHTML = `
         <div style="
@@ -1237,13 +1240,12 @@ input:checked + .slider:before {
           background:#f8fafb;
           border:1px solid #ddd;
           border-radius:8px;
-          padding:6px 8px;
-          text-align:left;
+          padding:4px 8px;
+          text-align:center;
           font-size:0.95em;
-          line-height:1.3em;
-        ">
-          ${infoText}
-        </div>
+          line-height:1.1em;
+          display:inline-block;
+        ">${infoText}</div>
       `;
     
       // Buttons aktualisieren
