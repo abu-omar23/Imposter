@@ -624,8 +624,10 @@ input:checked + .slider:before {
       <span class="slider"></span>
     </label>
 
-    <div id="nameInputs" style="text-align: center;"></div>
-
+    <button class="setup-btn" onclick="toggleNames()">🧍 Spielernamen bearbeiten</button>
+    <div class="checkboxes" id="nameInputsBox">
+      <div id="nameInputs" style="text-align:center;"></div>
+    </div>
     <!-- 📊 Punktestand-Button -->
     <button onclick="showScoreboard()">📊 Punktestand anzeigen</button>
   </div>
@@ -851,9 +853,11 @@ input:checked + .slider:before {
       startBtn.textContent = "Spiel starten";
       startBtn.classList.add("setup-btn");
       startBtn.onclick = startGame;
-      container.appendChild(startBtn);
+      document.getElementById("nameInputsBox").appendChild(startBtn);
     }
-    
+    function toggleNames() {
+      document.getElementById("nameInputsBox").classList.toggle("visible");
+    }
     function toggleCategoryMenu() {
       document.getElementById("categoryList").classList.toggle("visible");
     }
@@ -1032,58 +1036,8 @@ input:checked + .slider:before {
       else players.forEach((p, i) => { if (!imposterIndex.includes(i)) points[p] += 1; });
       localStorage.setItem("points", JSON.stringify(points));
     
-      const roundScore = document.getElementById("roundScore");
-      const sorted = Object.entries(points)
-        .filter(([name]) => players.includes(name))
-        .sort((a, b) => b[1] - a[1]);
-      /**/
-      let html = `
-        <div style="
-          display:flex;
-          flex-direction:column;
-          align-items:center;
-          justify-content:flex-start;
-          width:90vw;
-          max-width:420px;
-          margin:15px auto;
-          padding:20px;
-          background:#fff;
-          border-radius:25px;
-          box-shadow:0 8px 25px rgba(0,0,0,0.15);
-          text-align:center;
-        ">
-          <div style="
-            width:100%;
-            text-align:left;
-            font-size:1.05em;
-            line-height:1.2em;
-            background:#f7fbfd;
-            padding:10px 15px;
-            border-radius:12px;
-            border:1px solid #ddd;
-            box-shadow:inset 0 2px 4px rgba(0,0,0,0.05);
-          ">
-      `;
-      
-      sorted.forEach(([name, score]) => {
-        html += `
-          <p style="
-            margin:0;
-            display:flex;
-            justify-content:space-between;
-            font-weight:500;
-            color:#000;
-          ">
-            <span>${name}</span><span>${score} Punkte</span>
-          </p>
-        `;
-      });
-      
-      html += `
-          </div>
-        </div>
-      `;
-      roundScore.innerHTML = html;
+      localStorage.setItem("points", JSON.stringify(points));
+      document.getElementById("roundScore").innerHTML = "";
     
       ["crewWinBtn","imposterWinBtn"].forEach(id => document.getElementById(id).style.display = "none");
       ["restartBtn","resetPointsBtn","backToSetupBtn"].forEach(id => document.getElementById(id).style.display = "block");
