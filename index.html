@@ -1074,12 +1074,15 @@ input:checked + .slider:before {
     function startGame() {
       showHints = document.getElementById("hintSwitch").checked;
       players = [];
-      for (let i = 0; i < playerCount; i++) {
+    
+      // 🧩 Korrektur: hier settings.playerCount statt playerCount verwenden!
+      for (let i = 0; i < settings.playerCount; i++) {
         const name = document.getElementById(`player${i}`).value.trim();
         if (!name) return alert("Bitte alle Namen eingeben!");
         players.push(name);
         if (!points[name]) points[name] = 0;
       }
+    
       localStorage.setItem("imposter_names", JSON.stringify(players));
       localStorage.setItem("points", JSON.stringify(points));
     
@@ -1093,19 +1096,19 @@ input:checked + .slider:before {
       imposterHint = word[1];
     
       imposterIndex = [];
-      while (imposterIndex.length < imposterCount) {
+      while (imposterIndex.length < settings.imposterCount) {
         const rand = Math.floor(Math.random() * players.length);
         if (!imposterIndex.includes(rand)) imposterIndex.push(rand);
       }
-    
-      starter = players[Math.floor(Math.random() * players.length)];
-      currentIndex = 0;
-      roundStartTime = 0;
-    
-      document.getElementById("setup").style.display = "none";
-      document.getElementById("game").style.display = "block";
-      showPlayerCard();
-    }
+
+  starter = players[Math.floor(Math.random() * players.length)];
+  currentIndex = 0;
+  roundStartTime = 0;
+
+  document.getElementById("setup").style.display = "none";
+  document.getElementById("game").style.display = "block";
+  showPlayerCard();
+}
     
     function showPlayerCard() {
       document.getElementById("backToSetupBtn").style.display = "none";
@@ -1233,6 +1236,10 @@ input:checked + .slider:before {
     
       // 🧾 Kurzer Infotext, wer wie viele Punkte bekommt
       const roundScore = document.getElementById("roundScore");
+      const infoText = imposterWon
+        ? "😈 Die Imposter erhalten +2 Punkte"
+        : "✅ Die Crew-Mitglieder erhalten +1 Punkt";
+    
       roundScore.innerHTML = `
         <div style="
           width:85%;
