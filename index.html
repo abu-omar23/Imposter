@@ -29,13 +29,16 @@
     border-radius: 25px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     padding: 20px 18px;
-    margin: 20px auto;
-    width: 90%;
-    max-width: 380px; /* war 480px – jetzt kompakter */
+    margin: 30px auto;
+    width: 94%;
+    max-width: 420px; /* war 480px – jetzt kompakter */
     text-align: center;
     transition: 0.3s;
+    max-height: 85vh;   /* niemals höher als 90% des Bildschirms */
+    overflow-y: auto;   /* falls zu viel Inhalt: scrollbar */
+}
   }
-  }
+  
 
   h1 {
     color: #222;
