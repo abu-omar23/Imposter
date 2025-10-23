@@ -126,9 +126,8 @@
   }
     /* 🔹 Setup-Buttons: breite, mittige Buttons im Startmenü */
   .setup-btn {
-    display: block;
-    width: 90%;
-    padding: 12px 0;
+    display: inline-block;
+    padding: 10px 18px;         /* 🔹 etwas kompakter, Textbasiert */
     margin: 8px auto;
     text-align: center;
     border-radius: 15px;
@@ -140,6 +139,8 @@
     background: linear-gradient(90deg, #4CAF50, #45a049);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     transition: all 0.2s ease;
+    width: auto;                /* 🔹 Breite passt sich Text an */
+    min-width: 160px;           /* 🔹 bleibt nicht zu schmal */
   }
   
   .setup-btn:hover {
@@ -368,7 +369,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 4px 0 16px 0;  /* 🔹 unten mehr Abstand, oben minimal */
+    margin: 4px 0 40px 0; /* 🔹 deutlich mehr Abstand nach unten */
   }
   
   
@@ -900,6 +901,7 @@ input:checked + .slider:before {
     }
 
     function showPlayerCard() {
+      document.getElementById("backToSetupBtn").style.display = "none";
       const player = players[currentIndex];
       document.getElementById("playerName").textContent = player;
       document.getElementById("statusText").textContent = "";
