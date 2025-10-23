@@ -13,6 +13,8 @@
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(180deg, #a1c4fd 0%, #c2e9fb 100%);
       height: 100%;
+      overscroll-behavior: none;
+}
     }
     .card {
       background: #fdf5e6;
@@ -333,7 +335,8 @@
   ]
     };
 
-    let players = [], usedWords = [], selectedWords = [];
+    let players = [], selectedWords = [];
+    let usedWords = JSON.parse(localStorage.getItem("usedWords") || "[]");
     let currentIndex = 0, imposterIndex = 0;
     let realWord = "", imposterHint = "", starter = "";
     let roundStartTime = 0, timerInterval;
@@ -495,15 +498,20 @@
       if (imposterWon) points[players[imposterIndex]] += 2;
       else players.forEach((p, i) => { if (i !== imposterIndex) points[p] += 1; });
       localStorage.setItem("points", JSON.stringify(points));
-
-      let txt = "🏆 Punktestand:\n";
-      for (let p in points) txt += `${p}: ${points[p]} Punkte\n`;
+    
+      // 👉 Nur aktuelle Spieler anzeigen
+      let txt = "🏆 Punktestand (aktuelle Runde):\n";
+      players.forEach(p => {
+        txt += `${p}: ${points[p]} Punkte\n`;
+      });
+    
       document.getElementById("reveal").textContent += `\n\n${txt}`;
       document.getElementById("crewWinBtn").style.display = "none";
       document.getElementById("imposterWinBtn").style.display = "none";
       document.getElementById("restartBtn").style.display = "block";
       document.getElementById("resetPointsBtn").style.display = "block";
     }
+
 
     function resetPoints() {
       for (let p in points) points[p] = 0;
