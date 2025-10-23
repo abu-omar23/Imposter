@@ -206,6 +206,28 @@
     background: #666;
   }
 
+  .score-reset-btn {
+    background: #888;
+    color: #fff;
+    border: none;
+    border-radius: 15px;
+    padding: 10px 20px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 12px auto 0;
+    display: block;
+    width: 80%;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+  }
+
+  .score-reset-btn:hover {
+    background: #666;
+    transform: translateY(-2px);
+  }
+
 
 /* === KOMPAKTES KATEGORIEN-MENÜ === */
 .checkboxes {
@@ -1110,7 +1132,7 @@ input:checked + .slider:before {
       // Punkte-löschen-Button hinzufügen
       const deleteBtn = document.createElement("button");
       deleteBtn.textContent = "🗑️ Punkte löschen";
-      deleteBtn.style.marginTop = "10px";
+      deleteBtn.classList.add("score-reset-btn"); // 👈 eigene CSS-Klasse
       deleteBtn.onclick = () => {
         for (let p in points) points[p] = 0;
         localStorage.setItem("points", JSON.stringify(points));
