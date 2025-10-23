@@ -1031,9 +1031,43 @@ input:checked + .slider:before {
     }
     function revealImposter() {
       
-
+      clearInterval(timerInterval);
+      document.getElementById("statusText").textContent = "";
+      document.getElementById("timerDisplay").style.display = "none";
+    
+      const imposters = imposterIndex.map(i => players[i]).join(", ");
+      const timePassed = Math.floor((Date.now() - roundStartTime) / 1000);
+      const minutes = Math.floor(timePassed / 60);
+      const seconds = timePassed % 60;
+    
+      // 🎨 Kompakter, zentrierter Text
+      document.getElementById("reveal").innerHTML = `
+        <div style="
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          font-size: 1.05em;
+          line-height: 1.3em;
+          color: #222;
+          min-height: 120px;
+          margin-bottom: 8px;
+        ">
+          <span style="color:#b30000;font-weight:bold;">😈 Imposter: ${imposters}</span>
+          <span>Hinweis: ${imposterHint}</span>
+          <span>Wort: ${realWord}</span>
+          <span>Zeit: ${minutes} min ${seconds} sek</span>
+        </div>
+        <div id="roundScore" style="margin-top: 6px;"></div>
+      `;
+    
+      document.getElementById("revealImposterBtn").style.display = "none";
+      document.getElementById("crewWinBtn").style.display = "block";
+      document.getElementById("imposterWinBtn").style.display = "block";
+    }
+    
     function awardPoints(imposterWon) {
-      // Punktevergabe
       if (imposterWon) {
         imposterIndex.forEach(i => (points[players[i]] += 2));
       } else {
@@ -1043,7 +1077,6 @@ input:checked + .slider:before {
       }
       localStorage.setItem("points", JSON.stringify(points));
     
-      // 🏆 Minimaler Punktestand
       const roundScore = document.getElementById("roundScore");
       const sorted = Object.entries(points)
         .filter(([name]) => players.includes(name))
@@ -1065,11 +1098,7 @@ input:checked + .slider:before {
     
       sorted.forEach(([name, score]) => {
         html += `
-          <div style="
-            display: flex;
-            justify-content: space-between;
-            margin: 2px 0;
-          ">
+          <div style="display:flex;justify-content:space-between;margin:2px 0;">
             <span>${name}</span><span>${score}</span>
           </div>`;
       });
@@ -1077,7 +1106,6 @@ input:checked + .slider:before {
       html += "</div>";
       roundScore.innerHTML = html;
     
-      // Buttons
       document.getElementById("crewWinBtn").style.display = "none";
       document.getElementById("imposterWinBtn").style.display = "none";
       document.getElementById("restartBtn").style.display = "block";
