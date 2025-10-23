@@ -141,8 +141,14 @@
     accent-color: #4CAF50;
     width: auto;
   }
-
+  #game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
   #cardContainer {
+    margin-top: 20px;
     position: relative;
     width: 85vw;
     max-width: 420px;
@@ -546,6 +552,13 @@ input:checked + .slider:before {
       realWord = word[0];
       imposterHint = word[1];
       imposterIndex = Math.floor(Math.random() * players.length);
+
+      const imposterIndices = [];
+      while (imposterIndices.length < imposterCount) {
+        const rand = Math.floor(Math.random() * players.length);
+        if (!imposterIndices.includes(rand)) imposterIndices.push(rand);
+      }
+      imposterIndex = imposterIndices; // speichert alle Imposter
       starter = players[Math.floor(Math.random() * players.length)];
       currentIndex = 0;
       roundStartTime = 0;
@@ -587,7 +600,7 @@ input:checked + .slider:before {
         if (deltaY > 0) {
           swipeCard.style.transition = 'none';
           swipeCard.style.transform = `translateY(-${deltaY}px)`;
-          if (currentIndex === imposterIndex) {
+          if (imposterIndex.includes(currentIndex)) {
             wordCard.textContent = showHints
               ? `😈 Du bist der Imposter!\n💡 Hinweis: ${imposterHint}`
               : `😈 Du bist der Imposter!`;
@@ -701,8 +714,10 @@ input:checked + .slider:before {
       }
     }
 
-    generateCategoryCheckboxes();
-    updateNameInputs();
+    window.onload = () => {
+      generateCategoryCheckboxes();
+      updateNameInputs();
+};
   </script>
 </body>
 </html>
