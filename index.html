@@ -775,11 +775,6 @@ input:checked + .slider:before {
       <input type="checkbox" id="hintSwitch" checked>
       <span class="slider"></span>
     </label>
-    // 💾 Wenn der Hinweis-Switch geändert wird → in den Einstellungen speichern
-    document.getElementById("hintSwitch").addEventListener("change", (e) => {
-      settings.hintsEnabled = e.target.checked;
-      localStorage.setItem("gameSettings", JSON.stringify(settings));
-    });
     
     <p>Wie viele Spieler?</p>
     <div id="playerControl">
@@ -1019,7 +1014,10 @@ input:checked + .slider:before {
       document.getElementById("imposterCountDisplay").textContent = settings.imposterCount;
       localStorage.setItem("gameSettings", JSON.stringify(settings));
     }
-    
+    document.getElementById("hintSwitch").addEventListener("change", (e) => {
+      settings.hintsEnabled = e.target.checked;
+      localStorage.setItem("gameSettings", JSON.stringify(settings));
+    });
     function updateNameInputs() {
       const container = document.getElementById("nameInputs");
       container.innerHTML = "";
