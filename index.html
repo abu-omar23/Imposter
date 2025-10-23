@@ -431,15 +431,10 @@
   }
 
   #timerDisplay {
-    font-size: 1.2em;
-    font-weight: 600;
-    background: #e8f5e9;
-    color: #2e7d32;
-    padding: 4px 10px;
-    border-radius: 10px;
-    margin-top: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    display: inline-block;
+    font-size: 1.1em;
+    color: #222;
+    margin-top: 10px;
+    display: none;
   }
 
   #resetPointsBtn {
@@ -567,19 +562,7 @@ input:checked + .slider:before {
   justify-content: space-between;
   font-weight: 500;
 }
-
-.card {
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.3s ease;
-  display: none; /* 🔹 standardmäßig unsichtbar */
-}
-
-.card.active {
-  opacity: 1;
-  transform: translateY(0);
-  display: flex; /* 🔹 zeigt die Karte wieder an */
-} 
+    
 </style>
 
 
@@ -628,7 +611,7 @@ input:checked + .slider:before {
   </div>
 
   <!-- 🏆 Punktestand-Seite -->
-  <div class="card" id="scoreboard">
+  <div class="card" id="scoreboard" style="display:none">
     <h1>🏆 Punktestand</h1>
     <div id="scoreList"></div>
     <button onclick="goBackToSetup()">⬅️ Zurück</button>
@@ -636,7 +619,7 @@ input:checked + .slider:before {
 
 
 
-  <div class="card" id="game">
+  <div class="card" id="game" style="display:none">
     <h2 id="playerName"></h2>
 
     <div id="cardContainer">
@@ -912,8 +895,8 @@ input:checked + .slider:before {
       starter = players[Math.floor(Math.random() * players.length)];
       currentIndex = 0;
       roundStartTime = 0;
-      document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
-      document.getElementById("game").classList.add("active");
+      document.getElementById("setup").style.display = "none";
+      document.getElementById("game").style.display = "block";
       showPlayerCard();
     }
 
@@ -1105,9 +1088,11 @@ input:checked + .slider:before {
 
     function goBackToSetupFromGame() {
       clearInterval(timerInterval);
-      document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
-      document.getElementById("setup").classList.add("active");
+      document.getElementById("game").style.display = "none";
+      document.getElementById("setup").style.display = "block";
       document.getElementById("reveal").textContent = "";
+      document.getElementById("resetPointsBtn").style.display = "none";
+      document.getElementById("restartBtn").style.display = "none";
     }
     function getRandomWord() {
       let available = selectedWords.filter(w => !usedWords.includes(w[0]));
@@ -1127,8 +1112,6 @@ input:checked + .slider:before {
     window.onload = () => {
       generateCategoryCheckboxes();
       updateNameInputs();
-      document.getElementById("setup").classList.add("active");
-
 };
     function showScoreboard() {
       const scoreList = document.getElementById("scoreList");
@@ -1153,21 +1136,19 @@ input:checked + .slider:before {
       deleteBtn.textContent = "🗑️ Punkte löschen";
       deleteBtn.classList.add("score-reset-btn"); // 👈 eigene CSS-Klasse
       deleteBtn.onclick = () => {
-        if (confirm("⚠️ Willst du wirklich alle Punkte löschen?")) {
-          for (let p in points) points[p] = 0;
-          localStorage.setItem("points", JSON.stringify(points));
-          showScoreboard(); // neu laden
-        }
+        for (let p in points) points[p] = 0;
+        localStorage.setItem("points", JSON.stringify(points));
+        showScoreboard(); // neu laden
       };
       scoreList.appendChild(deleteBtn);
     
-      document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
-      document.getElementById("scoreboard").classList.add("active");
+      document.getElementById("setup").style.display = "none";
+      document.getElementById("scoreboard").style.display = "flex";
     }
     
     function goBackToSetup() {
-      document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
-      document.getElementById("setup").classList.add("active");
+      document.getElementById("scoreboard").style.display = "none";
+      document.getElementById("setup").style.display = "block";
     }
   </script>
 </body>
