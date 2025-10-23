@@ -32,10 +32,6 @@
     width: 92%;
     text-align: center;
     transition: 0.3s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
 }
   }
 
@@ -231,13 +227,12 @@
     width: 85vw;
     max-width: 400px;
     height: 240px;
+    margin: 20px auto; /* zentriert im weißen Kasten */
     display: flex;
     justify-content: center;
-    align-items: center; /* 🔥 Karte im Container perfekt mittig */
-    margin: 0 auto;
+    align-items: center; /* 🔥 vertikal + horizontal perfekt mittig */
     touch-action: none;
     overflow: hidden;
-    transform: translateY(0);
   }
   
   /* Karte mit dem Wort */
@@ -260,7 +255,6 @@
     padding: 20px;
   }
   
-  /* Swipe-Karte mit Nachfedern */
   #swipeCard {
     position: absolute;
     top: 0;
@@ -279,8 +273,9 @@
     text-align: center;
     z-index: 5;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    transition: transform 0.35s cubic-bezier(0.25, 1.5, 0.5, 1); /* 🪄 Nachfedern */
+    transition: transform 0.35s cubic-bezier(0.25, 1.5, 0.5, 1); /* Nachfedern */
   }
+
 
 
 
