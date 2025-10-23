@@ -949,27 +949,25 @@ input:checked + .slider:before {
           moved = true;
           
           // Wort sofort zeigen
-          if (imposterIndex.includes(currentIndex)) {
-            let otherImposters = imposterIndex
-              .filter(i => i !== currentIndex)
-              .map(i => players[i])
-              .join(", ");
-          
-            let imposterText = `😈 Du bist der Imposter 😈`;
-          
-            if (showHints) {
-              imposterText += `\nHinweis: ${imposterHint}`;
-            }
-          
-            // Wenn es weitere Imposter gibt
-            if (otherImposters.length > 0) {
-              imposterText += `\nAndere Imposter: ${otherImposters}`;
-            }
-          
-            wordCard.textContent = imposterText;
-          } else {
-            wordCard.textContent = `✅ ${realWord}`;
-          }
+        if (imposterIndex.includes(currentIndex)) {
+          let otherImposters = imposterIndex
+            .filter(i => i !== currentIndex)
+            .map(i => players[i])
+            .join(", ");
+        
+          // 🔹 Verwende <div> und <br> für saubere Zeilen
+          let imposterText = `
+            <div style="text-align:center;line-height:1.4em;">
+              <strong>😈 Du bist der Imposter 😈</strong><br>
+              ${showHints ? `Hinweis: ${imposterHint}<br>` : ""}
+              ${otherImposters ? `<span>Andere Imposter: ${otherImposters}</span>` : ""}
+            </div>
+          `;
+        
+          wordCard.innerHTML = imposterText;
+        } else {
+          wordCard.textContent = `✅ ${realWord}`;
+        }
         }
       };
       
