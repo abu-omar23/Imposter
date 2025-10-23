@@ -224,21 +224,18 @@
   /*test*/   
   #cardContainer {
     position: relative;
-    width: 90%;
-    max-width: 380px;
-    height: 260px;
-    margin: 60px auto 20px;
+    width: 85vw;
+    max-width: 360px;
+    aspect-ratio: 3 / 4; /* gleiches Verhältnis auf jedem Gerät */
+    margin: 40px auto;
     display: none;
     touch-action: none;
-    border-radius: 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-    background: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
+    perspective: 1000px; /* für 3D-Effekt optional */
   }
   
-  /* Beide Karten exakt gleich groß */
   #swipeCard, #wordCard {
     position: absolute;
     top: 50%;
@@ -248,33 +245,35 @@
     height: 100%;
     border-radius: 20px;
     display: flex;
-    align-items: center;
-    justify-content: center;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    padding: 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+    transition: transform 0.25s ease;
+    overflow: hidden;
   }
   
-  /* Swipe-Karte (oben) */
+  /* Karte unten (Wort) */
+  #wordCard {
+    background: #1e1e1e;
+    color: #f8f8f8;
+    z-index: 1;
+    font-size: 1.2em;
+    font-weight: 600;
+    padding: 20px;
+  }
+  
+  /* Karte oben (Swipe) */
   #swipeCard {
     background: linear-gradient(135deg, #9b5de5, #f15bb5);
     color: #fff;
-    z-index: 10;
+    z-index: 2;
     font-size: 1.3em;
-    font-weight: 600;
-    box-shadow: 0 6px 25px rgba(155, 93, 229, 0.35);
-    transition: transform 0.3s ease;
+    font-weight: bold;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   }
-  
-  /* Wort-Karte (unten) */
-  #wordCard {
-    background: #1e1e1e;
-    color: #f5f5f5;
-    z-index: 1;
-    font-size: 1.2em;
-    font-weight: 500;
-  }
+
 
 
 
