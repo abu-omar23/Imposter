@@ -793,8 +793,8 @@ input:checked + .slider:before {
   <button id="startGameBtn" class="setup-btn" onclick="startGame()">🚀 Spiel starten</button>
   
   <!-- 📊 Punktestand -->
-  <button onclick="showScoreboard()">📊 Punktestand anzeigen</button>
-  </div>
+  <button class="setup-btn" onclick="showScoreboard()">📊 Punktestand anzeigen</button>
+  </div> <!-- Schließt das Setup-Menü -->
   
   <!-- 🏆 Punktestand-Seite -->
   <div class="card" id="scoreboard" style="display:none">
@@ -1022,17 +1022,20 @@ input:checked + .slider:before {
     }
     
     function generateCategoryCheckboxes() {
-      const container = document.getElementById("categoryList");
+      const container = document.getElementById("categoryContent");
       container.innerHTML = `
-        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-          <button type="button" onclick="selectAllCategories(true)" style="background:#4CAF50;width:48%;font-size:0.9em;">Alle auswählen</button>
-          <button type="button" onclick="selectAllCategories(false)" style="background:#e53935;width:48%;font-size:0.9em;">Alle abwählen</button>
+        <div class="category-buttons">
+          <button class="setup-btn" type="button" onclick="selectAllCategories(true)">✅ Alle auswählen</button>
+          <button class="setup-btn" type="button" onclick="selectAllCategories(false)" style="background:#e53935;">❌ Alle abwählen</button>
         </div>
       `;
       for (let cat in wordPool) {
         const isChecked = cat !== "test";
         const label = document.createElement("label");
-        label.innerHTML = `<span>${cat.charAt(0).toUpperCase() + cat.slice(1)}</span><input type="checkbox" value="${cat}" ${isChecked ? "checked" : ""}>`;
+        label.innerHTML = `
+          <span>${cat.charAt(0).toUpperCase() + cat.slice(1)}</span>
+          <input type="checkbox" value="${cat}" ${isChecked ? "checked" : ""}>
+        `;
         container.appendChild(label);
       }
     }
