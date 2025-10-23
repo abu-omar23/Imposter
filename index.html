@@ -1034,10 +1034,15 @@ input:checked + .slider:before {
     function toggleNames() {
       const box = document.getElementById("nameInputsBox");
       const setup = document.getElementById("setup");
-      
-      // Wenn das Menü geöffnet wird, Spielerfelder aktualisieren
+    
+      // 📥 Wenn das Menü gerade geöffnet wird → Felder aktualisieren
       if (!box.classList.contains("visible")) {
         updateNameInputs();
+      } else {
+        // 💾 Wenn das Menü geschlossen wird → Namen speichern
+        const inputs = document.querySelectorAll("#nameInputs input");
+        const names = Array.from(inputs).map(i => i.value.trim());
+        localStorage.setItem("imposter_names", JSON.stringify(names));
       }
     
       box.classList.toggle("visible");
@@ -1247,7 +1252,7 @@ input:checked + .slider:before {
           background:#f8fafb;
           border:1px solid #ddd;
           border-radius:8px;
-          padding:4px 8px;
+          padding:5px 8px;
           text-align:center;
           font-size:0.95em;
           line-height:1.1em;
@@ -1255,9 +1260,26 @@ input:checked + .slider:before {
         ">${infoText}</div>
       `;
     
-      // Buttons aktualisieren
+      // Buttons und Layout kompakter anordnen
       ["crewWinBtn", "imposterWinBtn"].forEach(id => document.getElementById(id).style.display = "none");
-      ["restartBtn", "backToSetupBtn"].forEach(id => document.getElementById(id).style.display = "block");
+    
+      const restartBtn = document.getElementById("restartBtn");
+      const backBtn = document.getElementById("backToSetupBtn");
+    
+      restartBtn.style.display = "block";
+      backBtn.style.display = "block";
+    
+      // 🧩 Kompakte Abstände
+      restartBtn.style.marginTop = "8px";
+      backBtn.style.marginTop = "4px";
+      roundScore.style.marginTop = "4px";
+    
+      // 🩶 Einheitliche visuelle Struktur
+      const reveal = document.getElementById("reveal");
+      reveal.style.display = "flex";
+      reveal.style.flexDirection = "column";
+      reveal.style.alignItems = "center";
+      reveal.style.gap = "4px"; // kompakter Abstand
     }
     
     function resetPoints() {
