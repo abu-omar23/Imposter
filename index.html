@@ -989,15 +989,21 @@ input:checked + .slider:before {
       document.getElementById("playerName").textContent = "";
       document.getElementById("startRoundBtn").style.display = "none";
     
-      // ✨ Name fett und Text größer
+      // 🎲 Startspieler-Anzeige (größer und fett)
       document.getElementById("statusText").innerHTML = 
         `<span style="font-size: 1.4em;">🎲 <strong>${starter}</strong> beginnt die Runde!</span>`;
     
       document.getElementById("timerDisplay").style.display = "block";
+    
+      // ⏱️ Timer starten
       roundStartTime = Date.now();
       clearInterval(timerInterval);
       timerInterval = setInterval(updateTimer, 1000);
-      document.getElementById("revealImposterBtn").style.display = "block";
+    
+      // 😈 Imposter-Button sicher sichtbar machen
+      const revealBtn = document.getElementById("revealImposterBtn");
+      revealBtn.style.display = "block";
+      revealBtn.scrollIntoView({ behavior: "smooth", block: "center" });
     }
 
     function revealImposter() {
