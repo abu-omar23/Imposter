@@ -1021,17 +1021,29 @@ input:checked + .slider:before {
       clearInterval(timerInterval);
       document.getElementById("statusText").textContent = "";
       document.getElementById("timerDisplay").style.display = "none";
+    
       const imposters = imposterIndex.map(i => players[i]).join(", ");
       const timePassed = Math.floor((Date.now() - roundStartTime) / 1000);
       const minutes = Math.floor(timePassed / 60);
       const seconds = timePassed % 60;
-      document.getElementById("reveal").innerHTML = 
-        `<span style="color:#b30000; font-weight:bold;">
-          😈 Imposter: ${imposters}
-        </span><br>
-        Hinweis: ${imposterHint}<br>
-        Wort: ${realWord}<br>
-        Zeit: ${minutes} min ${seconds} sek`; 
+    
+      // ✨ Sauber formatierter, bündiger Text
+      document.getElementById("reveal").innerHTML = `
+        <div style="
+          text-align: center;
+          font-size: 1.1em;
+          line-height: 1.8em;
+        ">
+          <span style="color:#b30000; font-weight:bold; font-size:1.2em;">
+            😈 Imposter: ${imposters}
+          </span><br>
+          <span style="color:#222;">Hinweis: ${imposterHint}</span><br>
+          <span style="color:#222;">Wort: ${realWord}</span><br>
+          <span style="color:#222;">Zeit: ${minutes} min ${seconds} sek</span>
+        </div>
+      `;
+    
+      // Buttons anpassen
       document.getElementById("revealImposterBtn").style.display = "none";
       document.getElementById("crewWinBtn").style.display = "block";
       document.getElementById("imposterWinBtn").style.display = "block";
