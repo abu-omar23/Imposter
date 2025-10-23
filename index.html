@@ -246,7 +246,7 @@
     max-width: 420px;
     height: 60vh;
     max-height: 500px;
-    margin: 60px auto;
+    margin: 5px auto;
     display: none;
     touch-action: none;
     background: transparent; /* ❌ Weiß entfernt */
@@ -255,6 +255,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    
   }
   
   /* Wort-Karte (unten) */
@@ -377,19 +378,19 @@ input:checked + .slider:before {
 }
 
 #game.card {
-  background: white;
-  width: 80vw;
-  max-width: 450px;
-  border-radius: 30px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  margin: 20px auto;
-  padding: 5px 10px 15px 10px; /* noch weniger Abstand oben & unten */
+  background: #ffffff;
+  border-radius: 25px;
+  width: 92vw;
+  max-width: 420px;
+  margin: 40px auto;
+  padding: 25px 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  max-height: 70vh;   /* maximal 90% der Bildschirmhöhe */
-
+  justify-content: space-between;
+  max-height: 60vh;
+}
 }
 
 #playerName {
@@ -397,9 +398,6 @@ input:checked + .slider:before {
   margin-bottom: 10px;
 }
 
-#cardContainer {
-  margin: 5px auto; /* vorher 60px! */
-}
 
 #nextBtn,
 #startRoundBtn,
@@ -411,13 +409,6 @@ input:checked + .slider:before {
   margin-top: 4px;
 }
 
-/* optional: für vertikale Zentrierung des Spiels */
-body {
-  display: block;
-  overflow-x: hidden;
-  overscroll-behavior: none;
-  padding-top: 20px; /* etwas Luft nach oben */
-}
 
     
 </style>
