@@ -1032,42 +1032,12 @@ input:checked + .slider:before {
       document.getElementById("timerDisplay").textContent = `⏱️ Zeit: ${minutes}:${seconds}`;
     }
     function revealImposter() {
-      clearInterval(timerInterval);
-      document.getElementById("statusText").textContent = "";
-      document.getElementById("timerDisplay").style.display = "none";
-    
-      const imposters = imposterIndex.map(i => players[i]).join(", ");
-      const timePassed = Math.floor((Date.now() - roundStartTime) / 1000);
-      const minutes = Math.floor(timePassed / 60);
-      const seconds = timePassed % 60;
-    
-      // 🎨 Schöne, klare Darstellung
-      document.getElementById("reveal").innerHTML = `
-        <div style="
-          text-align: center;
-          font-size: 1.1em;
-          line-height: 1.8em;
-          color: #222;
-          margin-bottom: 10px;
-        ">
-          <span style="color:#b30000; font-weight:bold;">😈 Imposter: ${imposters}</span><br>
-          Hinweis: ${imposterHint}<br>
-          Wort: ${realWord}<br>
-          Zeit: ${minutes} min ${seconds} sek
-        </div>
-        <div id="roundScore" style="margin-top: 10px;"></div>
-      `;
-    
-      // Buttons sichtbar machen
-      document.getElementById("revealImposterBtn").style.display = "none";
-      document.getElementById("crewWinBtn").style.display = "block";
-      document.getElementById("imposterWinBtn").style.display = "block";
-    }
+      
 
     function awardPoints(imposterWon) {
-      // 🧮 Punktevergabe
+      // Punktevergabe
       if (imposterWon) {
-        imposterIndex.forEach(i => points[players[i]] += 2);
+        imposterIndex.forEach(i => (points[players[i]] += 2));
       } else {
         players.forEach((p, i) => {
           if (!imposterIndex.includes(i)) points[p] += 1;
@@ -1075,51 +1045,46 @@ input:checked + .slider:before {
       }
       localStorage.setItem("points", JSON.stringify(points));
     
-      // 🏆 Punktestand (wie auf der Punktestand-Seite)
+      // 🏆 Minimaler Punktestand
       const roundScore = document.getElementById("roundScore");
-      const currentPlayers = players;
       const sorted = Object.entries(points)
-        .filter(([name]) => currentPlayers.includes(name))
+        .filter(([name]) => players.includes(name))
         .sort((a, b) => b[1] - a[1]);
     
-      let scoreHTML = `
-        <h3 style="margin-bottom: 8px;">🏆 Punktestand</h3>
+      let html = `
         <div style="
-          width: 90%;
-          max-width: 360px;
-          margin: 0 auto;
-          background: #f7fbfd;
+          width: 85%;
+          margin: 4px auto 0;
+          background: #f8fafb;
           border: 1px solid #ddd;
-          border-radius: 12px;
-          padding: 10px 15px;
-          box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+          border-radius: 8px;
+          padding: 4px 8px;
           text-align: left;
-          font-size: 1.05em;
+          font-size: 0.95em;
+          line-height: 1.2em;
         ">
       `;
     
       sorted.forEach(([name, score]) => {
-        scoreHTML += `
-          <p style="
+        html += `
+          <div style="
             display: flex;
             justify-content: space-between;
-            margin: 4px 0;
-            font-weight: 500;
+            margin: 2px 0;
           ">
-            <span>${name}</span><span>${score} Punkte</span>
-          </p>`;
+            <span>${name}</span><span>${score}</span>
+          </div>`;
       });
     
-      scoreHTML += `</div>`;
-      roundScore.innerHTML = scoreHTML;
+      html += "</div>";
+      roundScore.innerHTML = html;
     
-      // 🔘 Buttons anpassen
+      // Buttons
       document.getElementById("crewWinBtn").style.display = "none";
       document.getElementById("imposterWinBtn").style.display = "none";
       document.getElementById("restartBtn").style.display = "block";
       document.getElementById("resetPointsBtn").style.display = "block";
       document.getElementById("backToSetupBtn").style.display = "block";
-
     }
 
 
