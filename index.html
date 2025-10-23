@@ -366,8 +366,8 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 1.1em;
-    font-weight: 500;
+    font-size: 1.4em;   /* 🔹 größerer Text für normales Wort */
+    font-weight: 600;
     padding: 15px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   }
@@ -388,8 +388,8 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 1.3em;
-    font-weight: bold;
+    font-size: 1.4em;   /* 🔹 größerer Text für normales Wort */
+    font-weight: 600;
     padding: 20px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
     transition: transform 0.3s ease;
@@ -491,14 +491,17 @@ input:checked + .slider:before {
 }
 
 
-#nextBtn,
+#nextBtn {
+  margin-top: 22px;   /* 🔹 extra Abstand unter der Karte */
+}
+
 #startRoundBtn,
 #revealImposterBtn,
 #crewWinBtn,
 #imposterWinBtn,
 #restartBtn,
 #resetPointsBtn {
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 #scoreboard {
@@ -1025,12 +1028,13 @@ input:checked + .slider:before {
 
     function startNewRound() {
       document.getElementById("reveal").textContent = "";
-      document.getElementById("backToSetupBtn").style.display = "none";
+      document.getElementById("backToSetupBtn").style.display = "none"; // <— Button sicher ausblenden
       document.getElementById("restartBtn").style.display = "none";
       document.getElementById("crewWinBtn").style.display = "none";
       document.getElementById("imposterWinBtn").style.display = "none";
       document.getElementById("revealImposterBtn").style.display = "none";
-    
+      document.getElementById("resetPointsBtn").style.display = "none";
+      
       // 🔄 Neues Wort & neue Runde
       const word = getRandomWord();
       realWord = word[0];
@@ -1054,7 +1058,6 @@ input:checked + .slider:before {
       // ⏳ Swipe-Funktion nach DOM-Neuaufbau aktivieren
       setTimeout(() => {
         setupSwipe();
-        // 🔁 Karte auf neuen Zustand vorbereiten
         document.getElementById("wordCard").textContent = "🗝️ Wort anzeigen...";
       }, 200);
     }
@@ -1090,15 +1093,30 @@ input:checked + .slider:before {
       const scoreList = document.getElementById("scoreList");
       const points = JSON.parse(localStorage.getItem("points") || "{}");
     
-      if (Object.keys(points).length === 0) {
+      // Nur aktuelle Spieler berücksichtigen
+      const currentPlayers = JSON.parse(localStorage.getItem("imposter_names") || "[]");
+      const filtered = Object.entries(points).filter(([name]) => currentPlayers.includes(name));
+    
+      if (filtered.length === 0) {
         scoreList.innerHTML = "<p>📭 Noch keine Punkte vergeben!</p>";
       } else {
         // Punkte sortieren (höchster zuerst)
-        const sorted = Object.entries(points).sort((a, b) => b[1] - a[1]);
+        const sorted = filtered.sort((a, b) => b[1] - a[1]);
         scoreList.innerHTML = sorted
           .map(([name, score]) => `<p><span>${name}</span><span>${score} Punkte</span></p>`)
           .join("");
       }
+    
+      // Punkte-löschen-Button hinzufügen
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "🗑️ Punkte löschen";
+      deleteBtn.style.marginTop = "10px";
+      deleteBtn.onclick = () => {
+        for (let p in points) points[p] = 0;
+        localStorage.setItem("points", JSON.stringify(points));
+        showScoreboard(); // neu laden
+      };
+      scoreList.appendChild(deleteBtn);
     
       document.getElementById("setup").style.display = "none";
       document.getElementById("scoreboard").style.display = "flex";
