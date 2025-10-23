@@ -950,9 +950,23 @@ input:checked + .slider:before {
           
           // Wort sofort zeigen
           if (imposterIndex.includes(currentIndex)) {
-            wordCard.textContent = showHints
-              ? `😈 Du bist der Imposter 😈\n Hinweis: ${imposterHint}`
-              : `😈 Du bist der Imposter 😈`;
+            let otherImposters = imposterIndex
+              .filter(i => i !== currentIndex)
+              .map(i => players[i])
+              .join(", ");
+          
+            let imposterText = `😈 Du bist der Imposter 😈`;
+          
+            if (showHints) {
+              imposterText += `\nHinweis: ${imposterHint}`;
+            }
+          
+            // Wenn es weitere Imposter gibt
+            if (otherImposters.length > 0) {
+              imposterText += `\nAndere Imposter: ${otherImposters}`;
+            }
+          
+            wordCard.textContent = imposterText;
           } else {
             wordCard.textContent = `✅ ${realWord}`;
           }
@@ -1086,22 +1100,35 @@ input:checked + .slider:before {
 
     function startNewRound() {
       document.getElementById("reveal").textContent = "";
-      document.getElementById("backToSetupBtn").style.display = "none"; // <— Button sicher ausblenden
+      document.getElementById("backToSetupBtn").style.display = "none";
       document.getElementById("restartBtn").style.display = "none";
       document.getElementById("crewWinBtn").style.display = "none";
       document.getElementById("imposterWinBtn").style.display = "none";
       document.getElementById("revealImposterBtn").style.display = "none";
       document.getElementById("resetPointsBtn").style.display = "none";
-      
-      // 🔄 Neues Wort & neue Runde
+    
+      // 🧩 Spieler neu mischen
+      shuffle(players);
+    
+      // 🎭 Neue Imposter wählen
+      const newImposters = [];
+      while (newImposters.length < imposterCount) {
+        const rand = Math.floor(Math.random() * players.length);
+        if (!newImposters.includes(rand)) newImposters.push(rand);
+      }
+      imposterIndex = newImposters;
+    
+      // 🎲 Neuer Startspieler
+      starter = players[Math.floor(Math.random() * players.length)];
+    
+      // 🧠 Neues Wort ziehen
       const word = getRandomWord();
       realWord = word[0];
       imposterHint = word[1];
-      imposterIndex = [Math.floor(Math.random() * players.length)];
-      starter = players[Math.floor(Math.random() * players.length)];
-      currentIndex = 0;
     
-      // 💡 Karten & Anzeige zurücksetzen
+      // 🔁 Runde zurücksetzen
+      currentIndex = 0;
+      roundStartTime = 0;
       document.getElementById("wordCard").textContent = "🗝️ Wort anzeigen...";
       document.getElementById("swipeCard").style.transform = "translate(-50%, -50%)";
       document.getElementById("cardContainer").style.display = "block";
@@ -1110,10 +1137,22 @@ input:checked + .slider:before {
       document.getElementById("nextBtn").style.display = "none";
       document.getElementById("startRoundBtn").style.display = "none";
     
-      // Spieler neu anzeigen
+      // 🌟 Neue-Runde-Meldung anzeigen
+      const status = document.getElementById("statusText");
+      status.innerHTML = `<span style="font-size:1.2em; font-weight:600;">🔄 Neue Runde – Spieler & Imposter neu gemischt!</span>`;
+      status.style.opacity = 1;
+    
+      // ⏳ Meldung nach 1,5s ausblenden
+      setTimeout(() => {
+        status.style.transition = "opacity 0.5s ease";
+        status.style.opacity = 0;
+        setTimeout(() => { status.textContent = ""; }, 600);
+      }, 1500);
+    
+      // 🧩 Ersten Spieler anzeigen
       showPlayerCard();
     
-      // ⏳ Swipe-Funktion nach DOM-Neuaufbau aktivieren
+      // 🕹️ Swipe-Funktion neu aktivieren
       setTimeout(() => {
         setupSwipe();
         document.getElementById("wordCard").textContent = "🗝️ Wort anzeigen...";
