@@ -105,42 +105,115 @@
     font-size: 1.4em;
     color: #222;
   }
+  #imposterControl {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 15px 0;
+  }
+
+  #imposterControl button {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 1.4em;
+    background: linear-gradient(90deg, #4CAF50, #45a049);
+    border: none;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  #imposterCountDisplay {
+    font-weight: bold;
+    font-size: 1.4em;
+    color: #222;
+  }
 
   .checkboxes {
     display: none;
     margin-top: 15px;
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.95);
     padding: 15px;
-    border-radius: 15px;
+    border-radius: 18px;
     border: 1px solid #ccc;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    max-height: 60vh;
+    overflow-y: auto;
+    transition: all 0.3s ease;
   }
-
+  
   .checkboxes.visible {
     display: block;
     animation: fadeIn 0.3s ease;
   }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.98); }
-    to { opacity: 1; transform: scale(1); }
-  }
-
+  
   .checkboxes label {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     margin: 8px 0;
-    background: #f2faff;
-    padding: 8px 12px;
-    border-radius: 8px;
-    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1);
+    background: #f3faff;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: 500;
+    color: #333;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+  
+  .checkboxes label:hover {
+    background: #e8f5e9;
+  }
+  
+  .checkboxes input[type="checkbox"] {
+    appearance: none;
+    width: 40px;
+    height: 22px;
+    background: #ccc;
+    border-radius: 20px;
+    position: relative;
+    outline: none;
+    transition: 0.3s;
+    cursor: pointer;
+  }
+  
+  .checkboxes input[type="checkbox"]::before {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    background: white;
+    transition: 0.3s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  
+  .checkboxes input[type="checkbox"]:checked {
+    background: #4CAF50;
+  }
+  
+  .checkboxes input[type="checkbox"]:checked::before {
+    transform: translateX(18px);
+  }
+  
+  .checkboxes button {
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    padding: 8px 0;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    transition: 0.2s;
+  }
+  
+  .checkboxes button:hover {
+    transform: scale(1.05);
   }
 
-  .checkboxes input {
-    margin-right: 10px;
-    accent-color: #4CAF50;
-    width: auto;
-  }
   #game {
     display: flex;
     flex-direction: column;
@@ -148,16 +221,16 @@
     justify-content: flex-start;
   }
   #cardContainer {
-  position: relative;
-  width: 80vw;
-  max-width: 340px;
-  aspect-ratio: 3 / 4;
-  margin: 30px auto;
-  display: none;
-  touch-action: none;
-  overflow: hidden;
-  border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+    position: relative;
+    width: 80vw;
+    max-width: 340px;
+    aspect-ratio: 3 / 4;
+    margin: 30px auto;
+    display: none;
+    touch-action: none;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
 }
 
 /* Beide Karten */
@@ -524,18 +597,25 @@ input:checked + .slider:before {
     }
 
     function generateCategoryCheckboxes() {
-  const container = document.getElementById("categoryList");
-  container.innerHTML = "";
-  for (let cat in wordPool) {
-    const isChecked = cat !== "test"; // ✅ alles aktiv, außer „test“
-    const label = document.createElement("label");
-    label.innerHTML = `<input type="checkbox" value="${cat}" ${isChecked ? "checked" : ""}> ${cat}`;
-    container.appendChild(label);
-  }
-}
+      const container = document.getElementById("categoryList");
+      container.innerHTML = `
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+          <button type="button" onclick="selectAllCategories(true)" style="background:#4CAF50;width:48%;font-size:0.9em;">Alle auswählen</button>
+          <button type="button" onclick="selectAllCategories(false)" style="background:#e53935;width:48%;font-size:0.9em;">Alle abwählen</button>
+        </div>
+      `;
+    
+      for (let cat in wordPool) {
+        const isChecked = cat !== "test"; // ✅ alles aktiv, außer test
+        const label = document.createElement("label");
+        label.innerHTML = `<input type="checkbox" value="${cat}" ${isChecked ? "checked" : ""}> ${cat.charAt(0).toUpperCase() + cat.slice(1)}`;
+        container.appendChild(label);
+      }
+    }
+
     function selectAllCategories(selectAll) {
-  document.querySelectorAll('#categoryList input[type="checkbox"]').forEach(cb => {
-    cb.checked = selectAll;
+      document.querySelectorAll('#categoryList input[type="checkbox"]').forEach(cb => {
+        cb.checked = selectAll;
   });
 }
 
