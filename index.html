@@ -222,14 +222,18 @@
     align-items: center;
     justify-content: flex-start;
     gap: 15px;
+    min-height: 700px; /* fixierte Höhe der weißen Box */
+    max-width: 480px;
+    margin: 20px auto;
   }
+
   
   #cardContainer {
     position: relative;
-    width: 90%;
-    max-width: 440px;
-    aspect-ratio: 3 / 3.5; /* etwas höher für mehr Fläche */
-    margin: 25px auto;
+    width: 90%;          /* gleichmäßiger Abstand links/rechts */
+    max-width: 400px;    /* begrenzt die Breite auf großen Bildschirmen */
+    height: 250px;       /* feste Höhe für Kartenbereich */
+    margin: 20px auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -237,40 +241,15 @@
   }
 
 
-  
-  /* Wortkarte (unten) */
-  #wordCard {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 85%;
-    height: 65%;
-    border-radius: 18px;
-    background: #222;
-    color: #f8f8f8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: 1.3em;
-    font-weight: 600;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-    z-index: 1;
-}
-  
-  
-  /* Swipe-Karte (oben) */
+  #wordCard,
   #swipeCard {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 85%;
-    height: 65%;
-    border-radius: 18px;
-    background: linear-gradient(135deg, #8a2be2, #e100ff);
-    color: #fff;
+    width: 80%;
+    height: 60%;
+    border-radius: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -278,6 +257,19 @@
     font-size: 1.3em;
     font-weight: bold;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  }
+  /* Wortkarte (unten) */
+  #wordCard {
+    background: #222;
+    color: #f8f8f8;
+    z-index: 1;
+  }
+  
+  
+  /* Swipe-Karte (oben) */
+  #swipeCard {
+    background: linear-gradient(135deg, #8a2be2, #e100ff);
+    color: #fff;
     z-index: 10;
     pointer-events: auto;
     touch-action: none;
