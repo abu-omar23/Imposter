@@ -28,13 +28,13 @@
     background: #fff;
     border-radius: 25px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    padding: 30px 25px;
-    max-width: 480px;
-    margin: 40px auto;
-    width: 92%;
+    padding: 20px 18px;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 380px; /* war 480px – jetzt kompakter */
     text-align: center;
     transition: 0.3s;
-}
+  }
   }
 
   h1 {
@@ -224,16 +224,15 @@
     gap: 15px;
   }
   
-  #cardContainer  {
+  #cardContainer {
     position: relative;
-    width: 80vw;
-    max-width: 340px;
+    width: 80%;
+    max-width: 320px;
     aspect-ratio: 3 / 4;
-    margin: 10px auto 20px;
+    margin: 10px auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: visible;
   }
   
   /* Wortkarte (unten) */
@@ -275,10 +274,11 @@
     font-size: 1.2em;
     font-weight: bold;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    z-index: 10;
+    z-index: 2;
     pointer-events: auto;
     touch-action: none;
   }
+
 
 
 
@@ -363,7 +363,9 @@ input:checked + .slider:before {
   transform: translateX(24px);
 }
 
-
+#game, #setup {
+  height: auto;
+}
     
 </style>
 
@@ -830,24 +832,38 @@ input:checked + .slider:before {
     function startNewRound() {
       document.getElementById("reveal").textContent = "";
       document.getElementById("restartBtn").style.display = "none";
+      document.getElementById("crewWinBtn").style.display = "none";
+      document.getElementById("imposterWinBtn").style.display = "none";
+      document.getElementById("revealImposterBtn").style.display = "none";
     
+      // 🔄 Neues Wort & neue Runde
       const word = getRandomWord();
       realWord = word[0];
       imposterHint = word[1];
-      imposterIndex = Math.floor(Math.random() * players.length);
+      imposterIndex = [Math.floor(Math.random() * players.length)];
       starter = players[Math.floor(Math.random() * players.length)];
       currentIndex = 0;
     
-      // 💡 Karte neu anzeigen
-      document.getElementById("cardContainer").style.display = "block";
-      document.getElementById("swipeCard").style.transform = "translate(-50%, -50%)";
+      // 💡 Karten & Anzeige zurücksetzen
       document.getElementById("wordCard").textContent = "🗝️ Wort anzeigen...";
+      document.getElementById("swipeCard").style.transform = "translate(-50%, -50%)";
+      document.getElementById("cardContainer").style.display = "block";
+      document.getElementById("statusText").textContent = "";
+      document.getElementById("timerDisplay").style.display = "none";
+      document.getElementById("nextBtn").style.display = "none";
+      document.getElementById("startRoundBtn").style.display = "none";
     
+      // Spieler neu anzeigen
       showPlayerCard();
     
-      // 🔁 Swipe nach DOM-Neuaufbau neu aktivieren
-      setTimeout(setupSwipe, 150);
+      // ⏳ Swipe-Funktion nach DOM-Neuaufbau aktivieren
+      setTimeout(() => {
+        setupSwipe();
+        // 🔁 Karte auf neuen Zustand vorbereiten
+        document.getElementById("wordCard").textContent = "🗝️ Wort anzeigen...";
+      }, 200);
     }
+
 
     function getRandomWord() {
       let available = selectedWords.filter(w => !usedWords.includes(w[0]));
