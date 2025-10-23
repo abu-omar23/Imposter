@@ -194,6 +194,17 @@
     color: #222;
   }
 
+  #backToSetupBtn {
+    background: #888;
+    width: 80%;
+    margin-top: 10px;
+  }
+  
+  #backToSetupBtn:hover {
+    background: #666;
+  }
+
+
 /* === KOMPAKTES KATEGORIEN-MENÜ === */
 .checkboxes {
   display: none;
@@ -323,11 +334,11 @@
   #cardContainer {
     position: relative;
     width: 100%;
-    height: 220px;                 /* 🔹 leicht kleiner als vorher */
+    height: 210px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 2px 0 6px 0;           /* 🔹 minimaler Außenabstand */
+    margin: 4px 0 16px 0;  /* 🔹 unten mehr Abstand, oben minimal */
   }
   
   
@@ -482,7 +493,41 @@ input:checked + .slider:before {
   margin-top: 4px;
 }
 
+#scoreboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 90vw;
+  max-width: 420px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 25px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
 
+#scoreList {
+  width: 100%;
+  text-align: left;
+  font-size: 1.05em;
+  line-height: 1.8em;
+  margin-top: 10px;
+  background: #f7fbfd;
+  padding: 10px 15px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+#scoreList p {
+  margin: 4px 0;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 500;
+}
     
 </style>
 
@@ -491,6 +536,11 @@ input:checked + .slider:before {
 </head>
 <body>
   <div class="card" id="setup">
+    <div class="card" id="scoreboard" style="display:none">
+      <h1>🏆 Punktestand</h1>
+      <div id="scoreList"></div>
+      <button onclick="goBackToSetup()">⬅️ Zurück</button>
+  </div>
     <h1>Imposter Wortspiel 🕵️‍♂️</h1>
 
     <!-- Kategorien-Button -->
@@ -525,6 +575,8 @@ input:checked + .slider:before {
     </label>
 
     <div id="nameInputs" style="text-align: center;"></div>
+    <button onclick="showScoreboard()">📊 Punktestand anzeigen</button>
+
   </div>
 
 
@@ -549,6 +601,8 @@ input:checked + .slider:before {
 
     <div id="reveal"></div>
     <button id="resetPointsBtn" onclick="resetPoints()">🗑️ Punkte löschen</button>
+    <button id="backToSetupBtn" onclick="goBackToSetupFromGame()">⬅️ Zurück zum Setup</button>
+
   </div>
 
   <script>
@@ -989,7 +1043,14 @@ input:checked + .slider:before {
       }, 200);
     }
 
-
+    function goBackToSetupFromGame() {
+      clearInterval(timerInterval);
+      document.getElementById("game").style.display = "none";
+      document.getElementById("setup").style.display = "block";
+      document.getElementById("reveal").textContent = "";
+      document.getElementById("resetPointsBtn").style.display = "none";
+      document.getElementById("restartBtn").style.display = "none";
+    }
     function getRandomWord() {
       let available = selectedWords.filter(w => !usedWords.includes(w[0]));
       if (available.length === 0) { usedWords = []; available = selectedWords; }
@@ -1009,6 +1070,28 @@ input:checked + .slider:before {
       generateCategoryCheckboxes();
       updateNameInputs();
 };
+    function showScoreboard() {
+      const scoreList = document.getElementById("scoreList");
+      const points = JSON.parse(localStorage.getItem("points") || "{}");
+    
+      if (Object.keys(points).length === 0) {
+        scoreList.innerHTML = "<p>📭 Noch keine Punkte vergeben!</p>";
+      } else {
+        // Punkte sortieren (höchster zuerst)
+        const sorted = Object.entries(points).sort((a, b) => b[1] - a[1]);
+        scoreList.innerHTML = sorted
+          .map(([name, score]) => `<p><span>${name}</span><span>${score} Punkte</span></p>`)
+          .join("");
+      }
+    
+      document.getElementById("setup").style.display = "none";
+      document.getElementById("scoreboard").style.display = "flex";
+    }
+    
+    function goBackToSetup() {
+      document.getElementById("scoreboard").style.display = "none";
+      document.getElementById("setup").style.display = "block";
+    }
   </script>
 </body>
 </html>
