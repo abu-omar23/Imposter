@@ -226,14 +226,17 @@
   
   #cardContainer {
     position: relative;
-    width: calc(100% - 14mm); /* links & rechts je ~7mm Platz */
-    max-width: 380px;
-    aspect-ratio: 3 / 3.8;
-    margin: 10px auto;
+    width: 90%;              /* lässt automatisch etwas Platz links/rechts */
+    max-width: 420px;        /* maximale Breite, damit es nicht zu groß wird */
+    aspect-ratio: 3 / 4;
+    margin: 20px auto;       /* schöner Abstand nach oben/unten */
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: visible;
+    transform: none;
   }
+
 
   
   /* Wortkarte (unten) */
