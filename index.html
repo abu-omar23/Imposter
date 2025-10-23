@@ -1035,13 +1035,19 @@ input:checked + .slider:before {
       const box = document.getElementById("nameInputsBox");
       const setup = document.getElementById("setup");
     
-      // 📥 Wenn das Menü gerade geöffnet wird → Felder aktualisieren
       if (!box.classList.contains("visible")) {
+        // Menü wird geöffnet → Eingabefelder updaten
         updateNameInputs();
       } else {
-        // 💾 Wenn das Menü geschlossen wird → Namen speichern
+        // Menü wird geschlossen → Namen speichern
         const inputs = document.querySelectorAll("#nameInputs input");
-        const names = Array.from(inputs).map(i => i.value.trim());
+        let names = Array.from(inputs).map(i => i.value.trim());
+    
+        // Falls weniger Namen gespeichert sind als Spieler → auffüllen
+        while (names.length < settings.playerCount) {
+          names.push("");
+        }
+    
         localStorage.setItem("imposter_names", JSON.stringify(names));
       }
     
@@ -1332,6 +1338,11 @@ input:checked + .slider:before {
     window.onload = () => {
       generateCategoryCheckboxes();
       updateNameInputs();
+    
+      // 🧩 Anzeige sofort mit gespeicherten Einstellungen synchronisieren
+      document.getElementById("playerCountDisplay").textContent = settings.playerCount;
+      document.getElementById("imposterCountDisplay").textContent = settings.imposterCount;
+      document.getElementById("hintSwitch").checked = settings.hintsEnabled;
     };
     
     function showScoreboard() {
