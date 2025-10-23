@@ -582,7 +582,56 @@ input:checked + .slider:before {
   justify-content: space-between;
   font-weight: 500;
 }
-    
+#setup {
+  position: relative;
+  overflow: hidden;
+}
+
+#nameInputsBox {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 400px;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  padding: 20px 15px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  z-index: 999;
+}
+
+#nameInputsBox.visible {
+  display: flex;
+  animation: fadeIn 0.25s ease;
+}
+
+/* Schöne Einblendung */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -45%); }
+  to   { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+/* Hintergrund abdunkeln, wenn Menü aktiv */
+#setup::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  border-radius: 25px;
+}
+
+#setup.menu-open::before {
+  opacity: 1;
+  pointer-events: auto;
+}    
 </style>
 
 
@@ -855,6 +904,7 @@ input:checked + .slider:before {
     }
     function toggleNames() {
       document.getElementById("nameInputsBox").classList.toggle("visible");
+      document.getElementById("setup").classList.toggle("menu-open");    
     }
     function toggleCategoryMenu() {
       document.getElementById("categoryList").classList.toggle("visible");
