@@ -198,6 +198,8 @@
     background: #888;
     width: 80%;
     margin-top: 10px;
+    display: none; /* <— NEU: unsichtbar zu Beginn */
+
   }
   
   #backToSetupBtn:hover {
@@ -535,12 +537,8 @@ input:checked + .slider:before {
   
 </head>
 <body>
+  <!-- 🧩 Setup-Menü -->
   <div class="card" id="setup">
-    <div class="card" id="scoreboard" style="display:none">
-      <h1>🏆 Punktestand</h1>
-      <div id="scoreList"></div>
-      <button onclick="goBackToSetup()">⬅️ Zurück</button>
-  </div>
     <h1>Imposter Wortspiel 🕵️‍♂️</h1>
 
     <!-- Kategorien-Button -->
@@ -575,9 +573,18 @@ input:checked + .slider:before {
     </label>
 
     <div id="nameInputs" style="text-align: center;"></div>
-    <button onclick="showScoreboard()">📊 Punktestand anzeigen</button>
 
+    <!-- 📊 Punktestand-Button -->
+    <button onclick="showScoreboard()">📊 Punktestand anzeigen</button>
   </div>
+
+  <!-- 🏆 Punktestand-Seite -->
+  <div class="card" id="scoreboard" style="display:none">
+    <h1>🏆 Punktestand</h1>
+    <div id="scoreList"></div>
+    <button onclick="goBackToSetup()">⬅️ Zurück</button>
+  </div>
+
 
 
   <div class="card" id="game" style="display:none">
@@ -998,6 +1005,8 @@ input:checked + .slider:before {
       document.getElementById("imposterWinBtn").style.display = "none";
       document.getElementById("restartBtn").style.display = "block";
       document.getElementById("resetPointsBtn").style.display = "block";
+      document.getElementById("backToSetupBtn").style.display = "block";
+
     }
 
 
@@ -1010,6 +1019,7 @@ input:checked + .slider:before {
 
     function startNewRound() {
       document.getElementById("reveal").textContent = "";
+      document.getElementById("backToSetupBtn").style.display = "none";
       document.getElementById("restartBtn").style.display = "none";
       document.getElementById("crewWinBtn").style.display = "none";
       document.getElementById("imposterWinBtn").style.display = "none";
