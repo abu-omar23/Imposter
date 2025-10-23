@@ -214,67 +214,61 @@
   .checkboxes button:hover {
     transform: scale(1.05);
   }
-
   #game {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; /* Zentriert vertikal im weißen Feld */
-    min-height: 80vh; /* Damit genug Platz für die Karten bleibt */
-  }  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* ⬆️ kein überdehntes Weiß mehr */
+  padding: 20px 0;
+}
+
   #cardContainer {
     position: relative;
-    width: 85vw;
-    max-width: 400px;
-    height: 240px;
-    margin: 20px auto; /* zentriert im weißen Kasten */
+    width: 80vw;
+    max-width: 340px;       /* kleiner & schöner */
+    aspect-ratio: 3 / 2;    /* immer gleiches Seitenverhältnis */
+    margin: 20px auto;
     display: flex;
-    justify-content: center;
-    align-items: center; /* 🔥 vertikal + horizontal perfekt mittig */
-    touch-action: none;
+    align-items: center;     /* vertikal mittig */
+    justify-content: center; /* horizontal mittig */
     overflow: hidden;
+    touch-action: none;
   }
   
-  /* Karte mit dem Wort */
-  #wordCard {
+  #wordCard, #swipeCard {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%); /* 💎 wirklich zentriert */
     width: 100%;
     height: 100%;
-    border-radius: 20px;
-    background: #1c1c1c;
-    color: #fefefe;
-    z-index: 1;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     text-align: center;
-    font-size: 1.2em;
-    padding: 20px;
+    padding: 18px;
+    transition: transform 0.3s cubic-bezier(0.25, 1.5, 0.5, 1);
+  }
+  
+  #wordCard {
+    background: #1c1c1c;
+    color: #fff;
+    z-index: 1;
+    font-size: 1.1em;
   }
   
   #swipeCard {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 20px;
     background: linear-gradient(135deg, #7b2ff7, #f107a3);
     color: white;
     font-weight: bold;
-    font-size: 1.3em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-    z-index: 5;
+    font-size: 1.2em;
+    z-index: 2;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    transition: transform 0.35s cubic-bezier(0.25, 1.5, 0.5, 1); /* Nachfedern */
   }
+
 
 
 
