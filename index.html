@@ -223,61 +223,57 @@
     }
   #cardContainer {
     position: relative;
-    width: 80vw;
-    max-width: 300px;
-    height: 180px;
-    margin: 25px auto;
-    padding: 10px;
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.05), 0 6px 15px rgba(0,0,0,0.1);
-    overflow: hidden;
-    touch-action: none;
+    width: 80vw;            /* kleiner → mehr weißer Rand außen */
+    max-width: 320px;
+    height: 220px;
+    margin: 50px auto 25px; /* mehr Abstand nach oben/unten */
     display: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    touch-action: none;
+    overflow: hidden;
+    border-radius: 25px;    /* weicherer Rand */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    background: transparent;
   }
   
-  /* Karten-Styling */
+  /* Beide Karten exakt gleich groß */
   #swipeCard, #wordCard {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    height: 90%;
-    border-radius: 16px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     text-align: center;
-    padding: 15px;
+    padding: 20px;
+    box-sizing: border-box;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    word-wrap: break-word;
-  }
-  
-  /* Vorderseite (Swipe-Karte) */
+}
+
+  /* Swipe-Karte (Vorderseite) */
   #swipeCard {
     background: linear-gradient(135deg, #9b5de5, #f15bb5);
     color: #fff;
     z-index: 10;
-    font-size: 1.1em;
+    font-size: 1.3em;
     font-weight: 600;
     letter-spacing: 0.3px;
-    box-shadow: 0 6px 15px rgba(155,93,229,0.3);
+    box-shadow: 0 6px 20px rgba(155,93,229,0.3);
   }
   
-  /* Rückseite (Wortkarte) */
+  /* Wortkarte (Rückseite) */
   #wordCard {
-    background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
+    background: #1f1f1f;
     color: #f2f2f2;
     z-index: 1;
-    font-size: 1.1em;
+    font-size: 1.2em;
     font-weight: 500;
     box-shadow: inset 0 0 8px rgba(255,255,255,0.05);
   }
+
 
 
 
