@@ -1030,7 +1030,6 @@ input:checked + .slider:before {
       document.getElementById("timerDisplay").textContent = `⏱️ Zeit: ${minutes}:${seconds}`;
     }
     function revealImposter() {
-      
       clearInterval(timerInterval);
       document.getElementById("statusText").textContent = "";
       document.getElementById("timerDisplay").style.display = "none";
@@ -1040,26 +1039,25 @@ input:checked + .slider:before {
       const minutes = Math.floor(timePassed / 60);
       const seconds = timePassed % 60;
     
-      // 🎨 Kompakter, zentrierter Text
+      // 🎨 Kompakt, perfekt zentriert, Farben & Zeilenhöhe feinjustiert
       document.getElementById("reveal").innerHTML = `
         <div style="
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          text-align: center;
-          font-size: 1.05em;
-          line-height: 1.3em;
-          color: #222;
-          min-height: 120px;
-          margin-bottom: 8px;
+          display:flex;
+          flex-direction:column;
+          align-items:center;
+          justify-content:center;
+          text-align:center;
+          font-size:1.1em;
+          line-height:1.2em;
+          color:#000;
+          margin-top:6px;
         ">
           <span style="color:#b30000;font-weight:bold;">😈 Imposter: ${imposters}</span>
-          <span>Hinweis: ${imposterHint}</span>
+          ${showHints ? `<span>Hinweis: ${imposterHint}</span>` : ""}
           <span>Wort: ${realWord}</span>
           <span>Zeit: ${minutes} min ${seconds} sek</span>
         </div>
-        <div id="roundScore" style="margin-top: 6px;"></div>
+        <div id="roundScore" style="margin-top:6px;"></div>
       `;
     
       document.getElementById("revealImposterBtn").style.display = "none";
