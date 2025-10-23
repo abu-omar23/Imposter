@@ -1027,23 +1027,25 @@ input:checked + .slider:before {
       const minutes = Math.floor(timePassed / 60);
       const seconds = timePassed % 60;
     
-      // ✨ Sauber formatierter, bündiger Text
+      // ✨ Alles in einer Zeile, zentriert und formatiert
       document.getElementById("reveal").innerHTML = `
         <div style="
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          align-items: center;
+          gap: 8px;
           text-align: center;
-          font-size: 1.1em;
-          line-height: 1.8em;
+          font-size: 1.05em;
+          line-height: 1.6em;
         ">
-          <span style="color:#b30000; font-weight:bold; font-size:1.2em;">
-            😈 Imposter: ${imposters}
-          </span><br>
-          <span style="color:#222;">Hinweis: ${imposterHint}</span><br>
-          <span style="color:#222;">Wort: ${realWord}</span><br>
-          <span style="color:#222;">Zeit: ${minutes} min ${seconds} sek</span>
+          <span style="color:#b30000; font-weight:bold;">😈 Imposter: ${imposters}</span>
+          <span style="color:#222;">| Hinweis: ${imposterHint}</span>
+          <span style="color:#222;">| Wort: ${realWord}</span>
+          <span style="color:#222;">| Zeit: ${minutes} min ${seconds} sek</span>
         </div>
       `;
     
-      // Buttons anpassen
       document.getElementById("revealImposterBtn").style.display = "none";
       document.getElementById("crewWinBtn").style.display = "block";
       document.getElementById("imposterWinBtn").style.display = "block";
