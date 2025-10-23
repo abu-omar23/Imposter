@@ -224,7 +224,7 @@
     gap: 15px;
   }
   
-  #cardContainer {
+  #cardContainer  {
     position: relative;
     width: 80vw;
     max-width: 340px;
@@ -233,8 +233,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
-    transform: translateZ(0);
+    overflow: visible;
   }
   
   /* Wortkarte (unten) */
@@ -243,7 +242,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 65%;
+    width: 70%;
     height: 45%;
     border-radius: 18px;
     background: #222;
@@ -264,7 +263,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 65%;
+    width: 70%;
     height: 45%;
     border-radius: 18px;
     background: linear-gradient(135deg, #8a2be2, #e100ff);
@@ -276,9 +275,11 @@
     font-size: 1.2em;
     font-weight: bold;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    z-index: 100;
+    z-index: 10;
     pointer-events: auto;
+    touch-action: none;
   }
+
 
 
 
@@ -697,21 +698,36 @@ input:checked + .slider:before {
       document.getElementById("timerDisplay").style.display = "none";
       setupSwipe();
     }
-
     function setupSwipe() {
       const swipeCard = document.getElementById("swipeCard");
       const wordCard = document.getElementById("wordCard");
-      let startY = 0, moved = false;
-
-      swipeCard.ontouchstart = e => {
+      
+      // 🧹 Vorherige Event-Handler entfernen, damit keine Dopplungen entstehen
+      swipeCard.ontouchstart = null;
+      swipeCard.ontouchmove = null;
+      swipeCard.ontouchend = null;
+      
+      // Ursprungsposition wiederherstellen
+      swipeCard.style.transition = "none";
+      swipeCard.style.transform = "translate(-50%, -50%)";
+      wordCard.textContent = "🗝️ Wort anzeigen...";
+      
+      let startY = 0;
+      let moved = false;
+      
+      swipeCard.ontouchstart = (e) => {
         startY = e.touches[0].clientY;
         moved = false;
       };
-      swipeCard.ontouchmove = e => {
+      
+      swipeCard.ontouchmove = (e) => {
         const deltaY = startY - e.touches[0].clientY;
         if (deltaY > 0) {
-          swipeCard.style.transition = 'none';
-          swipeCard.style.transform = `translateY(-${deltaY}px)`;
+          swipeCard.style.transition = "none";
+          swipeCard.style.transform = `translate(-50%, calc(-50% - ${deltaY}px))`;
+          moved = true;
+          
+          // Wort sofort zeigen
           if (imposterIndex.includes(currentIndex)) {
             wordCard.textContent = showHints
               ? `😈 Du bist der Imposter!\n💡 Hinweis: ${imposterHint}`
@@ -719,18 +735,17 @@ input:checked + .slider:before {
           } else {
             wordCard.textContent = `✅ ${realWord}`;
           }
-          moved = true;
         }
       };
+      
       swipeCard.ontouchend = () => {
         if (!moved) return;
-        swipeCard.style.transition = 'transform 0.35s cubic-bezier(0.25, 1.5, 0.5, 1)'; // 🪄 Feder-Animation
-        swipeCard.style.transform = 'translateY(0)';
         
-        // Optionales kurzes Aufleuchten
-        swipeCard.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.5)';
-        setTimeout(() => swipeCard.style.boxShadow = '0 6px 20px rgba(0,0,0,0.3)', 300);
-      
+        // Karte zurück animieren
+        swipeCard.style.transition = "transform 0.4s cubic-bezier(0.25, 1.5, 0.5, 1)";
+        swipeCard.style.transform = "translate(-50%, -50%)";
+        
+        // Buttons steuern
         if (currentIndex < players.length - 1) {
           document.getElementById("nextBtn").style.display = "block";
         } else {
@@ -738,8 +753,10 @@ input:checked + .slider:before {
           document.getElementById("startRoundBtn").style.display = "block";
         }
       };
-
     }
+
+    
+  
 
     function nextPlayer() {
       currentIndex++;
@@ -829,7 +846,7 @@ input:checked + .slider:before {
       showPlayerCard();
     
       // 🔁 Swipe nach DOM-Neuaufbau neu aktivieren
-      setTimeout(setupSwipe, 100);
+      setTimeout(setupSwipe, 150);
     }
 
     function getRandomWord() {
