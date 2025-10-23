@@ -247,23 +247,41 @@
 
 
 /* === KOMPAKTES KATEGORIEN-MENÜ === */
-.checkboxes {
+#categoryList {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 400px;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  padding: 20px 15px;
   display: none;
-  margin-top: 8px;
-  background: rgba(255, 255, 255, 0.96);
-  padding: 8px 10px;
-  border-radius: 14px;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  max-height: 45vh;
-  overflow-y: auto;
-  transition: all 0.3s ease;
-  font-size: 0.85em;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1000;
 }
 
-.checkboxes.visible {
-  display: block;
-  animation: fadeIn 0.3s ease;
+#categoryList.visible {
+  display: flex;
+  animation: fadeIn 0.25s ease;
+}
+
+.category-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.category-buttons .setup-btn {
+  flex: 1;
+  padding: 10px 0;
+  font-size: 0.9em;
+  font-weight: 600;
 }
 
 /* Jede Kategorie-Zeile */
@@ -663,20 +681,27 @@ input:checked + .slider:before {
   <!-- 🧩 Setup-Menü -->
   <div class="card" id="setup">
     <h1>Imposter Wortspiel 🕵️‍♂️</h1>
-
+    <!-- 📚 Kategorien-Menü -->
     <button class="setup-btn" onclick="toggleCategoryMenu()">📚 Kategorien ändern</button>
     
     <div class="checkboxes" id="categoryList">
-      <div id="categoryContent" style="width:100%;">
-        <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
-          <button class="setup-btn" type="button" onclick="selectAllCategories(true)" style="width:48%;font-size:0.9em;background:#4CAF50;">Alle auswählen</button>
-          <button class="setup-btn" type="button" onclick="selectAllCategories(false)" style="width:48%;font-size:0.9em;background:#e53935;">Alle abwählen</button>
+      <div id="categoryContent" style="width:100%;display:flex;flex-direction:column;align-items:center;">
+        <div class="category-buttons">
+          <button class="setup-btn" type="button" onclick="selectAllCategories(true)">✅ Alle auswählen</button>
+          <button class="setup-btn" type="button" onclick="selectAllCategories(false)" style="background:#e53935;">❌ Alle abwählen</button>
         </div>
-        <!-- Checkboxen werden hier dynamisch eingefügt -->
+        <!-- Checkboxen werden dynamisch eingefügt -->
       </div>
       <button class="setup-btn" style="margin-top:10px;background:#888;" onclick="toggleCategoryMenu()">⬅️ Zurück</button>
     </div>
-
+    
+    <!-- 🔹 Hinweise-Schalter nach oben verschoben -->
+    <p>Hinweise anzeigen?</p>
+    <label class="switch">
+      <input type="checkbox" id="hintSwitch" checked>
+      <span class="slider"></span>
+    </label>
+    
     <p>Wie viele Spieler?</p>
     <div id="playerControl">
       <button onclick="changePlayerCount(-1)">−</button>
@@ -691,11 +716,6 @@ input:checked + .slider:before {
       <button onclick="changeImposterCount(1)">+</button>
     </div>
 
-   <p>Hinweise anzeigen?</p>
-  <label class="switch">
-    <input type="checkbox" id="hintSwitch" checked>
-    <span class="slider"></span>
-  </label>
   
   <!-- 🧍 Spielernamen-Menü -->
   <button class="setup-btn" onclick="toggleNames()">🧍 Mitspieler</button>
