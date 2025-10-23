@@ -292,6 +292,7 @@ input:checked + .slider:before {
     </label>
     
     <div id="nameInputs" style="text-align: center;"></div>
+    </div>
 
 
   <div class="card" id="game" style="display:none">
@@ -487,12 +488,6 @@ input:checked + .slider:before {
     }
 
 
-    function changePlayerCount(n) {
-      playerCount = Math.min(10, Math.max(3, playerCount + n));
-      document.getElementById("playerCountDisplay").textContent = playerCount;
-      updateNameInputs();
-    }
-
     function updateNameInputs() {
       const container = document.getElementById("nameInputs");
       container.innerHTML = "";
@@ -530,10 +525,7 @@ input:checked + .slider:before {
   });
 }
 
-    function changeImposterCount(n) {
-      imposterCount = Math.min(3, Math.max(1, imposterCount + n));
-      document.getElementById("imposterCountDisplay").textContent = imposterCount;
-    }
+
 
     function startGame() {
       showHints = document.getElementById("hintSwitch").checked;
