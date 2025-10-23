@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Imposter Wortspiel – Vollversion</title>
+  <title>Imposter – Vollversion</title>
   <style>
   * {
     box-sizing: border-box;
@@ -591,7 +591,7 @@ input:checked + .slider:before {
 <body>
   <!-- 🧩 Setup-Menü -->
   <div class="card" id="setup">
-    <h1>Imposter Wortspiel 🕵️‍♂️</h1>
+    <h1>Imposter 🕵️‍♂️</h1>
 
     <!-- Kategorien-Button -->
     <button class="setup-btn" onclick="toggleCategoryMenu()">Kategorien ändern</button>
@@ -618,27 +618,31 @@ input:checked + .slider:before {
       <button onclick="changeImposterCount(1)">+</button>
     </div>
 
-    <p>Hinweise anzeigen?</p>
-    <label class="switch">
-      <input type="checkbox" id="hintSwitch" checked>
-      <span class="slider"></span>
-    </label>
-
-    <button class="setup-btn" onclick="toggleNames()">🧍 Spielernamen bearbeiten</button>
-    <div class="checkboxes" id="nameInputsBox">
-      <div id="nameInputs" style="text-align:center;"></div>
-    </div>
-    <!-- 📊 Punktestand-Button -->
-    <button onclick="showScoreboard()">📊 Punktestand anzeigen</button>
+   <p>Hinweise anzeigen?</p>
+  <label class="switch">
+    <input type="checkbox" id="hintSwitch" checked>
+    <span class="slider"></span>
+  </label>
+  
+  <!-- 🧍 Spielernamen-Menü -->
+  <button class="setup-btn" onclick="toggleNames()">🧍 Mitspieler</button>
+  <div class="checkboxes" id="nameInputsBox">
+    <div id="nameInputs" style="text-align:center;"></div>
   </div>
-
+  
+  <!-- 🎮 Spiel starten -->
+  <button id="startGameBtn" class="setup-btn" onclick="startGame()">🚀 Spiel starten</button>
+  
+  <!-- 📊 Punktestand -->
+  <button onclick="showScoreboard()">📊 Punktestand anzeigen</button>
+  </div>
+  
   <!-- 🏆 Punktestand-Seite -->
   <div class="card" id="scoreboard" style="display:none">
     <h1>🏆 Punktestand</h1>
     <div id="scoreList"></div>
     <button onclick="goBackToSetup()">⬅️ Zurück</button>
   </div>
-
 
 
   <div class="card" id="game" style="display:none">
@@ -848,12 +852,6 @@ input:checked + .slider:before {
         input.value = saved[i] || "";
         container.appendChild(input);
       }
-    
-      const startBtn = document.createElement("button");
-      startBtn.textContent = "Spiel starten";
-      startBtn.classList.add("setup-btn");
-      startBtn.onclick = startGame;
-      document.getElementById("nameInputsBox").appendChild(startBtn);
     }
     function toggleNames() {
       document.getElementById("nameInputsBox").classList.toggle("visible");
