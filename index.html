@@ -802,7 +802,6 @@ input:checked + .slider:before {
   <button id="startGameBtn" class="setup-btn" onclick="startGame()">🚀 Spiel starten</button>
   
   <!-- 📊 Punktestand -->
-  <button class="setup-btn" onclick="showScoreboard()">📊 Punktestand anzeigen</button>
   <button class="setup-btn" onclick="showStatistics()">📈 Statistiken</button>
 
   </div> <!-- Schließt das Setup-Menü -->
@@ -1040,34 +1039,67 @@ input:checked + .slider:before {
       const container = document.getElementById("nameInputs");
       container.innerHTML = "";
     
-      // Alte Namen laden oder leeres Array anlegen
-      let saved = JSON.parse(localStorage.getItem("imposter_names") || "[]");
+      // Gespeicherte Namen laden oder leeres Array erstellen
+      let savedNames = JSON.parse(localStorage.getItem("imposter_names") || "[]");
     
-      // 🧩 Falls Spielerzahl kleiner wird → NICHT kürzen!
-      // Wir behalten alle Namen, auch wenn gerade weniger angezeigt werden.
-      if (saved.length < settings.playerCount) {
-        // Wenn mehr Spieler hinzugefügt werden → fehlende Felder ergänzen
-        while (saved.length < settings.playerCount) {
-          saved.push("");
-        }
+      // Wenn weniger Namen gespeichert sind, mit Platzhaltern auffüllen
+      while (savedNames.length < playerCount) {
+        savedNames.push(`Spieler ${savedNames.length + 1}`);
       }
     
-      // 🧩 Eingabefelder erzeugen
-      for (let i = 0; i < settings.playerCount; i++) {
+      // Spieler-Inputs anzeigen
+      for (let i = 0; i < playerCount; i++) {
+        const div = document.createElement("div");
+        div.style.display = "flex";
+        div.style.alignItems = "center";
+        div.style.justifyContent = "space-between";
+        div.style.margin = "5px 0";
+    
         const input = document.createElement("input");
-        input.placeholder = `Name Spieler ${i + 1}`;
-        input.id = `player${i}`;
-        input.value = saved[i] || "";
+        input.type = "text";
+        input.value = savedNames[i] || `Spieler ${i + 1}`;
+        input.placeholder = `Spieler ${i + 1}`;
+        input.style.width = "80%";
+        input.style.padding = "6px";
+        input.style.borderRadius = "8px";
+        input.style.border = "1px solid #ccc";
     
-        // Sofort beim Tippen speichern
-        input.addEventListener("input", () => {
-          saved[i] = input.value.trim();
-          localStorage.setItem("imposter_names", JSON.stringify(saved));
-        });
+        // Bei Texteingabe speichern
+        input.oninput = () => {
+          savedNames[i] = input.value;
+          localStorage.setItem("imposter_names", JSON.stringify(savedNames));
+        };
     
-        container.appendChild(input);
+        // ❌ Entfernen-Button
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "❌";
+        delBtn.style.background = "transparent";
+        delBtn.style.border = "none";
+        delBtn.style.cursor = "pointer";
+        delBtn.style.fontSize = "1.2em";
+        delBtn.style.marginLeft = "8px";
+        delBtn.onclick = () => {
+          savedNames.splice(i, 1); // Namen löschen
+          localStorage.setItem("imposter_names", JSON.stringify(savedNames));
+    
+          // 🔹 Spieleranzahl anpassen
+          playerCount = Math.max(3, playerCount - 1);
+          document.getElementById("playerCountDisplay").textContent = playerCount;
+          localStorage.setItem("playerCount", playerCount);
+    
+          updateNameInputs(); // Ansicht neu laden
+        };
+    
+        div.appendChild(input);
+        div.appendChild(delBtn);
+        container.appendChild(div);
       }
+    
+      // Aktuelle Namen und Anzahl speichern
+      localStorage.setItem("imposter_names", JSON.stringify(savedNames));
+      localStorage.setItem("playerCount", playerCount);
     }
+
     function toggleNames() {
       const box = document.getElementById("nameInputsBox");
       const setup = document.getElementById("setup");
@@ -1386,20 +1418,29 @@ input:checked + .slider:before {
     
     window.onload = () => {
       generateCategoryCheckboxes();
-      updateNameInputs();
     
-      // 🧩 Anzeige sofort mit gespeicherten Einstellungen synchronisieren
+      // 🧩 Gespeicherte Spieleranzahl laden
+      const savedCount = localStorage.getItem("playerCount");
+      if (savedCount) {
+        settings.playerCount = parseInt(savedCount);
+      }
+    
+      // 🧩 Gespeicherte Einstellungen wiederherstellen
       document.getElementById("playerCountDisplay").textContent = settings.playerCount;
       document.getElementById("imposterCountDisplay").textContent = settings.imposterCount;
       document.getElementById("hintSwitch").checked = settings.hintsEnabled;
+    
+      // 🧩 Namen-Felder aktualisieren (nachdem Anzahl gesetzt ist)
+      updateNameInputs();
+    
+      // 🧩 Standardseiten-Anzeige
       document.getElementById("setup").style.display = "block";
       document.getElementById("game").style.display = "none";
       document.getElementById("scoreboard").style.display = "none";
     
-      // 🧩 Weißer Setup-Container stabilisieren (verhindert Größenflackern)
+      // 🧩 Setup-Card fixieren (verhindert Layout-Sprung)
       const setupCard = document.getElementById("setup");
       setupCard.style.minHeight = "520px";
-      
     };
     
     function showScoreboard() {
