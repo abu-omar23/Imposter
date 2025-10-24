@@ -1464,10 +1464,11 @@ input:checked + .slider:before {
     window.onload = () => {
       generateCategoryCheckboxes();
     
-      // 🧩 Gespeicherte Spieleranzahl laden
-      const savedCount = localStorage.getItem("playerCount");
-      if (savedCount) {
-        settings.playerCount = parseInt(savedCount);
+      // 🧩 Gespeicherte Einstellungen (inkl. Spieleranzahl) laden
+      const savedSettings = JSON.parse(localStorage.getItem("gameSettings") || "{}");
+      if (savedSettings.playerCount) settings.playerCount = savedSettings.playerCount;
+      if (savedSettings.imposterCount) settings.imposterCount = savedSettings.imposterCount;
+      if (typeof savedSettings.hintsEnabled === "boolean") settings.hintsEnabled = savedSettings.hintsEnabled;
       }
     
       // 🧩 Gespeicherte Einstellungen wiederherstellen
