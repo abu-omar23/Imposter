@@ -824,11 +824,7 @@ input:checked + .slider:before {
     </div>
     <button onclick="goBackToSetup()">⬅️ Zurück</button>
   </div>
-  <div class="card" id="stats" style="display:none;">
-    <h1>📈 Statistiken</h1>
-    <div id="statsContent"></div>
-    <button onclick="goBackToSetup()">⬅️ Zurück</button>
-  </div>
+
 
   <div class="card" id="game" style="display:none">
     <h2 id="playerName"></h2>
@@ -1278,7 +1274,8 @@ input:checked + .slider:before {
       if (imposterWon) stats.imposterWins++;
       else stats.crewWins++;
       localStorage.setItem("stats", JSON.stringify(stats));
-      // 🧮 Punkte berechnen
+    
+      // 🧮 Punkte vergeben
       if (imposterWon) {
         imposterIndex.forEach(i => (points[players[i]] += 2));
       } else {
@@ -1301,10 +1298,9 @@ input:checked + .slider:before {
           background:#f8fafb;
           border:1px solid #ddd;
           border-radius:8px;
-          padding:8px 10px;
+          padding:6px 10px;
           text-align:center;
           font-size:1em;
-          line-height:1.3em;
           font-weight:500;
           color:#222;
           display:flex;
@@ -1313,7 +1309,7 @@ input:checked + .slider:before {
         ">${infoText}</div>
       `;
     
-      // Buttons und Layout kompakter anordnen
+      // 🔹 Buttons umschalten
       ["crewWinBtn", "imposterWinBtn"].forEach(id => document.getElementById(id).style.display = "none");
     
       const restartBtn = document.getElementById("restartBtn");
@@ -1322,23 +1318,17 @@ input:checked + .slider:before {
       restartBtn.style.display = "block";
       backBtn.style.display = "block";
     
-      // 🧩 Kompakte Abstände
-      restartBtn.style.marginTop = "8px";
+      // 🔹 Kompaktere Abstände
+      restartBtn.style.marginTop = "6px";
       backBtn.style.marginTop = "4px";
       roundScore.style.marginTop = "4px";
     
-      // 🩶 Einheitliche visuelle Struktur
+      // 🔹 Layout beibehalten, schön zentriert
       const reveal = document.getElementById("reveal");
       reveal.style.display = "flex";
       reveal.style.flexDirection = "column";
       reveal.style.alignItems = "center";
-      reveal.style.gap = "4px"; // kompakter Abstand
-
-      let stats = JSON.parse(localStorage.getItem("gameStats") || '{"rounds":0,"totalTime":0,"crewWins":0,"imposterWins":0}');
-      stats.rounds++;
-      stats.totalTime += Math.floor((Date.now() - roundStartTime) / 1000);
-      if (imposterWon) stats.imposterWins++; else stats.crewWins++;
-      localStorage.setItem("gameStats", JSON.stringify(stats));
+      reveal.style.gap = "4px";
     }
 
 
