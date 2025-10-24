@@ -1462,33 +1462,41 @@ input:checked + .slider:before {
     }
     
     window.onload = () => {
-      generateCategoryCheckboxes();
-    
-      // 🧩 Gespeicherte Einstellungen (inkl. Spieleranzahl) laden
-      const savedSettings = JSON.parse(localStorage.getItem("gameSettings") || "{}");
-      if (savedSettings.playerCount) settings.playerCount = savedSettings.playerCount;
-      if (savedSettings.imposterCount) settings.imposterCount = savedSettings.imposterCount;
-      if (typeof savedSettings.hintsEnabled === "boolean") settings.hintsEnabled = savedSettings.hintsEnabled;
-      }
-    
-      // 🧩 Gespeicherte Einstellungen wiederherstellen
-      document.getElementById("playerCountDisplay").textContent = settings.playerCount;
-      document.getElementById("imposterCountDisplay").textContent = settings.imposterCount;
-      document.getElementById("hintSwitch").checked = settings.hintsEnabled;
-    
-      // 🧩 Namen-Felder aktualisieren (nachdem Anzahl gesetzt ist)
-      updateNameInputs();
-    
-      // 🧩 Standardseiten-Anzeige
-      document.getElementById("setup").style.display = "block";
-      document.getElementById("game").style.display = "none";
-      document.getElementById("scoreboard").style.display = "none";
-    
-      // 🧩 Setup-Card fixieren (verhindert Layout-Sprung)
-      const setupCard = document.getElementById("setup");
-      setupCard.style.minHeight = "520px";
-    };
-    
+		  // 🧩 Kategorien-Checkboxen erzeugen
+		  generateCategoryCheckboxes();
+		
+		  // 🧩 Gespeicherte Einstellungen laden
+		  const savedSettings = JSON.parse(localStorage.getItem("gameSettings") || "{}");
+		
+		  if (savedSettings.playerCount) settings.playerCount = savedSettings.playerCount;
+		  if (savedSettings.imposterCount) settings.imposterCount = savedSettings.imposterCount;
+		  if (typeof savedSettings.hintsEnabled === "boolean")
+		    settings.hintsEnabled = savedSettings.hintsEnabled;
+		
+		  // 🧩 UI mit gespeicherten Einstellungen aktualisieren
+		  document.getElementById("playerCountDisplay").textContent = settings.playerCount;
+		  document.getElementById("imposterCountDisplay").textContent = settings.imposterCount;
+		  document.getElementById("hintSwitch").checked = settings.hintsEnabled;
+		
+		  // 🧩 Spielernamen-Felder erstellen (aus localStorage)
+		  updateNameInputs();
+		
+		  // 🧩 Standard-Ansicht: Setup sichtbar, andere versteckt
+		  document.getElementById("setup").style.display = "block";
+		  document.getElementById("game").style.display = "none";
+		  document.getElementById("scoreboard").style.display = "none";
+		  document.getElementById("statistics").style.display = "none";
+		
+		  // 🧩 Weißer Setup-Container stabilisieren
+		  const setupCard = document.getElementById("setup");
+		  setupCard.style.minHeight = "520px";
+		
+		  // 🧩 Sicherheit: Buttons aktiv lassen
+		  document.querySelectorAll("button").forEach(btn => {
+		    btn.disabled = false;
+		  });
+		};
+		
     function showScoreboard() {
       const scoreList = document.getElementById("scoreList");
       const pts = JSON.parse(localStorage.getItem("points") || "{}");
