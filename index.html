@@ -803,6 +803,8 @@ input:checked + .slider:before {
   
   <!-- 📊 Punktestand -->
   <button class="setup-btn" onclick="showScoreboard()">📊 Punktestand anzeigen</button>
+  <button class="setup-btn" onclick="showStatistics()">📈 Statistiken</button>
+
   </div> <!-- Schließt das Setup-Menü -->
   
   <!-- 🏆 Punktestand-Seite -->
@@ -811,7 +813,22 @@ input:checked + .slider:before {
     <div id="scoreList"></div>
     <button onclick="goBackToSetup()">⬅️ Zurück</button>
   </div>
-
+  <!-- 📈 Statistik-Seite -->
+  <div class="card" id="statistics" style="display:none">
+    <h1>📊 Spielstatistik</h1>
+    <div id="statsContent">
+      <p><strong>⏱️ Durchschnittliche Rundenzeit:</strong> <span id="avgTime">–</span></p>
+      <p><strong>😈 Imposter-Siege:</strong> <span id="imposterWins">0</span></p>
+      <p><strong>✔️ Crew-Siege:</strong> <span id="crewWins">0</span></p>
+      <p><strong>🎮 Gespielte Runden:</strong> <span id="totalRounds">0</span></p>
+    </div>
+    <button onclick="goBackToSetup()">⬅️ Zurück</button>
+  </div>
+  <div class="card" id="stats" style="display:none;">
+    <h1>📈 Statistiken</h1>
+    <div id="statsContent"></div>
+    <button onclick="goBackToSetup()">⬅️ Zurück</button>
+  </div>
 
   <div class="card" id="game" style="display:none">
     <h2 id="playerName"></h2>
@@ -1143,7 +1160,7 @@ input:checked + .slider:before {
     function showPlayerCard() {
       document.getElementById("backToSetupBtn").style.display = "none";
       const player = players[currentIndex];
-      document.getElementById("playerName").textContent = player;
+      document.getElementById("playerName").textContent = `${player} (${currentIndex + 1} von ${settings.playerCount} Spielern)`;
       document.getElementById("statusText").textContent = "";
       document.getElementById("wordCard").textContent = "🗝️ Wort anzeigen...";
       document.getElementById("swipeCard").style.transform = "translate(-50%, -50%)";
@@ -1254,6 +1271,13 @@ input:checked + .slider:before {
     }
     
     function awardPoints(imposterWon) {
+
+      let stats = JSON.parse(localStorage.getItem("stats") || '{"rounds":0,"crewWins":0,"imposterWins":0,"totalTime":0}');
+      stats.rounds++;
+      stats.totalTime += Math.floor((Date.now() - roundStartTime) / 1000);
+      if (imposterWon) stats.imposterWins++;
+      else stats.crewWins++;
+      localStorage.setItem("stats", JSON.stringify(stats));
       // 🧮 Punkte berechnen
       if (imposterWon) {
         imposterIndex.forEach(i => (points[players[i]] += 2));
@@ -1309,8 +1333,15 @@ input:checked + .slider:before {
       reveal.style.flexDirection = "column";
       reveal.style.alignItems = "center";
       reveal.style.gap = "4px"; // kompakter Abstand
+
+      let stats = JSON.parse(localStorage.getItem("gameStats") || '{"rounds":0,"totalTime":0,"crewWins":0,"imposterWins":0}');
+      stats.rounds++;
+      stats.totalTime += Math.floor((Date.now() - roundStartTime) / 1000);
+      if (imposterWon) stats.imposterWins++; else stats.crewWins++;
+      localStorage.setItem("gameStats", JSON.stringify(stats));
     }
-    
+
+
     function resetPoints() {
       for (let p in points) points[p] = 0;
       localStorage.setItem("points", JSON.stringify(points));
@@ -1401,6 +1432,23 @@ input:checked + .slider:before {
     
       document.getElementById("setup").style.display = "none";
       document.getElementById("scoreboard").style.display = "flex";
+    }
+    function showStatistics() {
+      // Werte laden
+      const stats = JSON.parse(localStorage.getItem("stats") || '{"rounds":0,"crewWins":0,"imposterWins":0,"totalTime":0}');
+      
+      // Durchschnittliche Zeit berechnen
+      const avgTime = stats.rounds > 0 ? (stats.totalTime / stats.rounds).toFixed(1) : 0;
+      
+      // In die Seite eintragen
+      document.getElementById("avgTime").textContent = `${avgTime} Sek`;
+      document.getElementById("imposterWins").textContent = stats.imposterWins;
+      document.getElementById("crewWins").textContent = stats.crewWins;
+      document.getElementById("totalRounds").textContent = stats.rounds;
+      
+      // Seitenwechsel
+      document.getElementById("setup").style.display = "none";
+      document.getElementById("statistics").style.display = "flex";
     }
     
     function goBackToSetup() {
