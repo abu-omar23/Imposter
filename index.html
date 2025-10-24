@@ -811,17 +811,22 @@ input:checked + .slider:before {
   <div class="card" id="scoreboard" style="display:none">
     <h1>🏆 Punktestand</h1>
     <div id="scoreList"></div>
-    <button onclick="goBackToSetup()">⬅️ Zurück</button>
+    <button onclick="goBackToStatistics()">⬅️ Zurück</button>
   </div>
   <!-- 📈 Statistik-Seite -->
   <div class="card" id="statistics" style="display:none">
     <h1>📊 Spielstatistik</h1>
-    <div id="statsContent">
-      <p><strong>Durchschnittliche Rundenzeit:</strong> <span id="avgTime">–</span></p>
-      <p><strong>Imposter-Siege:</strong> <span id="imposterWins">0</span></p>
-      <p><strong>Crew-Siege:</strong> <span id="crewWins">0</span></p>
+  
+    <div id="statsContent" style="text-align:left;width:90%;">
+      <p><strong>⏱️ Durchschnittliche Rundenzeit:</strong> <span id="avgTime">–</span></p>
+      <p><strong>😈 Imposter-Siege:</strong> <span id="imposterWins">0</span></p>
+      <p><strong>✔️ Crew-Siege:</strong> <span id="crewWins">0</span></p>
       <p><strong>🎮 Gespielte Runden:</strong> <span id="totalRounds">0</span></p>
     </div>
+  
+    <!-- 📊 Punktestand-Button -->
+    <button class="setup-btn" style="margin-top:15px;" onclick="showScoreboardFromStats()">📊 Punktestand anzeigen</button>
+  
     <button onclick="goBackToSetup()">⬅️ Zurück</button>
   </div>
 
@@ -1440,7 +1445,30 @@ input:checked + .slider:before {
       document.getElementById("setup").style.display = "none";
       document.getElementById("statistics").style.display = "flex";
     }
+    function showScoreboardFromStats() {
+      const scoreList = document.getElementById("scoreList");
+      const points = JSON.parse(localStorage.getItem("points") || "{}");
+      const currentPlayers = JSON.parse(localStorage.getItem("imposter_names") || "[]");
     
+      if (Object.keys(points).length === 0) {
+        scoreList.innerHTML = "<p>📭 Noch keine Punkte vergeben!</p>";
+      } else {
+        const sorted = Object.entries(points)
+          .filter(([name]) => currentPlayers.includes(name))
+          .sort((a, b) => b[1] - a[1]);
+        scoreList.innerHTML = sorted
+          .map(([name, score]) => `<p><span>${name}</span><span>${score} Punkte</span></p>`)
+          .join("");
+      }
+    
+      // Statistik-Seite ausblenden, Punktestand anzeigen
+      document.getElementById("statistics").style.display = "none";
+      document.getElementById("scoreboard").style.display = "flex";
+    }
+    function goBackToStatistics() {
+      document.getElementById("scoreboard").style.display = "none";
+      document.getElementById("statistics").style.display = "flex";
+    }
     function goBackToSetup() {
       // Alle anderen Seiten ausblenden
       document.getElementById("scoreboard").style.display = "none";
