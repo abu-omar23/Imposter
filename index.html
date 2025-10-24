@@ -1069,57 +1069,51 @@ input:checked + .slider:before {
       const container = document.getElementById("nameInputs");
       container.innerHTML = "";
     
-      // Namen aus Speicher laden oder Array erstellen
+      // 🧩 Alte Namen aus localStorage laden
       let savedNames = JSON.parse(localStorage.getItem("imposter_names") || "[]");
     
-      // Auffüllen, falls Spielerzahl gestiegen ist
+      // 🧩 Wenn zu wenige Namen vorhanden sind → auffüllen
       while (savedNames.length < settings.playerCount) {
         savedNames.push(`Spieler ${savedNames.length + 1}`);
       }
     
-      // Nicht kürzen – Namen bleiben erhalten
+      // 🧩 ❗ Wenn mehr gespeichert sind → NICHT löschen! Nur anzeigen, was gebraucht wird.
+      // (Dadurch bleiben alte Namen für höhere Spieleranzahl erhalten)
       localStorage.setItem("imposter_names", JSON.stringify(savedNames));
     
-      // Sichtbare Felder erzeugen
+      // 🧩 Eingabefelder erzeugen
       for (let i = 0; i < settings.playerCount; i++) {
         const wrapper = document.createElement("div");
         wrapper.style.display = "flex";
         wrapper.style.alignItems = "center";
-        wrapper.style.justifyContent = "space-between"; // ❌ ganz nach rechts
-        wrapper.style.margin = "6px auto";
+        wrapper.style.justifyContent = "space-between";
+        wrapper.style.margin = "6px 0";
         wrapper.style.width = "90%";
     
-        // 🟩 Eingabefeld
         const input = document.createElement("input");
         input.type = "text";
         input.value = savedNames[i] || "";
         input.placeholder = `Spieler ${i + 1}`;
         input.style.flex = "1";
-        input.style.padding = "10px 12px";
-        input.style.marginRight = "12px"; // Platz fürs X
+        input.style.padding = "8px 10px";
         input.style.textAlign = "center";
         input.style.borderRadius = "10px";
         input.style.border = "1px solid #ccc";
         input.style.fontSize = "1em";
+    
         input.oninput = () => {
           savedNames[i] = input.value;
           localStorage.setItem("imposter_names", JSON.stringify(savedNames));
         };
     
-        // ❌ Kleines neutrales X
         const delBtn = document.createElement("button");
         delBtn.textContent = "✖";
-        delBtn.style.width = "18px";
-        delBtn.style.height = "18px";
-        delBtn.style.marginLeft = "8px";
         delBtn.style.border = "none";
         delBtn.style.background = "transparent";
         delBtn.style.color = "#666";
         delBtn.style.cursor = "pointer";
         delBtn.style.fontSize = "0.9em";
-        delBtn.style.display = "flex";
-        delBtn.style.alignItems = "center";
-        delBtn.style.justifyContent = "center";
+    
         delBtn.onclick = () => {
           savedNames.splice(i, 1);
           settings.playerCount = Math.max(3, settings.playerCount - 1);
@@ -1134,7 +1128,6 @@ input:checked + .slider:before {
         container.appendChild(wrapper);
       }
     }
-
     function toggleNames() {
       const box = document.getElementById("nameInputsBox");
       const setup = document.getElementById("setup");
@@ -1189,14 +1182,21 @@ input:checked + .slider:before {
     function startGame() {
       showHints = document.getElementById("hintSwitch").checked;
       players = [];
-    
-      // 🧩 Korrektur: hier settings.playerCount statt playerCount verwenden!
-      for (let i = 0; i < settings.playerCount; i++) {
-        const name = document.getElementById(`player${i}`).value.trim();
-        if (!name) return alert("Bitte alle Namen eingeben!");
-        players.push(name);
-        if (!points[name]) points[name] = 0;
+      const inputs = document.querySelectorAll("#nameInputs input");
+      inputs.forEach(input => {
+        const name = input.value.trim();
+        if (name) players.push(name);
+      });
+      
+      // 🧩 prüfen, ob genug Namen vorhanden
+      if (players.length < settings.playerCount) {
+        return alert("Bitte alle Spielernamen eingeben!");
       }
+      
+      players = players.slice(0, settings.playerCount);
+      players.forEach(name => {
+        if (!points[name]) points[name] = 0;
+      });
     
       localStorage.setItem("imposter_names", JSON.stringify(players));
       localStorage.setItem("points", JSON.stringify(points));
@@ -1503,17 +1503,7 @@ input:checked + .slider:before {
           .join("");
       }
     
-      // 🗑️ Punkte löschen-Button wieder aktiv
-      const delBtn = document.createElement("button");
-      delBtn.textContent = "🗑️ Punkte löschen";
-      delBtn.classList.add("score-reset-btn");
-      delBtn.style.marginTop = "12px";
-      delBtn.onclick = () => {
-        for (let p in pts) pts[p] = 0;
-        localStorage.setItem("points", JSON.stringify(pts));
-        showScoreboard();
-      };
-      scoreList.appendChild(delBtn);
+
     
       document.getElementById("setup").style.display = "none";
       document.getElementById("scoreboard").style.display = "flex";
