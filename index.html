@@ -748,7 +748,7 @@ input:checked + .slider:before {
 }
 
 #nameInputs div button {
-  opacity: 0.8;
+  opacity: 0.6;
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
@@ -756,7 +756,6 @@ input:checked + .slider:before {
   opacity: 1;
   transform: scale(1.1);
 }
-    
 </style>
 
 
@@ -828,7 +827,7 @@ input:checked + .slider:before {
     <h1>📊 Spielstatistik</h1>
   
     <div id="statsContent" style="text-align:left;width:90%;">
-      <p><strong>Durchschnittliche Rundenzeit:</strong> <span id="avgTime">–</span></p>
+      <p><strong>Durchschn. Rundenzeit:</strong> <span id="avgTime">–</span></p>
       <p><strong>Imposter-Siege:</strong> <span id="imposterWins">0</span></p>
       <p><strong>Crew-Siege:</strong> <span id="crewWins">0</span></p>
       <p><strong>🎮 Gespielte Runden:</strong> <span id="totalRounds">0</span></p>
@@ -1051,27 +1050,27 @@ input:checked + .slider:before {
       const container = document.getElementById("nameInputs");
       container.innerHTML = "";
     
-      // Immer die vollständige Liste aus dem Speicher holen
+      // Namen aus Speicher laden oder Array erstellen
       let savedNames = JSON.parse(localStorage.getItem("imposter_names") || "[]");
     
-      // Falls weniger Namen gespeichert sind als Spieler — auffüllen
+      // Auffüllen, falls Spielerzahl gestiegen ist
       while (savedNames.length < settings.playerCount) {
         savedNames.push(`Spieler ${savedNames.length + 1}`);
       }
     
-      // NICHT kürzen — alle Namen bleiben gespeichert
+      // Nicht kürzen – Namen bleiben erhalten
       localStorage.setItem("imposter_names", JSON.stringify(savedNames));
     
-      // Nur sichtbare Namen anzeigen
+      // Sichtbare Felder erzeugen
       for (let i = 0; i < settings.playerCount; i++) {
         const wrapper = document.createElement("div");
         wrapper.style.display = "flex";
         wrapper.style.alignItems = "center";
-        wrapper.style.justifyContent = "center";
+        wrapper.style.justifyContent = "center"; // 🔹 zentriert
         wrapper.style.margin = "6px 0";
-        wrapper.style.gap = "8px";
+        wrapper.style.gap = "6px";
     
-        // 🟢 Eingabefeld
+        // 🟩 Eingabefeld
         const input = document.createElement("input");
         input.type = "text";
         input.value = savedNames[i] || "";
@@ -1087,23 +1086,20 @@ input:checked + .slider:before {
           localStorage.setItem("imposter_names", JSON.stringify(savedNames));
         };
     
-        // 🔴 Kleiner, runder Lösch-Button
+        // ❌ Kleines neutrales X
         const delBtn = document.createElement("button");
-        delBtn.innerHTML = "✖";
+        delBtn.textContent = "✖";
         delBtn.style.width = "20px";
         delBtn.style.height = "20px";
-        delBtn.style.borderRadius = "50%";
         delBtn.style.border = "none";
-        delBtn.style.background = "#e53935";
-        delBtn.style.color = "#fff";
+        delBtn.style.background = "transparent";
+        delBtn.style.color = "#666";
         delBtn.style.cursor = "pointer";
-        delBtn.style.fontSize = "0.75em";
-        delBtn.style.fontWeight = "bold";
+        delBtn.style.fontSize = "0.9em";
         delBtn.style.display = "flex";
         delBtn.style.alignItems = "center";
         delBtn.style.justifyContent = "center";
         delBtn.onclick = () => {
-          // Spieler löschen
           savedNames.splice(i, 1);
           settings.playerCount = Math.max(3, settings.playerCount - 1);
           localStorage.setItem("imposter_names", JSON.stringify(savedNames));
@@ -1471,12 +1467,16 @@ input:checked + .slider:before {
         scoreList.innerHTML = "<p>📭 Noch keine Punkte vergeben!</p>";
       } else {
         const sorted = filtered.sort((a, b) => b[1] - a[1]);
-        scoreList.innerHTML = sorted.map(([n, s]) => `<p><span>${n}</span><span>${s} Punkte</span></p>`).join("");
+        scoreList.innerHTML = sorted
+          .map(([n, s]) => `<p><span>${n}</span><span>${s} Punkte</span></p>`)
+          .join("");
       }
     
+      // 🗑️ Punkte löschen-Button wieder aktiv
       const delBtn = document.createElement("button");
       delBtn.textContent = "🗑️ Punkte löschen";
       delBtn.classList.add("score-reset-btn");
+      delBtn.style.marginTop = "12px";
       delBtn.onclick = () => {
         for (let p in pts) pts[p] = 0;
         localStorage.setItem("points", JSON.stringify(pts));
