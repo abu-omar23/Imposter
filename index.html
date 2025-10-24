@@ -817,9 +817,9 @@ input:checked + .slider:before {
   <div class="card" id="statistics" style="display:none">
     <h1>📊 Spielstatistik</h1>
     <div id="statsContent">
-      <p><strong>⏱️ Durchschnittliche Rundenzeit:</strong> <span id="avgTime">–</span></p>
-      <p><strong>😈 Imposter-Siege:</strong> <span id="imposterWins">0</span></p>
-      <p><strong>✔️ Crew-Siege:</strong> <span id="crewWins">0</span></p>
+      <p><strong>Durchschnittliche Rundenzeit:</strong> <span id="avgTime">–</span></p>
+      <p><strong>Imposter-Siege:</strong> <span id="imposterWins">0</span></p>
+      <p><strong>Crew-Siege:</strong> <span id="crewWins">0</span></p>
       <p><strong>🎮 Gespielte Runden:</strong> <span id="totalRounds">0</span></p>
     </div>
     <button onclick="goBackToSetup()">⬅️ Zurück</button>
@@ -1442,8 +1442,22 @@ input:checked + .slider:before {
     }
     
     function goBackToSetup() {
+      // Alle anderen Seiten ausblenden
       document.getElementById("scoreboard").style.display = "none";
-      document.getElementById("setup").style.display = "block";
+      document.getElementById("statistics").style.display = "none";
+      document.getElementById("game").style.display = "none";
+    
+      // Setup wieder normal anzeigen
+      const setup = document.getElementById("setup");
+      setup.style.display = "block";
+      setup.classList.remove("menu-open"); // Blur & Overlay sicher entfernen
+    
+      // Sichtbare Menüs (Namen/Kategorien) schließen, falls offen
+      document.getElementById("nameInputsBox").classList.remove("visible");
+      document.getElementById("categoryList").classList.remove("visible");
+    
+      // Größe wiederherstellen
+      setup.style.minHeight = "520px";
     }
     </script>
 </body>
