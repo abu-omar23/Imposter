@@ -756,14 +756,23 @@ input:checked + .slider:before {
   flex: 1;
 }
 
+/* ❌ Spieler entfernen */
 #nameInputs div button {
-  opacity: 0.6;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  all: unset; /* entfernt Standard-Button-Stile */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  font-size: 0.9em;
+  color: #666;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
 #nameInputs div button:hover {
-  opacity: 1;
-  transform: scale(1.1);
+  transform: scale(1.15);
+  color: #000;
 }
 </style>
 
@@ -1076,9 +1085,9 @@ input:checked + .slider:before {
         const wrapper = document.createElement("div");
         wrapper.style.display = "flex";
         wrapper.style.alignItems = "center";
-        wrapper.style.justifyContent = "center"; // 🔹 zentriert
-        wrapper.style.margin = "6px 0";
-        wrapper.style.gap = "6px";
+        wrapper.style.justifyContent = "space-between"; // ❌ ganz nach rechts
+        wrapper.style.margin = "6px auto";
+        wrapper.style.width = "90%";
     
         // 🟩 Eingabefeld
         const input = document.createElement("input");
@@ -1086,7 +1095,8 @@ input:checked + .slider:before {
         input.value = savedNames[i] || "";
         input.placeholder = `Spieler ${i + 1}`;
         input.style.flex = "1";
-        input.style.padding = "8px 10px";
+        input.style.padding = "10px 12px";
+        input.style.marginRight = "12px"; // Platz fürs X
         input.style.textAlign = "center";
         input.style.borderRadius = "10px";
         input.style.border = "1px solid #ccc";
@@ -1395,9 +1405,19 @@ input:checked + .slider:before {
 
 
     function resetPoints() {
-      for (let p in points) points[p] = 0;
+      // Punkte aus localStorage laden
+      let points = JSON.parse(localStorage.getItem("points") || "{}");
+    
+      // Alle Punkte auf 0 setzen
+      for (let player in points) {
+        points[player] = 0;
+      }
+    
+      // Gespeicherte Punkte aktualisieren
       localStorage.setItem("points", JSON.stringify(points));
-      document.getElementById("reveal").textContent += `\n❌ Punkte gelöscht!`;
+    
+      // Punktestand sofort neu laden
+      showScoreboard();
     }
     
     function startNewRound() {
@@ -1498,6 +1518,9 @@ input:checked + .slider:before {
       document.getElementById("setup").style.display = "none";
       document.getElementById("scoreboard").style.display = "flex";
     }
+
+
+    
     function showStatistics() {
       // Werte laden
       const stats = JSON.parse(localStorage.getItem("stats") || '{"rounds":0,"crewWins":0,"imposterWins":0,"totalTime":0}');
