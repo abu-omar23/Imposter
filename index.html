@@ -488,7 +488,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 1.5em;   /* 🔹 größerer Text für normales Wort */
+    font-size: 1.3em;   /* 🔹 größerer Text für normales Wort */
     font-weight: 600;
     padding: 15px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
@@ -510,7 +510,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 1.4em;   /* 🔹 größerer Text für normales Wort */
+    font-size: 1.3em;   /* 🔹 größerer Text für normales Wort */
     font-weight: 600;
     padding: 20px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
@@ -1228,7 +1228,7 @@ input:checked + .slider:before {
     function showPlayerCard() {
       document.getElementById("backToSetupBtn").style.display = "none";
       const player = players[currentIndex];
-      document.getElementById("playerName").textContent = `${player} (${currentIndex + 1} von ${settings.playerCount} Spielern)`;
+      document.getElementById("playerName").textContent = `${player}`;
       document.getElementById("statusText").textContent = "";
       document.getElementById("wordCard").textContent = "🗝️ Wort anzeigen...";
       document.getElementById("swipeCard").style.transform = "translate(-50%, -50%)";
