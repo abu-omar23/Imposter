@@ -488,7 +488,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 1.2em;   /* 🔹 größerer Text für normales Wort */
+    font-size: 1.5em;   /* 🔹 größerer Text für normales Wort */
     font-weight: 600;
     padding: 15px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
@@ -1021,13 +1021,32 @@ input:checked + .slider:before {
     function updateNameInputs() {
       const container = document.getElementById("nameInputs");
       container.innerHTML = "";
-      const saved = JSON.parse(localStorage.getItem("imposter_names") || "[]");
     
+      // Alte Namen laden oder leeres Array anlegen
+      let saved = JSON.parse(localStorage.getItem("imposter_names") || "[]");
+    
+      // 🧩 Falls Spielerzahl kleiner wird → NICHT kürzen!
+      // Wir behalten alle Namen, auch wenn gerade weniger angezeigt werden.
+      if (saved.length < settings.playerCount) {
+        // Wenn mehr Spieler hinzugefügt werden → fehlende Felder ergänzen
+        while (saved.length < settings.playerCount) {
+          saved.push("");
+        }
+      }
+    
+      // 🧩 Eingabefelder erzeugen
       for (let i = 0; i < settings.playerCount; i++) {
         const input = document.createElement("input");
         input.placeholder = `Name Spieler ${i + 1}`;
         input.id = `player${i}`;
         input.value = saved[i] || "";
+    
+        // Sofort beim Tippen speichern
+        input.addEventListener("input", () => {
+          saved[i] = input.value.trim();
+          localStorage.setItem("imposter_names", JSON.stringify(saved));
+        });
+    
         container.appendChild(input);
       }
     }
@@ -1258,13 +1277,15 @@ input:checked + .slider:before {
           background:#f8fafb;
           border:1px solid #ddd;
           border-radius:8px;
-          padding:6px 10px;
+          padding:8px 10px;
           text-align:center;
-          font-size:0.95em;
-          line-height:1.2em;
+          font-size:1em;
+          line-height:1.3em;
           font-weight:500;
           color:#222;
-          display:inline-block;
+          display:flex;
+          justify-content:center;
+          align-items:center;
         ">${infoText}</div>
       `;
     
