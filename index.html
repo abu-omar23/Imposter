@@ -747,9 +747,18 @@ input:checked + .slider:before {
   margin-top: 8px;
 }
 
+#nameInputs div {
+  width: 100%;
+  max-width: 340px;
+}
+
+#nameInputs div input {
+  flex: 1;
+}
+
 #nameInputs div button {
   opacity: 0.6;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 #nameInputs div button:hover {
@@ -820,6 +829,7 @@ input:checked + .slider:before {
   <div class="card" id="scoreboard" style="display:none">
     <h1>🏆 Punktestand</h1>
     <div id="scoreList"></div>
+    <button class="score-reset-btn" onclick="resetPoints()">🗑️ Punkte löschen</button>
     <button onclick="goBackToStatistics()">⬅️ Zurück</button>
   </div>
   <!-- 📈 Statistik-Seite -->
@@ -827,7 +837,7 @@ input:checked + .slider:before {
     <h1>📊 Spielstatistik</h1>
   
     <div id="statsContent" style="text-align:left;width:90%;">
-      <p><strong>Durchschn. Rundenzeit:</strong> <span id="avgTime">–</span></p>
+      <p><strong>Durchschnittliche Rundenzeit:</strong> <span id="avgTime">–</span></p>
       <p><strong>Imposter-Siege:</strong> <span id="imposterWins">0</span></p>
       <p><strong>Crew-Siege:</strong> <span id="crewWins">0</span></p>
       <p><strong>🎮 Gespielte Runden:</strong> <span id="totalRounds">0</span></p>
@@ -1075,12 +1085,12 @@ input:checked + .slider:before {
         input.type = "text";
         input.value = savedNames[i] || "";
         input.placeholder = `Spieler ${i + 1}`;
-        input.style.width = "75%";
+        input.style.flex = "1";
         input.style.padding = "8px 10px";
+        input.style.textAlign = "center";
         input.style.borderRadius = "10px";
         input.style.border = "1px solid #ccc";
         input.style.fontSize = "1em";
-        input.style.textAlign = "center";
         input.oninput = () => {
           savedNames[i] = input.value;
           localStorage.setItem("imposter_names", JSON.stringify(savedNames));
@@ -1089,8 +1099,9 @@ input:checked + .slider:before {
         // ❌ Kleines neutrales X
         const delBtn = document.createElement("button");
         delBtn.textContent = "✖";
-        delBtn.style.width = "20px";
-        delBtn.style.height = "20px";
+        delBtn.style.width = "18px";
+        delBtn.style.height = "18px";
+        delBtn.style.marginLeft = "8px";
         delBtn.style.border = "none";
         delBtn.style.background = "transparent";
         delBtn.style.color = "#666";
