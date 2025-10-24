@@ -749,7 +749,7 @@ input:checked + .slider:before {
 
 #nameInputs div button {
   opacity: 0.8;
-  transition: opacity 0.2s, transform 0.2s;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 #nameInputs div button:hover {
@@ -828,9 +828,9 @@ input:checked + .slider:before {
     <h1>📊 Spielstatistik</h1>
   
     <div id="statsContent" style="text-align:left;width:90%;">
-      <p><strong>⏱️ Durchschnittliche Rundenzeit:</strong> <span id="avgTime">–</span></p>
-      <p><strong>😈 Imposter-Siege:</strong> <span id="imposterWins">0</span></p>
-      <p><strong>✔️ Crew-Siege:</strong> <span id="crewWins">0</span></p>
+      <p><strong>Durchschnittliche Rundenzeit:</strong> <span id="avgTime">–</span></p>
+      <p><strong>Imposter-Siege:</strong> <span id="imposterWins">0</span></p>
+      <p><strong>Crew-Siege:</strong> <span id="crewWins">0</span></p>
       <p><strong>🎮 Gespielte Runden:</strong> <span id="totalRounds">0</span></p>
     </div>
   
@@ -1051,70 +1051,71 @@ input:checked + .slider:before {
       const container = document.getElementById("nameInputs");
       container.innerHTML = "";
     
-      // Gespeicherte Namen laden oder neues Array
+      // Immer die vollständige Liste aus dem Speicher holen
       let savedNames = JSON.parse(localStorage.getItem("imposter_names") || "[]");
     
-      // Falls Spieleranzahl gestiegen → auffüllen
+      // Falls weniger Namen gespeichert sind als Spieler — auffüllen
       while (savedNames.length < settings.playerCount) {
         savedNames.push(`Spieler ${savedNames.length + 1}`);
       }
     
-      // Falls Spieleranzahl gesunken → NICHT löschen, nur beim Anzeigen begrenzen
-      const visibleNames = savedNames.slice(0, settings.playerCount);
+      // NICHT kürzen — alle Namen bleiben gespeichert
+      localStorage.setItem("imposter_names", JSON.stringify(savedNames));
     
-      visibleNames.forEach((name, i) => {
+      // Nur sichtbare Namen anzeigen
+      for (let i = 0; i < settings.playerCount; i++) {
         const wrapper = document.createElement("div");
         wrapper.style.display = "flex";
         wrapper.style.alignItems = "center";
-        wrapper.style.justifyContent = "space-between";
+        wrapper.style.justifyContent = "center";
         wrapper.style.margin = "6px 0";
+        wrapper.style.gap = "8px";
     
-        // Name-Feld
+        // 🟢 Eingabefeld
         const input = document.createElement("input");
         input.type = "text";
-        input.value = name;
+        input.value = savedNames[i] || "";
         input.placeholder = `Spieler ${i + 1}`;
-        input.style.width = "80%";
-        input.style.padding = "8px";
+        input.style.width = "75%";
+        input.style.padding = "8px 10px";
         input.style.borderRadius = "10px";
         input.style.border = "1px solid #ccc";
-        input.style.fontSize = "0.95em";
+        input.style.fontSize = "1em";
+        input.style.textAlign = "center";
         input.oninput = () => {
           savedNames[i] = input.value;
           localStorage.setItem("imposter_names", JSON.stringify(savedNames));
         };
     
-        // ❌ Kleiner, runder Lösch-Button
+        // 🔴 Kleiner, runder Lösch-Button
         const delBtn = document.createElement("button");
         delBtn.innerHTML = "✖";
-        delBtn.style.width = "24px";
-        delBtn.style.height = "24px";
+        delBtn.style.width = "20px";
+        delBtn.style.height = "20px";
         delBtn.style.borderRadius = "50%";
         delBtn.style.border = "none";
         delBtn.style.background = "#e53935";
-        delBtn.style.color = "white";
+        delBtn.style.color = "#fff";
         delBtn.style.cursor = "pointer";
-        delBtn.style.fontSize = "0.8em";
+        delBtn.style.fontSize = "0.75em";
         delBtn.style.fontWeight = "bold";
         delBtn.style.display = "flex";
         delBtn.style.alignItems = "center";
         delBtn.style.justifyContent = "center";
         delBtn.onclick = () => {
+          // Spieler löschen
           savedNames.splice(i, 1);
           settings.playerCount = Math.max(3, settings.playerCount - 1);
-          document.getElementById("playerCountDisplay").textContent = settings.playerCount;
           localStorage.setItem("imposter_names", JSON.stringify(savedNames));
           localStorage.setItem("gameSettings", JSON.stringify(settings));
+          document.getElementById("playerCountDisplay").textContent = settings.playerCount;
           updateNameInputs();
         };
     
         wrapper.appendChild(input);
         wrapper.appendChild(delBtn);
         container.appendChild(wrapper);
-      });
-    
-      // Änderungen speichern
-      localStorage.setItem("imposter_names", JSON.stringify(savedNames));
+      }
     }
 
     function toggleNames() {
