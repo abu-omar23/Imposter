@@ -1248,8 +1248,8 @@ input:checked + .slider:before {
       // 🧾 Kurzer Infotext, wer wie viele Punkte bekommt
       const roundScore = document.getElementById("roundScore");
       const infoText = imposterWon
-        ? "😈 Die Imposter erhalten +2 Punkte"
-        : "✅ Die Crew-Mitglieder erhalten +1 Punkt";
+        ? "Die Imposter erhalten +2 Punkte"
+        : "Die Crew-Mitglieder erhalten +1 Punkt";
     
       roundScore.innerHTML = `
         <div style="
@@ -1258,10 +1258,12 @@ input:checked + .slider:before {
           background:#f8fafb;
           border:1px solid #ddd;
           border-radius:8px;
-          padding:5px 8px;
+          padding:6px 10px;
           text-align:center;
           font-size:0.95em;
-          line-height:1.1em;
+          line-height:1.2em;
+          font-weight:500;
+          color:#222;
           display:inline-block;
         ">${infoText}</div>
       `;
@@ -1343,6 +1345,14 @@ input:checked + .slider:before {
       document.getElementById("playerCountDisplay").textContent = settings.playerCount;
       document.getElementById("imposterCountDisplay").textContent = settings.imposterCount;
       document.getElementById("hintSwitch").checked = settings.hintsEnabled;
+      document.getElementById("setup").style.display = "block";
+      document.getElementById("game").style.display = "none";
+      document.getElementById("scoreboard").style.display = "none";
+    
+      // 🧩 Weißer Setup-Container stabilisieren (verhindert Größenflackern)
+      const setupCard = document.getElementById("setup");
+      setupCard.style.minHeight = "520px";
+      
     };
     
     function showScoreboard() {
