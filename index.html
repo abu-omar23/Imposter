@@ -1265,7 +1265,7 @@ input:checked + .slider:before {
             const others = imposterIndex.filter(i => i !== currentIndex).map(i => players[i]).join(", ");
             wordCard.innerHTML = `
               <div style="text-align:center;line-height:1.3em;">
-                <strong>😈 Du bist der Imposter 😈</strong><br>
+                <strong>😈 Du bist der Imposter</strong><br>
                 ${showHints ? `Hinweis: ${imposterHint}<br>` : ""}
                 ${others ? `<span>Andere Imposter: ${others}</span>` : ""}
               </div>`;
